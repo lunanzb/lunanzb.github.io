@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="问题锦集,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="开发者博客" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="原文标题: VC++ Redistributable ClickOnce Bootstrapper won&apos;t function properly    问题: 我正在使用Visual Studio 2019安装项目的扩展名为我的代码创建安装项目。 我尝试使用clickonce引导程序将vcredist下载到客户端计算机上，但是它是从网站安装的。 我的客户无法在他们的位置使用互联网，因此这不是可行">
+<meta name="keywords" content="问题锦集">
+<meta property="og:type" content="article">
+<meta property="og:title" content="cVC可再发行的ClickOnceBootstrapper无法正常运行堆栈内存溢出">
+<meta property="og:url" content="https://luna.newban.cn/cVC可再发行的ClickOnceBootstrapper无法正常运行堆栈内存溢出.html">
+<meta property="og:site_name" content="开发者博客">
+<meta property="og:description" content="原文标题: VC++ Redistributable ClickOnce Bootstrapper won&apos;t function properly    问题: 我正在使用Visual Studio 2019安装项目的扩展名为我的代码创建安装项目。 我尝试使用clickonce引导程序将vcredist下载到客户端计算机上，但是它是从网站安装的。 我的客户无法在他们的位置使用互联网，因此这不是可行">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-09-08T08:47:27.204Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="cVC可再发行的ClickOnceBootstrapper无法正常运行堆栈内存溢出">
+<meta name="twitter:description" content="原文标题: VC++ Redistributable ClickOnce Bootstrapper won&apos;t function properly    问题: 我正在使用Visual Studio 2019安装项目的扩展名为我的代码创建安装项目。 我尝试使用clickonce引导程序将vcredist下载到客户端计算机上，但是它是从网站安装的。 我的客户无法在他们的位置使用互联网，因此这不是可行">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+<!--谷歌广告验证代码-->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({
+          google_ad_client: "ca-pub-2626449904708114",
+          enable_page_level_ads: true
+     });
+</script>
+<!--谷歌广告验证代码-->
+
+
+
+  <link rel="canonical" href="https://luna.newban.cn/cVC可再发行的ClickOnceBootstrapper无法正常运行堆栈内存溢出.html">
+
+
+
+
+
+  <title>cVC可再发行的ClickOnceBootstrapper无法正常运行堆栈内存溢出 | 开发者博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+  
+<a href="https://www.github.com/songjianzaina" class="github-corner" aria-label="View source on Github"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">开发者博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">开发者的博客 – 全栈</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="http://www.newban.cn/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="http://code.newban.cn/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://luna.newban.cn">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="开发者">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="开发者博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">cVC可再发行的ClickOnceBootstrapper无法正常运行堆栈内存溢出</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-08-31T00:00:00+00:00">
+                2020-08-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="原文标题"><a href="#原文标题" class="headerlink" title="原文标题:"></a>原文标题:</h2>
+VC++ Redistributable ClickOnce Bootstrapper won't function properly
+
+
+
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题:"></a>问题:</h2>
+我正在使用Visual Studio 2019安装项目的扩展名为我的代码创建安装项目。 我尝试使用clickonce引导程序将vcredist下载到客户端计算机上，但是它是从网站安装的。 我的客户无法在他们的位置使用互联网，因此这不是可行的解决方案。
+
+
+我尝试为.exe的本地版本创建自己的clickonce软件包，如果它是全新安装而没有以前安装的其他版本的Visual C ++可再发行版本，则该版本可以工作。
+
+
+这是我的product.xml
+
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;InstallChecks&gt; &lt;MsiProductCheck Property=&quot;IsMsiInstalled&quot; Product=&quot;&#123;2cbcedbb-f38c-48a3-a3e1-6c6fd821a7f4&#125;&quot;/&gt; &lt;/InstallChecks&gt; &lt;!-- Defines how to invoke the setup for .NET Framework redist --&gt; &lt;Commands Reboot=&quot;Immediate&quot;&gt; &lt;!--Command for downlevel and future Operating Systems where netfx is not integrated within OS.--&gt; &lt;Command PackageFile=&quot;vc_redist.x64.exe&quot; Arguments=&quot; /q /norestart /ChainingPackage FullX64Bootstrapper&quot;&gt; &lt;!-- These checks determine whether the package is to be installed --&gt; &lt;InstallConditions&gt; &lt;BypassIf Property=&quot;IsMsiInstalled&quot; Compare=&quot;ValueGreaterThan&quot; Value=&quot;0&quot;/&gt; &lt;FailIf Property=&quot;AdminUser&quot; Compare=&quot;ValueNotEqualTo&quot; Value=&quot;True&quot; String=&quot;NotAnAdmin&quot;/&gt; &lt;/InstallConditions&gt; &lt;ExitCodes&gt; &lt;ExitCode Value=&quot;0&quot; Result=&quot;Success&quot; /&gt; &lt;ExitCode Value=&quot;3010&quot; Result=&quot;SuccessReboot&quot; /&gt; &lt;DefaultExitCode Result=&quot;Fail&quot; FormatMessageFromSystem=&quot;false&quot; String=&quot;GeneralFailure&quot; /&gt; &lt;/ExitCodes&gt; &lt;/Command&gt; &lt;/Commands&gt; &lt;/Product&gt;</span><br></pre></td></tr></table></figure>
+
+
+这是我的package.xml
+
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;Package xmlns=&quot;http://schemas.microsoft.com/developer/2004/01/bootstrapper&quot; Name=&quot;DisplayName&quot; Culture=&quot;Culture&quot; &gt; &lt;!-- Defines a localizable string table for error messages--&gt; &lt;Strings&gt; &lt;String Name=&quot;DisplayName&quot;&gt;Visual C++ &quot;14&quot; Runtime Libraries (x64)&lt;/String&gt; &lt;String Name=&quot;Culture&quot;&gt;en&lt;/String&gt; &lt;String Name=&quot;AdminRequired&quot;&gt;You do not have the permissions required to install Visual C++ &quot;14&quot; Runtime Libraries (x64). Please contact your administrator.&lt;/String&gt; &lt;String Name=&quot;InvalidOS&quot;&gt;Installation of Visual C++ &quot;14&quot; Runtime Libraries (x64) is supported only on x64 machines.&lt;/String&gt; &lt;String Name=&quot;GeneralFailure&quot;&gt;A failure occurred attempting to install Visual C++ &quot;14&quot; Runtime Libraries (x64).&lt;/String&gt; &lt;/Strings&gt; &lt;/Package&gt;</span><br></pre></td></tr></table></figure>
+
+
+当运行已经安装了此软件包（或该软件包的早期版本）的计算机的安装程序时，出现错误。
+
+
+这是错误。
+
+
+为（产品名称）安装系统组件时发生错误。 在成功安装所有系统组件之前，安装程序无法继续
+
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt;Component Visual C++ &quot;14&quot; Runtime Libraries (x64) has failed to install with the following error message: &quot;Another version of this product is already installed. Installation of this version cannot continue. To configure or remove the existing version of this product, use Add/Remove Programs on the Control Panel. &quot; The following components failed to install: - Visual C++ &quot;14&quot; Runtime Libraries (x64) See the setup log file located at &apos;C:\Users\(username)\AppData\Local\Temp\VSD5A50.tmp\install.log&apos; for more information.&gt;</span><br></pre></td></tr></table></figure>
+
+
+这是install.log
+
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt;The following properties have been set: Property: [AdminUser] = true &#123;boolean&#125; Property: [InstallMode] = SameSite &#123;string&#125; Property: [NTProductType] = 1 &#123;int&#125; Property: [ProcessorArchitecture] = AMD64 &#123;string&#125; Property: [VersionNT] = 10.0.0 &#123;version&#125; Running checks for package &apos;Microsoft .NET Framework 4.7.2 (x86 and x64)&apos;, phase BuildList Reading value &apos;Release&apos; of registry key &apos;HKLM\Software\Microsoft\NET Framework Setup\NDP\v4\Full&apos; Read integer value 528049 Setting value &apos;528049 &#123;int&#125;&apos; for property &apos;DotNetFull_Release&apos; Reading value &apos;v4&apos; of registry key &apos;HKLM\SOFTWARE\Microsoft\NET Framework Setup\OS Integration&apos; Read integer value 1 Setting value &apos;1 &#123;int&#125;&apos; for property &apos;DotNetFull_OSIntegrated&apos; Reading value &apos;ThisVersionInstalled&apos; of registry key &apos;HKLM\SOFTWARE\Microsoft\Updates\Microsoft .NET Framework 4.7.2\KB4087364&apos; Unable to read registry value Not setting value for property &apos;DotNetFull_MSPDetection&apos; Reading value &apos;CurrentState&apos; of registry key &apos;HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages\Package_for_KB4054542~31bf3856ad364e35~amd64~~6.2.1.2142&apos; Unable to read registry value Not setting value for property &apos;DotNetFull_Win8X86Identity&apos; Reading value &apos;CurrentState&apos; of registry key &apos;HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages\Package_for_KB4054542~31bf3856ad364e35~x86~~6.2.1.2142&apos; Unable to read registry value Not setting value for property &apos;DotNetFull_Win8X64Identity&apos; Reading value &apos;CurrentState&apos; of registry key &apos;HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages\Package_for_KB4054566~31bf3856ad364e35~amd64~~6.3.1.2145&apos; Unable to read registry value Not setting value for property &apos;DotNetFull_Win81X86Identity&apos; Reading value &apos;CurrentState&apos; of registry key &apos;HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages\Package_for_KB4054566~31bf3856ad364e35~x86~~6.3.1.2145&apos; Unable to read registry value Not setting value for property &apos;DotNetFull_Win81X64Identity&apos; Reading value &apos;CurrentState&apos; of registry key &apos;HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages\Package_for_KB4054590~31bf3856ad364e35~amd64~~10.0.1.2072&apos; Unable to read registry value Not setting value for property &apos;DotNetFull_Win10AX86Identity&apos; Reading value &apos;CurrentState&apos; of registry key &apos;HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages\Package_for_KB4054590~31bf3856ad364e35~x86~~10.0.1.2072&apos; Unable to read registry value Not setting value for property &apos;DotNetFull_Win10AX64Identity&apos; Reading value &apos;CurrentState&apos; of registry key &apos;HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages\Package_for_KB4073120~31bf3856ad364e35~amd64~~10.0.1.2072&apos; Unable to read registry value Not setting value for property &apos;DotNetFull_Win10BX86Identity&apos; Reading value &apos;CurrentState&apos; of registry key &apos;HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages\Package_for_KB4073120~31bf3856ad364e35~x86~~10.0.1.2072&apos; Unable to read registry value Not setting value for property &apos;DotNetFull_Win10BX64Identity&apos; The following properties have been set for package &apos;Microsoft .NET Framework 4.7.2 (x86 and x64)&apos;: Property: [DotNetFull_OSIntegrated] = 1 &#123;int&#125; Property: [DotNetFull_Release] = 528049 &#123;int&#125; Running checks for command &apos;DotNetFX472\NDP472-KB4054530-x86-x64-AllOS-ENU.exe&apos; Result of running operator &apos;ValueEqualTo&apos; on property &apos;InstallMode&apos; and value &apos;HomeSite&apos;: false Result of running operator &apos;ValueGreaterThan&apos; on property &apos;DotNetFull_Release&apos; and value &apos;461808&apos;: true Result of checks for command &apos;DotNetFX472\NDP472-KB4054530-x86-x64-AllOS-ENU.exe&apos; is &apos;Bypass&apos; Running checks for command &apos;DotNetFX472\NDP472-KB4054531-Web.exe&apos; Result of running operator &apos;ValueNotEqualTo&apos; on property &apos;InstallMode&apos; and value &apos;HomeSite&apos;: true Result of checks for command &apos;DotNetFX472\NDP472-KB4054531-Web.exe&apos; is &apos;Bypass&apos; &apos;Microsoft .NET Framework 4.7.2 (x86 and x64)&apos; RunCheck result: No Install Needed Running checks for package &apos;Microsoft Visual C++ Redistributable 14.0&apos;, phase BuildList Running MsiProductCheck with ProductCode &apos;&#123;2cbcedbb-f38c-48a3-a3e1-6c6fd821a7f4&#125;&apos; MsiQueryProductState returned &apos;-1&apos; Setting value &apos;-1 &#123;int&#125;&apos; for property &apos;VCRedistInstalled&apos; The following properties have been set for package &apos;Microsoft Visual C++ Redistributable 14.0&apos;: Property: [VCRedistInstalled] = -1 &#123;int&#125; Running checks for command &apos;vcredist_current_x64\vc_redist.x64.exe&apos; Skipping ByPassIf because Property &apos;IsMsiInstalled&apos; was not defined Result of running operator &apos;ValueNotEqualTo&apos; on property &apos;AdminUser&apos; and value &apos;True&apos;: false Result of checks for command &apos;vcredist_current_x64\vc_redist.x64.exe&apos; is &apos;Install&apos; &apos;Microsoft Visual C++ Redistributable 14.0&apos; RunCheck result: Install Needed EULA for components &apos;Microsoft Visual C++ Redistributable 14.0&apos; was accepted. Copying files to temporary directory &quot;C:\Users\(username)\AppData\Local\Temp\VSDA0C2.tmp\&quot; Copying from &apos;C:\Users\(username)\(product)\(installer)\Debug\vcredist_current_x64\vc_redist.x64.exe&apos; to &apos;C:\Users\(username)\AppData\Local\Temp\VSDA0C2.tmp\vcredist_current_x64\vc_redist.x64.exe&apos; Verifying file integrity of C:\Users\(username)\AppData\Local\Temp\VSDA0C2.tmp\vcredist_current_x64\vc_redist.x64.exe WinVerifyTrust returned 0 File trusted Running checks for package &apos;Microsoft Visual C++ Redistributable 14.0&apos;, phase BeforePackage Running MsiProductCheck with ProductCode &apos;&#123;2cbcedbb-f38c-48a3-a3e1-6c6fd821a7f4&#125;&apos; MsiQueryProductState returned &apos;-1&apos; Setting value &apos;-1 &#123;int&#125;&apos; for property &apos;VCRedistInstalled&apos; The following properties have been set for package &apos;Microsoft Visual C++ Redistributable 14.0&apos;: Property: [VCRedistInstalled] = -1 &#123;int&#125; Running checks for command &apos;vcredist_current_x64\vc_redist.x64.exe&apos; Skipping ByPassIf because Property &apos;IsMsiInstalled&apos; was not defined Result of running operator &apos;ValueNotEqualTo&apos; on property &apos;AdminUser&apos; and value &apos;True&apos;: false Result of checks for command &apos;vcredist_current_x64\vc_redist.x64.exe&apos; is &apos;Install&apos; &apos;Microsoft Visual C++ Redistributable 14.0&apos; RunCheck result: Install Needed Verifying file integrity of C:\Users\(username)\AppData\Local\Temp\VSDA0C2.tmp\vcredist_current_x64\vc_redist.x64.exe WinVerifyTrust returned 0 File trusted Installing using command &apos;C:\Users\(username)\AppData\Local\Temp\VSDA0C2.tmp\vcredist_current_x64\vc_redist.x64.exe&apos; and parameters &apos; /q /norestart /ChainingPackage FullX64Bootstrapper&apos; Process exited with code 1638 Status of package &apos;Microsoft Visual C++ Redistributable 14.0&apos; after install is &apos;InstallFailed&apos; &gt;</span><br></pre></td></tr></table></figure>
+
+
+我已经尝试遵循vcredist的Program File（x86）\\ Microsoft SDKs ...中的软件包和产品清单，但是将其从网站更改为本地，但这似乎不起作用。 遵循Microsoft的教程对我也不起作用。
+
+
+我认为产品密钥不是正确的产品密钥存在问题。
+
+
+我需要做的是让安装程序检查产品或先前版本是否已安装。 如果是这样，则跳过设置的这一部分。
+
+
+指导表示赞赏！
+
+
+谢谢！
+
+
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案:"></a>解决方案:</h2>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="tags/问题锦集/" rel="tag"># 问题锦集</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="ajax我怎样才能从Ajax请求中刷新堆栈内存溢出.html" rel="next" title="ajax我怎样才能从Ajax请求中刷新堆栈内存溢出">
+                <i class="fa fa-chevron-left"></i> ajax我怎样才能从Ajax请求中刷新堆栈内存溢出
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="cWPFNavigationService在第一次导航或第二页访问后返回Null堆栈内存溢出.html" rel="prev" title="cWPFNavigationService在第一次导航或第二页访问后返回Null堆栈内存溢出">
+                cWPFNavigationService在第一次导航或第二页访问后返回Null堆栈内存溢出 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    <!-- 乱码三千文章内嵌广告 -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-2626449904708114" data-ad-slot="1549007621"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+  <!-- 乱码三千信息流广告 -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle" style="display:block" data-ad-format="fluid" data-ad-layout-key="-6t+ed+2i-1n-4w" data-ad-client="ca-pub-2626449904708114" data-ad-slot="9471729671"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">开发者</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="http://code.newban.cn/archives/">
+              
+                  <span class="site-state-item-count">1724</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#原文标题"><span class="nav-number">1.</span> <span class="nav-text">原文标题:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题"><span class="nav-number">2.</span> <span class="nav-text">问题:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解决方案"><span class="nav-number">3.</span> <span class="nav-text">解决方案:</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">开发者</span>
+  <div>
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+  </div>
+  
+</div>
+
+
+  <div class="powered-by">由 <a rel="external nofollow" class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a rel="external nofollow" class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+      <style>
+        a.gitment-editor-footer-tip { display: none; }
+        .gitment-container.gitment-footer-container { display: none; }
+      </style>
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: 'songjianzaina',
+            repo: 'codesan_comment',
+            
+            lang: "zh" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: '75fa01da04fd1029841debfa65ce027b566a47e3',
+            
+                client_id: '01a471de64bf7a7789f3'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

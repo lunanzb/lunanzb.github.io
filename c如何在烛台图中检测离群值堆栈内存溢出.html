@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="问题锦集,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="开发者博客" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="原文标题: How to detect outliers in a candlestick diagram   问题: 我想实施离群值检测，因为我应该在市场不景气的时候找到它。 换句话说，我有一个给定的蜡烛阵列，对于每5支蜡烛，我应该确定情况是否安静。  满足以下要求的情况是安静的：  这里的问题是我不知道如何区分小蜡烛和大蜡烛。  这里的问题是如何确定最大值和最小值之间的距离是大还是小  我尝试">
+<meta name="keywords" content="问题锦集">
+<meta property="og:type" content="article">
+<meta property="og:title" content="c如何在烛台图中检测离群值堆栈内存溢出">
+<meta property="og:url" content="https://luna.newban.cn/c如何在烛台图中检测离群值堆栈内存溢出.html">
+<meta property="og:site_name" content="开发者博客">
+<meta property="og:description" content="原文标题: How to detect outliers in a candlestick diagram   问题: 我想实施离群值检测，因为我应该在市场不景气的时候找到它。 换句话说，我有一个给定的蜡烛阵列，对于每5支蜡烛，我应该确定情况是否安静。  满足以下要求的情况是安静的：  这里的问题是我不知道如何区分小蜡烛和大蜡烛。  这里的问题是如何确定最大值和最小值之间的距离是大还是小  我尝试">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-09-08T08:47:27.232Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="c如何在烛台图中检测离群值堆栈内存溢出">
+<meta name="twitter:description" content="原文标题: How to detect outliers in a candlestick diagram   问题: 我想实施离群值检测，因为我应该在市场不景气的时候找到它。 换句话说，我有一个给定的蜡烛阵列，对于每5支蜡烛，我应该确定情况是否安静。  满足以下要求的情况是安静的：  这里的问题是我不知道如何区分小蜡烛和大蜡烛。  这里的问题是如何确定最大值和最小值之间的距离是大还是小  我尝试">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+<!--谷歌广告验证代码-->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({
+          google_ad_client: "ca-pub-2626449904708114",
+          enable_page_level_ads: true
+     });
+</script>
+<!--谷歌广告验证代码-->
+
+
+
+  <link rel="canonical" href="https://luna.newban.cn/c如何在烛台图中检测离群值堆栈内存溢出.html">
+
+
+
+
+
+  <title>c如何在烛台图中检测离群值堆栈内存溢出 | 开发者博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+  
+<a href="https://www.github.com/songjianzaina" class="github-corner" aria-label="View source on Github"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">开发者博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">开发者的博客 – 全栈</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="http://www.newban.cn/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="http://code.newban.cn/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://luna.newban.cn">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="开发者">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="开发者博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">c如何在烛台图中检测离群值堆栈内存溢出</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-08-28T00:00:00+00:00">
+                2020-08-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="原文标题"><a href="#原文标题" class="headerlink" title="原文标题:"></a>原文标题:</h2>
+How to detect outliers in a candlestick diagram
+
+
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题:"></a>问题:</h2>
+我想实施离群值检测，因为我应该在市场不景气的时候找到它。 换句话说，我有一个给定的蜡烛阵列，对于每5支蜡烛，我应该确定情况是否安静。
+
+满足以下要求的情况是安静的：
+
+这里的问题是我不知道如何区分小蜡烛和大蜡烛。
+
+这里的问题是如何确定最大值和最小值之间的距离是大还是小
+
+我尝试通过计算标准偏差来进行尝试，但由于结果过于随机，因此似乎无济于事。 这些高容量的蜡烛不符合条件。
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Open time: 11/27/2019 1:00:00 AM | StdDev: 7.188532534530273E-05 | CV: 0.004710394164556892 Open time: 11/27/2019 2:00:00 AM | StdDev: 6.919176251549048E-05 | CV: 0.004528256709128957 Open time: 11/27/2019 3:00:00 AM | StdDev: 3.946517452134247E-05 | CV: 0.0025799290397687433 Open time: 11/27/2019 4:00:00 AM | StdDev: 3.6979724174201114E-05 | CV: 0.002417133418798687 Open time: 11/27/2019 5:00:00 AM | StdDev: 3.110466202999165E-05 | CV: 0.002034447120805262 Open time: 11/27/2019 6:00:00 AM | StdDev: 5.2985847166956244E-05 | CV: 0.003472887669067067 Open time: 11/27/2019 7:00:00 AM | StdDev: 8.348652585896753E-05 | CV: 0.0054882018050859535 Open time: 11/27/2019 8:00:00 AM | StdDev: 9.300537618869152E-05 | CV: 0.006126836376066635 Open time: 11/27/2019 9:00:00 AM | StdDev: 8.136338242723194E-05 | CV: 0.0053698114062323095 Open time: 11/27/2019 10:00:00 AM | StdDev: 3.840572873934283E-05 | CV: 0.002541742471167626 Open time: 11/27/2019 11:00:00 AM | StdDev: 7.612489737267272E-05 | CV: 0.00505410286633068 Open time: 11/27/2019 12:00:00 PM | StdDev: 0.0001445423813281074 | CV: 0.009635516387447998 Open time: 11/27/2019 1:00:00 PM | StdDev: 0.00016103571032538092 | CV: 0.010780272481281359 Open time: 11/27/2019 2:00:00 PM | StdDev: 0.0001487615541731129 | CV: 0.009964602731134899 Open time: 11/27/2019 3:00:00 PM | StdDev: 0.00019730686759461785 | CV: 0.013188080181446285 Open time: 11/27/2019 4:00:00 PM | StdDev: 0.00025021490762942194 | CV: 0.016638842108619628 Open time: 11/27/2019 5:00:00 PM | StdDev: 0.00024766408702111035 | CV: 0.016331294890940345 Open time: 11/27/2019 6:00:00 PM | StdDev: 0.0001475466028073844 | CV: 0.009644829572975841 Open time: 11/27/2019 7:00:00 PM | StdDev: 0.0002146625258399797 | CV: 0.01390211293568938 Open time: 11/27/2019 8:00:00 PM | StdDev: 0.00034918476484520355 | CV: 0.022346394780827054 Open time: 11/27/2019 9:00:00 PM | StdDev: 0.0003890790408130464 | CV: 0.02460501111826006 Open time: 11/27/2019 10:00:00 PM | StdDev: 0.0003559950842357241 | CV: 0.022273358207828574</span><br></pre></td></tr></table></figure>
+
+
+码：
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/// &lt;summary&gt; /// Calculates the standard deviation. /// &lt;/summary&gt; /// &lt;param name=&quot;values&quot;&gt;&lt;/param&gt; /// &lt;returns&gt;&lt;/returns&gt; public static double StandardDeviation(this List&lt;BinanceKline&gt; values) &#123; if (values.Count &gt; 0) &#123; // Compute average double mean = values.Mean(); // Perform the Sum of (value - avg)_2_2 double sum = values.Sum(e =&gt; Math.Pow(Convert.ToDouble((e.GetUpperValue() + e.GetLowerValue()) / 2) - mean, 2)); // Put it all together return Math.Sqrt(sum / (values.Count - 1)); &#125; return 0; &#125;</span><br></pre></td></tr></table></figure>
+
+
+顺便说一下，作为一个值，它得到蜡烛的平均值(the highest value + the lowest value) / 2 。
+
+可能仍然不清楚我想要什么，所以这是一张照片：
+
+在图片的左侧，没有大蜡烛，但是图形在上升，这意味着它与其余的蜡烛相去甚远。 在图片的右侧，图形保持安静（“嵌入式”）。 它不会向上或向下而是直线。
+
+您能建议我如何检测这些模式吗？ 我的想法不是预测未来的价值，而是使用已经获取的数据。 例如，这些检查将出现在每支新蜡烛上，并且将花费前五支蜡烛（不包括新蜡烛）。
+
+编辑：
+
+标准偏差实际上并不起作用，因为如果您在此处查看：
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Open time: 11/27/2019 12:00:00 PM | StdDev: 0.0001445423813281074 | CV: 0.009635516387447998 Open time: 11/27/2019 1:00:00 PM | StdDev: 0.00016103571032538092 | CV: 0.010780272481281359</span><br></pre></td></tr></table></figure>
+
+
+标准偏差应该是更高的值，并且绝对不能接近0。代码可以正常工作，但是不适用于这种情况，或者至少不是单独适用。 结合其他东西，它可能会起作用。
+
+编辑2：
+
+变异系数（CV）似乎更准确。 我认为这可能有效。 满足条件的最佳值可能是0.001 ，这是两个图形的总和。 你怎么看？
+
+上面图片中该示例的输出：
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Open time: 11/15/2019 5:00:00 AM | StdDev: 49.24148243605151 | CV: 0.005714494887752725 Open time: 11/15/2019 6:00:00 AM | StdDev: 48.10100328995206 | CV: 0.005597444742963025 Open time: 11/15/2019 7:00:00 AM | StdDev: 34.570228051026604 | CV: 0.00403204199023016 Open time: 11/15/2019 8:00:00 AM | StdDev: 15.476614859199533 | CV: 0.0018079612622890022 Open time: 11/15/2019 9:00:00 AM | StdDev: 11.576726437123352 | CV: 0.0013526856869483194 Open time: 11/15/2019 10:00:00 AM | StdDev: 13.672853762107772 | CV: 0.0015963730504533972 Open time: 11/15/2019 11:00:00 AM | StdDev: 22.617282551182015 | CV: 0.0026365899074065743 Open time: 11/15/2019 12:00:00 PM | StdDev: 31.647747155208304 | CV: 0.0036823320018835684 Open time: 11/15/2019 1:00:00 PM | StdDev: 30.173184825271647 | CV: 0.0035044316829057126 Open time: 11/15/2019 2:00:00 PM | StdDev: 26.069585871279347 | CV: 0.0030231190376703017 Open time: 11/15/2019 3:00:00 PM | StdDev: 12.839695966026326 | CV: 0.0014866559587110115 Open time: 11/15/2019 4:00:00 PM | StdDev: 6.756121853548856 | CV: 0.0007815331369451161 Open time: 11/15/2019 5:00:00 PM | StdDev: 41.376141434406144 | CV: 0.004795673597019467 Open time: 11/15/2019 6:00:00 PM | StdDev: 79.81362075172356 | CV: 0.00928666074947359 Open time: 11/15/2019 7:00:00 PM | StdDev: 88.35104423548115 | CV: 0.010319785070149313 Open time: 11/15/2019 8:00:00 PM | StdDev: 79.06051554031244 | CV: 0.009271338691229074 Open time: 11/15/2019 9:00:00 PM | StdDev: 34.327389319609104 | CV: 0.00404133486502223 Open time: 11/15/2019 10:00:00 PM | StdDev: 8.048344239655792 | CV: 0.0009489408690167187 Open time: 11/15/2019 11:00:00 PM | StdDev: 6.030277356805678 | CV: 0.0007108047078810328 Open time: 11/16/2019 12:00:00 AM | StdDev: 7.8962145994142245 | CV: 0.0009308828374337032 Open time: 11/16/2019 1:00:00 AM | StdDev: 8.47613886153356 | CV: 0.00099890434169011 Open time: 11/16/2019 2:00:00 AM | StdDev: 9.912337262220127 | CV: 0.0011679248762150303 Open time: 11/16/2019 3:00:00 AM | StdDev: 12.102422484775284 | CV: 0.0014266919637413724 Open time: 11/16/2019 4:00:00 AM | StdDev: 12.490426133643089 | CV: 0.0014727030576166967 Open time: 11/16/2019 5:00:00 AM | StdDev: 12.640563970804447 | CV: 0.0014904318275539364 Open time: 11/16/2019 6:00:00 AM | StdDev: 15.174553947315598 | CV: 0.001790813176679162 Open time: 11/16/2019 7:00:00 AM | StdDev: 8.421461719915296 | CV: 0.0009946885198633634 Open time: 11/16/2019 8:00:00 AM | StdDev: 8.337805916426555 | CV: 0.0009848295065977384 Open time: 11/16/2019 9:00:00 AM | StdDev: 6.463572348167512 | CV: 0.0007636420370893617 Open time: 11/16/2019 10:00:00 AM | StdDev: 5.982922153931075 | CV: 0.0007068892832431122 Open time: 11/16/2019 11:00:00 AM | StdDev: 6.279278023786336 | CV: 0.0007414932821942903 Open time: 11/16/2019 12:00:00 PM | StdDev: 10.051010521335781 | CV: 0.0011860719031101202 Open time: 11/16/2019 1:00:00 PM | StdDev: 10.679646178596128 | CV: 0.0012597437184238111 Open time: 11/16/2019 2:00:00 PM | StdDev: 8.387603948685346 | CV: 0.0009891293173925218 Open time: 11/16/2019 3:00:00 PM | StdDev: 6.277716145224007 | CV: 0.0007401768729218733 Open time: 11/16/2019 4:00:00 PM | StdDev: 6.0087794101637115 | CV: 0.0007084052927520973 Open time: 11/16/2019 5:00:00 PM | StdDev: 5.152108063696313 | CV: 0.0006074484521114183 Open time: 11/16/2019 6:00:00 PM | StdDev: 5.4574552219879005 | CV: 0.0006434300416311673 Open time: 11/16/2019 7:00:00 PM | StdDev: 5.885869731823884 | CV: 0.000693675723796855</span><br></pre></td></tr></table></figure>
+
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案:"></a>解决方案:</h2><p><strong>===============&gt;&gt;#1 票数：1</strong></p>
+
+编辑： 我希望有人想出一个更好的主意。 https://pastebin.com/CG3EApQJ-TRXUSDT （在问题的第一张图中）-25.11.2019-1小时间隔（Binance） https://pastebin.com/mP6rFMBh-BTCUSDT （在问题的最后一张照片中）-2019年11月15日-1小时间隔（Binance） 这些是数据集。 我的解决方案可能无法在所有情况下都有效： 当图表发生极大变化时，此解决方案将无法在较小的间隔内工作。 一种解决方案是使用变异系数（CV）。 我将以前的蜡烛数量从5减少到3。如果我们看下面的图片，CV的最佳值似乎低于0.003。 当然，它也有其自身的风险，例如，我在图表上标记了两个蜡烛，它们满足了不应该满足的条件。 原因是它们两个的CV〜0.0024都低于0.003，但是如果我减小最佳值，则将使条件触发的时间小于现在。 我愿意冒险。 看来数量对我的雇主来说无关紧要。 让我知道是否有人有更好的主意。 完整的输出（顺便说一下，您可以在图像的底部看到时间）：
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"> double mean = previousThree.Average(e =&gt; Convert.ToDouble((e.GetUpperValue() + e.GetLowerValue()) / 2));</span><br><span class="line">double stdDev = previousThree.StandardDeviation();</span><br><span class="line">double CV = stdDev / mean;</span><br><span class="line"></span><br><span class="line">if (CV &lt; 0.003)</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="tags/问题锦集/" rel="tag"># 问题锦集</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="algorithm拆分集合后如何在合并排序中应用合并逻辑堆栈内存溢出.html" rel="next" title="algorithm拆分集合后如何在合并排序中应用合并逻辑堆栈内存溢出">
+                <i class="fa fa-chevron-left"></i> algorithm拆分集合后如何在合并排序中应用合并逻辑堆栈内存溢出
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="c如何在不等待的情况下安全地在C中调用异步方法堆栈内存溢出.html" rel="prev" title="c如何在不等待的情况下安全地在C中调用异步方法堆栈内存溢出">
+                c如何在不等待的情况下安全地在C中调用异步方法堆栈内存溢出 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    <!-- 乱码三千文章内嵌广告 -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-2626449904708114" data-ad-slot="1549007621"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+  <!-- 乱码三千信息流广告 -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle" style="display:block" data-ad-format="fluid" data-ad-layout-key="-6t+ed+2i-1n-4w" data-ad-client="ca-pub-2626449904708114" data-ad-slot="9471729671"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">开发者</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="http://code.newban.cn/archives/">
+              
+                  <span class="site-state-item-count">1724</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#原文标题"><span class="nav-number">1.</span> <span class="nav-text">原文标题:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题"><span class="nav-number">2.</span> <span class="nav-text">问题:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解决方案"><span class="nav-number">3.</span> <span class="nav-text">解决方案:</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">开发者</span>
+  <div>
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+  </div>
+  
+</div>
+
+
+  <div class="powered-by">由 <a rel="external nofollow" class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a rel="external nofollow" class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+      <style>
+        a.gitment-editor-footer-tip { display: none; }
+        .gitment-container.gitment-footer-container { display: none; }
+      </style>
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: 'songjianzaina',
+            repo: 'codesan_comment',
+            
+            lang: "zh" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: '75fa01da04fd1029841debfa65ce027b566a47e3',
+            
+                client_id: '01a471de64bf7a7789f3'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="问题锦集,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="开发者博客" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="原文标题: Deleting a single record from a table which deletes all corresponding data from a second table   问题: 我有两个表SignUpInfo和DetailInfo，我要达到的目的是当我从SignUpInfo删除记录时，所有相应的DetailInfo也应删除。 它可能是DetailInfo中的1条">
+<meta name="keywords" content="问题锦集">
+<meta property="og:type" content="article">
+<meta property="og:title" content="android从表中删除一条记录从而从第二个表中删除所有对应的数据堆栈内存溢出">
+<meta property="og:url" content="https://luna.newban.cn/android从表中删除一条记录从而从第二个表中删除所有对应的数据堆栈内存溢出.html">
+<meta property="og:site_name" content="开发者博客">
+<meta property="og:description" content="原文标题: Deleting a single record from a table which deletes all corresponding data from a second table   问题: 我有两个表SignUpInfo和DetailInfo，我要达到的目的是当我从SignUpInfo删除记录时，所有相应的DetailInfo也应删除。 它可能是DetailInfo中的1条">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-09-08T08:47:27.172Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="android从表中删除一条记录从而从第二个表中删除所有对应的数据堆栈内存溢出">
+<meta name="twitter:description" content="原文标题: Deleting a single record from a table which deletes all corresponding data from a second table   问题: 我有两个表SignUpInfo和DetailInfo，我要达到的目的是当我从SignUpInfo删除记录时，所有相应的DetailInfo也应删除。 它可能是DetailInfo中的1条">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+<!--谷歌广告验证代码-->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({
+          google_ad_client: "ca-pub-2626449904708114",
+          enable_page_level_ads: true
+     });
+</script>
+<!--谷歌广告验证代码-->
+
+
+
+  <link rel="canonical" href="https://luna.newban.cn/android从表中删除一条记录从而从第二个表中删除所有对应的数据堆栈内存溢出.html">
+
+
+
+
+
+  <title>android从表中删除一条记录从而从第二个表中删除所有对应的数据堆栈内存溢出 | 开发者博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+  
+<a href="https://www.github.com/songjianzaina" class="github-corner" aria-label="View source on Github"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">开发者博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">开发者的博客 – 全栈</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="http://www.newban.cn/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="http://code.newban.cn/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://luna.newban.cn">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="开发者">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="开发者博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">android从表中删除一条记录从而从第二个表中删除所有对应的数据堆栈内存溢出</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-08-28T00:00:00+00:00">
+                2020-08-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="原文标题"><a href="#原文标题" class="headerlink" title="原文标题:"></a>原文标题:</h2>
+Deleting a single record from a table which deletes all corresponding data from a second table
+
+
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题:"></a>问题:</h2>
+我有两个表SignUpInfo和DetailInfo，我要达到的目的是当我从SignUpInfo删除记录时，所有相应的DetailInfo也应删除。 它可能是DetailInfo中的1条记录，也可能是单个SignUpInfo记录中的许多条记录。 我正在粘贴我的数据库处理程序类（RAVI TAMADA在https://www.androidhive.info/2013/09/android-sqlite-database-with-multiple-tables/上的代码）和我已实现删除的infoRecyclerView类代码码。
+
+我得到的错误是，当我实现删除功能时，项目确实被删除，recyclerview得到更新，但是在重新打开活动时再次出现，并且相应的数据也没有被删除。
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public class InfoRecyclerView extends RecyclerView.Adapter&lt;InfoRecyclerView.ViewHolder&gt; &#123; private Context context; private List&lt;Info&gt; infos; private LayoutInflater layoutInflater; private AlertDialog.Builder alertDialogBuilder; private AlertDialog dialog; public InfoRecyclerView(Context context, List&lt;Info&gt; infos) &#123; this.context = context; this.infos = infos; &#125; @NonNull @Override public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) &#123; View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.signup_list_row, parent, false); return new ViewHolder(view, context); &#125; @Override public void onBindViewHolder(@NonNull ViewHolder holder, int position) &#123; Info info = infos.get(position); holder.name.setText(info.getName()); holder.mobile.setText(info.getMobile()); holder.email.setText(info.getEmail()); &#125; @Override public int getItemCount() &#123; return infos.size(); &#125; public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener &#123; public TextView name; public TextView mobile; public TextView email; public Button editButton; public Button deleteButton; public int id; public ViewHolder(View view, Context ctx) &#123; super(view); context = ctx; name = view.findViewById(R.id.list_name); mobile = view.findViewById(R.id.list_mobile); email = view.findViewById(R.id.list_email); editButton = view.findViewById(R.id.list_edit_button); deleteButton = view.findViewById(R.id.list_delete_button); editButton.setOnClickListener(this); deleteButton.setOnClickListener(this); &#125; @Override public void onClick(View view) &#123; switch (view.getId()) &#123; case R.id.list_edit_button: int position = getAdapterPosition(); Info info = infos.get(position); editItem(info); Toast.makeText(context, &quot;Edit Button Clicked&quot;, Toast.LENGTH_SHORT).show(); break; case R.id.list_delete_button: position = getAdapterPosition(); info = infos.get(position); Toast.makeText(context, &quot;Delete Button Clicked&quot;, Toast.LENGTH_SHORT).show(); deleteItem(info.getId()); break; &#125; &#125; public void deleteItem(final int id) &#123; final Info infor = new Info(); AlertDialog.Builder builder = new AlertDialog.Builder(context); builder.setMessage(&quot;Are you sure you want to delete the student !&quot;).setCancelable(false) .setPositiveButton(&quot;YES&quot;, new DialogInterface.OnClickListener() &#123; @Override public void onClick(DialogInterface dialogInterface, int i) &#123; // delete the student DataBaseHandler db = new DataBaseHandler(context); db.deleteAllInfoDetail(infor,true); // db.deleteSignUpInfo(id); infos.remove(getAdapterPosition()); notifyItemRemoved(getAdapterPosition()); dialogInterface.dismiss(); &#125; &#125;) .setNegativeButton(&quot;NO&quot;, new DialogInterface.OnClickListener() &#123; @Override public void onClick(DialogInterface dialogInterface, int i) &#123; dialogInterface.dismiss(); &#125; &#125;); builder.show(); &#125; private void editItem(final Info info) &#123; alertDialogBuilder = new AlertDialog.Builder(context); layoutInflater = LayoutInflater.from(context); View view = layoutInflater.inflate(R.layout.edit_popup, null); final EditText name = view.findViewById(R.id.enter_student_name); final EditText mobile = view.findViewById(R.id.enter_mobile); final EditText email = view.findViewById(R.id.enter_email); final Button saveButton = view.findViewById(R.id.popup_save_button); // above content will be build and inflated alertDialogBuilder.setView(view); dialog = alertDialogBuilder.create(); dialog.show(); saveButton.setOnClickListener(new View.OnClickListener() &#123; @Override public void onClick(View view) &#123; DataBaseHandler dataBaseHandler = new DataBaseHandler(context); info.setName(name.getText().toString()); info.setMobile(mobile.getText().toString()); info.setEmail(email.getText().toString()); dataBaseHandler.updateSignUpInfo(info); notifyItemChanged(getAdapterPosition(),info); Toast.makeText(context, &quot;Editing Successfull&quot;, Toast.LENGTH_SHORT).show(); dialog.dismiss(); &#125; &#125;); &#125; &#125; &#125;</span><br></pre></td></tr></table></figure>
+
+
+现在我的数据库处理程序类
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public class DataBaseHandler extends SQLiteOpenHelper &#123; // Database to Handler private static final String DATABASE_NAME = &quot;StudentInfo&quot;; private static final int VERSION = 1; private static final String KEY_ID = &quot;id&quot;; // Table Names private static final String TABLE_SIGNUP = &quot;SignUpForm&quot;; private static final String TABLE_DETAIL = &quot;DetailForm&quot;; private static final String TABLE_SIGNUP_DETAIL = &quot;SignUp_Detail&quot;; // SignUp Form Table private static final String NAME = &quot;name&quot;; private static final String MOBILE = &quot;mobile&quot;; private static final String EMAIL = &quot;email&quot;; private static final String IMAGE = &quot;image&quot;; // SignUp Detail Table private static final String AGE = &quot;age&quot;; private static final String CLASS = &quot;class&quot;; private static final String SUBJECT = &quot;suject&quot;; // SignUp and Detail Table private static final String KEY_SIGNUP_ID = &quot;signUpId&quot;; private static final String KEY_DETAIL_ID = &quot;detailId&quot;; // Creating Sign Up Table private static final String CREATE_TABLE_SIGNUP = &quot;CREATE TABLE &quot; + TABLE_SIGNUP + &quot;(&quot; + KEY_ID + &quot; INTEGER PRIMARY KEY AUTOINCREMENT,&quot; + NAME + &quot; TEXT,&quot; + MOBILE + &quot; TEXT,&quot; + EMAIL + &quot; TEXT,&quot; + IMAGE + &quot; BLOB&quot; + &quot;)&quot;; // Creating Detail Table private static final String CREATE_TABLE_DETAIL = &quot;CREATE TABLE &quot; + TABLE_DETAIL + &quot;(&quot; + KEY_ID + &quot; INTEGER PRIMARY KEY AUTOINCREMENT,&quot; + NAME + &quot; TEXT,&quot; + AGE + &quot; TEXT,&quot; + CLASS + &quot; TEXT,&quot; + SUBJECT + &quot; TEXT&quot; + &quot;)&quot;; // Creating Combined Table SignUp and Detail private static final String CREATE_TABLE_SIGNUP_DETAIL = &quot;CREATE TABLE &quot; + TABLE_SIGNUP_DETAIL + &quot;(&quot; + KEY_ID + &quot; INTEGER PRIMARY KEY AUTOINCREMENT,&quot; + KEY_SIGNUP_ID + &quot; INTEGER,&quot; + KEY_DETAIL_ID + &quot; INTEGER&quot; + &quot;)&quot;; public DataBaseHandler(Context context) &#123; super(context, DATABASE_NAME, null, VERSION); &#125; @Override public void onCreate(SQLiteDatabase sqLiteDatabase) &#123; sqLiteDatabase.execSQL(CREATE_TABLE_SIGNUP); sqLiteDatabase.execSQL(CREATE_TABLE_DETAIL); sqLiteDatabase.execSQL(CREATE_TABLE_SIGNUP_DETAIL); &#125; @Override public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) &#123; sqLiteDatabase.execSQL(&quot;DROP TABLE IF EXISTS &quot; + TABLE_SIGNUP); sqLiteDatabase.execSQL(&quot;DROP TABLE IF EXISTS &quot; + TABLE_DETAIL); sqLiteDatabase.execSQL(&quot;DROP TABLE IF EXISTS &quot; + TABLE_SIGNUP_DETAIL); onCreate(sqLiteDatabase); &#125; /* CRUD OPERATIONS for SIGNUP INFO */ public long insertData(Info info, long [] detailIDs) &#123; // getting writable datebase SQLiteDatabase db = this.getWritableDatabase(); // new method content values to insert data into Info Class ContentValues contentValues = new ContentValues(); contentValues.put(NAME, info.getName()); contentValues.put(MOBILE, info.getMobile()); contentValues.put(EMAIL, info.getEmail()); contentValues.put(IMAGE, info.getImage()); // insert new row long signUp_id = db.insert(TABLE_SIGNUP,null,contentValues); for (long detail_id : detailIDs)&#123; createSignUpDetail(signUp_id, detail_id); &#125; return signUp_id; &#125; public Info getInfo (long signUp_id)&#123; SQLiteDatabase db = this.getReadableDatabase(); String selectQuery = &quot;SELECT * FROM &quot; + TABLE_SIGNUP + &quot; WHERE &quot; + KEY_ID + &quot; = &quot; + signUp_id; Cursor c = db.rawQuery(selectQuery, null); if ( c != null ) c.moveToFirst(); Info info = new Info(); info.setId(c.getInt(c.getColumnIndex(KEY_ID))); info.setName(c.getString(c.getColumnIndex(NAME))); info.setEmail(c.getString(c.getColumnIndex(EMAIL))); info.setMobile(c.getString(c.getColumnIndex(MOBILE))); info.setImage(c.getBlob(c.getColumnIndex(IMAGE))); return info; &#125; public List&lt;Info&gt; getAllInfo ()&#123; List&lt;Info&gt; infoList = new ArrayList&lt;&gt;(); String selectQuery = &quot;SELECT * FROM &quot; + TABLE_SIGNUP; SQLiteDatabase db = this.getReadableDatabase(); Cursor c = db.rawQuery(selectQuery, null); // looping through all rows and adding to list. if ( c.moveToFirst() )&#123; do &#123; Info info = new Info(); info.setId(c.getInt(c.getColumnIndex(KEY_ID))); info.setName(c.getString(c.getColumnIndex(NAME))); info.setEmail(c.getString(c.getColumnIndex(EMAIL))); info.setMobile(c.getString(c.getColumnIndex(MOBILE))); info.setImage(c.getBlob(c.getColumnIndex(IMAGE))); // adding info to list infoList.add(info); &#125;while (c.moveToNext()); &#125; return infoList; &#125; /* * Updating a SignUp Info */ public int updateSignUpInfo (Info info)&#123; SQLiteDatabase db = this.getWritableDatabase(); ContentValues values = new ContentValues(); values.put(NAME, info.getName()); values.put(MOBILE, info.getMobile()); values.put(EMAIL, info.getEmail()); values.put(IMAGE, info.getImage()); // updating row return db.update(TABLE_SIGNUP, values, KEY_ID + &quot; = ?&quot;, new String[] &#123;String.valueOf(info.getId())&#125;); &#125; /* * Deleting SignUp Info */ public void deleteSignUpInfo (long signUp_id)&#123; SQLiteDatabase db = this.getWritableDatabase(); db.delete(TABLE_SIGNUP, KEY_ID + &quot; = ?&quot;, new String[] &#123;String.valueOf(signUp_id)&#125;); &#125; /* CRUD OPERATIONS for DETAIL INFO */ public void createDetails (Detail detail)&#123; SQLiteDatabase db = this.getWritableDatabase(); ContentValues values = new ContentValues(); values.put(NAME, detail.getName()); values.put(AGE, detail.getAge()); values.put(CLASS,detail.getmClass()); values.put(SUBJECT,detail.getSubject()); db.insert(TABLE_DETAIL, null, values); &#125; public List&lt;Detail&gt; allDetails ()&#123; List&lt;Detail&gt; detailList = new ArrayList&lt;&gt;(); String selectQuery = &quot;SELECT * FROM &quot; + TABLE_DETAIL; SQLiteDatabase db = this.getReadableDatabase(); Cursor c = db.rawQuery(selectQuery, null); // looping through all rows and adding to list. if ( c.moveToFirst() )&#123; do &#123; Detail detail = new Detail(); detail.setId(c.getInt(c.getColumnIndex(KEY_ID))); detail.setName(c.getString(c.getColumnIndex(NAME))); detail.setAge(c.getString(c.getColumnIndex(AGE))); detail.setmClass(c.getString(c.getColumnIndex(CLASS))); detail.setSubject(c.getString(c.getColumnIndex(SUBJECT))); detailList.add(detail); &#125;while (c.moveToNext()); &#125;return detailList; &#125; public int updateDetails ( Detail detail)&#123; SQLiteDatabase db = this.getWritableDatabase(); ContentValues values = new ContentValues(); values.put(NAME, detail.getName()); values.put(AGE, detail.getAge()); values.put(CLASS,detail.getmClass()); values.put(SUBJECT,detail.getSubject()); return db.update(TABLE_DETAIL,values,KEY_ID + &quot; = ?&quot;, new String[]&#123;String.valueOf(detail.getId())&#125;); &#125; /* * Deleting SignUp Info */ public void deleteDetailInfo (long detail_id)&#123; SQLiteDatabase db = this.getWritableDatabase(); db.delete(TABLE_DETAIL, KEY_ID + &quot; = ?&quot;, new String[] &#123;String.valueOf(detail_id)&#125;); &#125; /* Delete Details if student info is deleted boolean should_delete_all_details = passing it true will delete all detail records. */ public void deleteAllInfoDetail (Info info, boolean should_delete_all)&#123; SQLiteDatabase db = this.getWritableDatabase(); // checking if the all should be deleted if ( should_delete_all )&#123; List&lt;Detail&gt; alldetails = getallDetailsbyInfo(info.getName()); // delete all info for (Detail detail1 : alldetails)&#123; deleteDetailInfo(detail1.getId()); &#125; &#125; db.delete(TABLE_SIGNUP,KEY_ID +&quot; = ?&quot;, new String[]&#123;String.valueOf(info.getId())&#125;); &#125; public void deleteInfoandDetail (long signUpDetailID)&#123; SQLiteDatabase db = this.getWritableDatabase(); db.delete(TABLE_SIGNUP_DETAIL, KEY_ID + &quot; = ?&quot;, new String[] &#123;String.valueOf(signUpDetailID)&#125;); &#125; /* String selectQuery = &quot;SELECT * FROM &quot; + TABLE_TODO + &quot; td, &quot; + TABLE_TAG + &quot; tg, &quot; + TABLE_TODO_TAG + &quot; tt WHERE tg.&quot; + KEY_TAG_NAME + &quot; = &apos;&quot; + tag_name + &quot;&apos;&quot; + &quot; AND tg.&quot; + KEY_ID + &quot; = &quot; + &quot;tt.&quot; + KEY_TAG_ID + &quot; AND td.&quot; + KEY_ID + &quot; = &quot; + &quot;tt.&quot; + KEY_TODO_ID; */ private List&lt;Detail&gt; getallDetailsbyInfo(String name) &#123; List&lt;Detail&gt; allDetails = new ArrayList&lt;&gt;(); String selectQuery = &quot;SELECT * FROM &quot; + TABLE_DETAIL + &quot; td, &quot; + TABLE_SIGNUP + &quot; ts,&quot; + TABLE_SIGNUP_DETAIL + &quot; tsd WHERE ts.&quot; + NAME + &quot; =&apos;&quot; + name + &quot;&apos;&quot; + &quot; AND ts.&quot; + KEY_ID + &quot; = &quot; + &quot;tsd.&quot; + KEY_SIGNUP_ID + &quot; AND td.&quot; + KEY_ID + &quot; = &quot; + &quot;tsd.&quot; + KEY_DETAIL_ID; SQLiteDatabase db = this.getWritableDatabase(); Cursor c = db.rawQuery(selectQuery, null); // looping through all rows and adding to list if ( c.moveToFirst() )&#123; do &#123; Detail detail = new Detail(); detail.setId(c.getInt(c.getColumnIndex(KEY_ID))); detail.setName(c.getString(c.getColumnIndex(NAME))); detail.setAge(c.getString(c.getColumnIndex(AGE))); detail.setmClass(c.getString(c.getColumnIndex(CLASS))); detail.setSubject(c.getString(c.getColumnIndex(SUBJECT))); allDetails.add(detail); &#125;while (c.moveToNext()); &#125;return allDetails; &#125; public long createSignUpDetail(long signUp_id, long detail_id) &#123; SQLiteDatabase db = this.getWritableDatabase(); ContentValues values = new ContentValues(); values.put(KEY_SIGNUP_ID, signUp_id); values.put(KEY_DETAIL_ID, detail_id); long id = db.insert(TABLE_SIGNUP_DETAIL, null, values); return id; &#125; // closing database public void closeDB() &#123; SQLiteDatabase db = this.getReadableDatabase(); if (db != null &amp;&amp; db.isOpen()) db.close(); &#125; &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案:"></a>解决方案:</h2><p><strong>===============&gt;&gt;#1 票数：1</strong></p>
+
+我相信您的问题集中在final Info infor = new Info();的使用上final Info infor = new Info(); 即一个新的空/用默认值Info对象constrcuted并且您然后通过传递的Infor到deleteAllInfoDetail方法db.deleteAllInfoDetail(infor,true); 当您使用infos.remove(getAdapterPosition());从RecyclerView中删除单击的项目时，该项目似乎将被删除infos.remove(getAdapterPosition()); 。 因此，它显然已删除，但是如果从数据库重建RecyclerView，它将重新出现。 你也许想用
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.deleteAllInfoDetail(infos.get(getAdapterPosition()),true);</span><br></pre></td></tr></table></figure>
+
+<p><strong>===============&gt;&gt;#2 票数：0</strong></p>
+
+我看你的代码有一些不合理的语法 在下面的方法中，您有2个不同的输入参数 上面的方法填充KEY_SIGNUP_ID和KEY_DETAIL_ID 但是在下面的方法中，您认为这两个参数相同 我的意思是KEY_SIGNUP_ID和KEY_DETAIL_ID 在您的查询中 结果，上述查询不返回任何内容，因为您的条件永远不会为真，并且您不会传递任何returne以便在deleteDetailInfo删除
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public long createSignUpDetail(long signUp_id, long detail_id)</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="tags/问题锦集/" rel="tag"># 问题锦集</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="androidAndroid导航栏在Chrome中阻止我的网站底部56px堆栈内存溢出.html" rel="next" title="androidAndroid导航栏在Chrome中阻止我的网站底部56px堆栈内存溢出">
+                <i class="fa fa-chevron-left"></i> androidAndroid导航栏在Chrome中阻止我的网站底部56px堆栈内存溢出
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="androidAndroid应用程式错误glUtilsParamSize未知参数堆栈内存溢出.html" rel="prev" title="androidAndroid应用程式错误glUtilsParamSize未知参数堆栈内存溢出">
+                androidAndroid应用程式错误glUtilsParamSize未知参数堆栈内存溢出 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    <!-- 乱码三千文章内嵌广告 -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-2626449904708114" data-ad-slot="1549007621"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+  <!-- 乱码三千信息流广告 -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle" style="display:block" data-ad-format="fluid" data-ad-layout-key="-6t+ed+2i-1n-4w" data-ad-client="ca-pub-2626449904708114" data-ad-slot="9471729671"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">开发者</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="http://code.newban.cn/archives/">
+              
+                  <span class="site-state-item-count">1724</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#原文标题"><span class="nav-number">1.</span> <span class="nav-text">原文标题:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题"><span class="nav-number">2.</span> <span class="nav-text">问题:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解决方案"><span class="nav-number">3.</span> <span class="nav-text">解决方案:</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">开发者</span>
+  <div>
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+  </div>
+  
+</div>
+
+
+  <div class="powered-by">由 <a rel="external nofollow" class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a rel="external nofollow" class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+      <style>
+        a.gitment-editor-footer-tip { display: none; }
+        .gitment-container.gitment-footer-container { display: none; }
+      </style>
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: 'songjianzaina',
+            repo: 'codesan_comment',
+            
+            lang: "zh" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: '75fa01da04fd1029841debfa65ce027b566a47e3',
+            
+                client_id: '01a471de64bf7a7789f3'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

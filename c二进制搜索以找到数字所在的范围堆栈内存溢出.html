@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="问题锦集,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="开发者博客" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="原文标题: Binary search to find the range in which the number lies   问题: 我有一个数组  1Values array: 12 20 32 40 52 ^ ^ ^ ^ ^ 0 1 2 3 4   我必须在其上执行二进制搜索以找到数字所在范围的索引。 例如：  我以以下方式实现了二进制搜索，这对于情况1和3来说是正确的，但是如果我们搜索情">
+<meta name="keywords" content="问题锦集">
+<meta property="og:type" content="article">
+<meta property="og:title" content="c二进制搜索以找到数字所在的范围堆栈内存溢出">
+<meta property="og:url" content="https://luna.newban.cn/c二进制搜索以找到数字所在的范围堆栈内存溢出.html">
+<meta property="og:site_name" content="开发者博客">
+<meta property="og:description" content="原文标题: Binary search to find the range in which the number lies   问题: 我有一个数组  1Values array: 12 20 32 40 52 ^ ^ ^ ^ ^ 0 1 2 3 4   我必须在其上执行二进制搜索以找到数字所在范围的索引。 例如：  我以以下方式实现了二进制搜索，这对于情况1和3来说是正确的，但是如果我们搜索情">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-09-08T08:47:27.212Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="c二进制搜索以找到数字所在的范围堆栈内存溢出">
+<meta name="twitter:description" content="原文标题: Binary search to find the range in which the number lies   问题: 我有一个数组  1Values array: 12 20 32 40 52 ^ ^ ^ ^ ^ 0 1 2 3 4   我必须在其上执行二进制搜索以找到数字所在范围的索引。 例如：  我以以下方式实现了二进制搜索，这对于情况1和3来说是正确的，但是如果我们搜索情">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+<!--谷歌广告验证代码-->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({
+          google_ad_client: "ca-pub-2626449904708114",
+          enable_page_level_ads: true
+     });
+</script>
+<!--谷歌广告验证代码-->
+
+
+
+  <link rel="canonical" href="https://luna.newban.cn/c二进制搜索以找到数字所在的范围堆栈内存溢出.html">
+
+
+
+
+
+  <title>c二进制搜索以找到数字所在的范围堆栈内存溢出 | 开发者博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+  
+<a href="https://www.github.com/songjianzaina" class="github-corner" aria-label="View source on Github"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">开发者博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">开发者的博客 – 全栈</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="http://www.newban.cn/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="http://code.newban.cn/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://luna.newban.cn">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="开发者">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="开发者博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">c二进制搜索以找到数字所在的范围堆栈内存溢出</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-08-28T00:00:00+00:00">
+                2020-08-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="原文标题"><a href="#原文标题" class="headerlink" title="原文标题:"></a>原文标题:</h2>
+Binary search to find the range in which the number lies
+
+
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题:"></a>问题:</h2>
+我有一个数组
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Values array: 12 20 32 40 52 ^ ^ ^ ^ ^ 0 1 2 3 4</span><br></pre></td></tr></table></figure>
+
+
+我必须在其上执行二进制搜索以找到数字所在范围的索引。 例如：
+
+我以以下方式实现了二进制搜索，这对于情况1和3来说是正确的，但是如果我们搜索情况2或52、55 32等，则是错误的。
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;iostream&gt; using namespace std; int findIndex(int values[], int number, unsigned first, unsigned last) &#123; unsigned midPoint; while(first&lt;last) &#123; unsigned midPoint = (first+last)/2; if (number &lt;= values[midPoint]) last = midPoint -1; else if (number &gt; values[midPoint]) first = midPoint + 1; &#125; return midPoint; &#125; int main() &#123; int a[] = &#123;12, 20, 32, 40, 52&#125;; unsigned i = findIndex(a, 55, 0, 4); cout &lt;&lt; i; &#125;</span><br></pre></td></tr></table></figure>
+
+
+不允许使用其他变量，例如bool found 。
+
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案:"></a>解决方案:</h2><p><strong>===============&gt;&gt;#1 票数：12 已采纳</strong></p>
+
+通常使用C或C ++的范围作为直接指向下限的指针，但指向上限的一个指针。 除非您感到极端受虐狂，否则您可能还希望在搜索中遵循该约定。 假设您要遵循该规则，那么您的last = midpoint-1; 是不正确的。 相反，你想最后设定为一个过去你要真正使用范围的结束，所以它应该是last = midpoint; 您还只真正需要一个比较，而不是两个。 在二分查找中，只要两个边界不相等，就需要将下限或上限设置为中心点，因此您只需要进行一次比较即可确定哪个。 至少按照惯例，在C ++中，您使用<而不是<= ，>等进行所有比较。以上任何一种都可以使用，但是遵循仅使用<的惯例，可以避免对包含的类型施加额外的（不必要的）要求。 尽管大多数面试官可能并不在意，但是当您进行midpoint="(left" + right) 2;时，也可能会发生溢出midpoint="(left" 2; 。 我通常更喜欢midpoint="left" (right - left) 考虑到这些因素，代码可能看起来像这样： <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"> template &lt;class T&gt;</span><br><span class="line">T *lower_bound(T *left, T *right, T val) &#123;</span><br><span class="line">    while (left &lt; right) &#123;</span><br><span class="line">        T *middle = left + (right - left) / 2;</span><br><span class="line">        if (*middle &lt; val)</span><br><span class="line">            left = middle + 1;</span><br><span class="line">        else</span><br><span class="line">            right = middle;</span><br><span class="line">    &#125;</span><br><span class="line">    return left;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">template &lt;class T&gt;</span><br><span class="line">T *upper_bound(T *left, T *right, T val) &#123;</span><br><span class="line">    while (left &lt; right) &#123;</span><br><span class="line">        T *middle = left + (right - left) / 2;</span><br><span class="line">        if (val &lt; *middle)</span><br><span class="line">            right = middle;</span><br><span class="line">        else</span><br><span class="line">            left = middle + 1;</span><br><span class="line">    &#125;</span><br><span class="line">    return left;</span><br><span class="line">&#125;</span><br></pre></td></tr></table>
+
+<p><strong>===============&gt;&gt;#2 票数：3</strong></p>
+
+为什么不使用标准库函数？ 注意：一个非常酷的网站-http://en.cppreference.com/w/cpp/algorithm
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"> #include &lt;vector&gt;</span><br><span class="line">#include &lt;algorithm&gt;</span><br><span class="line">#include &lt;iostream&gt;</span><br><span class="line"></span><br><span class="line">using namespace std;</span><br><span class="line"></span><br><span class="line">int main() &#123;</span><br><span class="line">    for (int input = 10; input &lt; 55; input++) &#123;</span><br><span class="line">        cout &lt;&lt; input &lt;&lt; &quot;: &quot;;</span><br><span class="line"></span><br><span class="line">        // Your desire:</span><br><span class="line">        vector&lt;int&gt; v = &#123; 12, 20, 32, 40, 52 &#125;;</span><br><span class="line">        if (input &lt; v.front() || input &gt; v.back()) &#123;</span><br><span class="line">            cout &lt;&lt; &quot;Not found&quot; &lt;&lt; endl;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            auto it = upper_bound(v.begin(), v.end(), input);</span><br><span class="line">            cout &lt;&lt; it - v.begin() - 1 &lt;&lt; endl;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>===============&gt;&gt;#3 票数：1</strong></p>
+
+对于输入 4 1 3 8 10 4 输出值 3（3和8中的最小值）
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"> #include &lt;stdio.h&gt;</span><br><span class="line"></span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">   int c, first, last, middle, n, search, array[100];</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">   scanf(&quot;%d&quot;,&amp;n);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">for (c = 0; c &lt; n; c++)</span><br><span class="line">  scanf(&quot;%d&quot;,&amp;array[c]);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">   scanf(&quot;%d&quot;, &amp;search);</span><br><span class="line"></span><br><span class="line">   first = 0;</span><br><span class="line">   last = n - 1;</span><br><span class="line">   middle = (first+last)/2;</span><br><span class="line"></span><br><span class="line">while (first &lt;= last) &#123;</span><br><span class="line"></span><br><span class="line">  if (array[middle] &lt; search)</span><br><span class="line">  &#123; </span><br><span class="line">     first = middle + 1;    &#125;</span><br><span class="line">  else if (array[middle] == search) &#123;</span><br><span class="line"></span><br><span class="line">     break;</span><br><span class="line">  &#125;</span><br><span class="line">  else</span><br><span class="line">  &#123;  </span><br><span class="line">     last = middle - 1;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  middle = (first + last)/2;</span><br><span class="line"> &#125;</span><br><span class="line">  printf(&quot;%d\n&quot;,array[middle]);</span><br><span class="line">   return 0;   </span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>===============&gt;&gt;#4 票数：0</strong></p>
+
+常规的成功二进制搜索将返回键的索引。 如果找不到密钥，它将始终在最低密钥的索引大于我们正在搜索的密钥的索引处停止。 我猜下面的修改过的二进制搜索算法会起作用。
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"> Given sorted array A</span><br><span class="line">Find a key using binary search and get an index. </span><br><span class="line">If A[index] == key</span><br><span class="line">    return index;</span><br><span class="line">else </span><br><span class="line">   while(index &gt; 1 &amp;&amp; A[index] == A[index -1]) index = index -1;</span><br><span class="line">   return index;</span><br></pre></td></tr></table></figure>
+
+<p><strong>===============&gt;&gt;#5 票数：0</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"> binsrch(array, num, low, high) &#123;</span><br><span class="line">if (num &gt; array[high])</span><br><span class="line">     return high;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">while(1) &#123;</span><br><span class="line">     if (low == high-1)</span><br><span class="line">          return low;</span><br><span class="line">     if(low &gt;= high)</span><br><span class="line">          return low-1;        </span><br><span class="line">     mid = (low+high)/2</span><br><span class="line">     if (num &lt; arr[mid])</span><br><span class="line">          high = mid;</span><br><span class="line">     else</span><br><span class="line">          low = mid+1;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>===============&gt;&gt;#6 票数：0</strong></p>
+
+这将在min（A [i]）<=键<= max（a [i]）的条件下工作 min（a [i]）<="键<=" <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"> int binary_search(int A[],int key,int left, int right)</span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">  while (left &lt;= right) &#123;</span><br><span class="line">        int middle = left + (right - left) / 2;</span><br><span class="line">        if (A[middle] &lt; key)</span><br><span class="line">            left = middle+1;</span><br><span class="line">        else if(A[middle] &gt; key)</span><br><span class="line">            right = middle-1;</span><br><span class="line">        else</span><br><span class="line">            return middle;</span><br><span class="line">    &#125;</span><br><span class="line">    return (left - 1);</span><br><span class="line">&#125;</span><br></pre></td></tr></table>
+
+<p><strong>===============&gt;&gt;#7 票数：0</strong></p>
+
+这是一个更具体的答案 我觉得这与您想要的内容更加内联...我们不会遗漏这件事的最后价值
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"> int findIndex(int values[],int key,int first, int last)</span><br><span class="line">&#123;</span><br><span class="line">    if(values[first]&lt;=key &amp;&amp; values[first+1]&gt;=key)// stopping condition</span><br><span class="line">    &#123;</span><br><span class="line">        return first;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">   int imid=first+(last-first)/2;</span><br><span class="line"></span><br><span class="line">   if(first==last || imid==first)</span><br><span class="line">   &#123;</span><br><span class="line">        return -1;</span><br><span class="line">   &#125;</span><br><span class="line">   if(values[imid]&gt;key)</span><br><span class="line">   &#123;</span><br><span class="line">        return findIndex(values,key,first,imid);</span><br><span class="line">    &#125;</span><br><span class="line">    else if(values[imid]&lt;=key)</span><br><span class="line">    &#123;</span><br><span class="line">        return findIndex(values,key,imid,last);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>===============&gt;&gt;#8 票数：0</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br></pre></td><td class="code"><pre><span class="line"> /* binary_range.c (c) 2016 adolfo@di-mare.com  */</span><br><span class="line">/* http://stackoverflow.com/questions/10935635 */</span><br><span class="line"></span><br><span class="line">/* This code is written to be easily translated to Fortran */</span><br><span class="line"></span><br><span class="line">#include &lt;stdio.h&gt;   /* printf() */</span><br><span class="line">#include &lt;assert.h&gt;  /* assert() */</span><br><span class="line"></span><br><span class="line">/** Find the biggest index &apos;i&apos; such that &apos;*nSEED &lt;= nVEC[i]&apos;.</span><br><span class="line">    - nVEC[0..N-1] is an strict ascending order array.</span><br><span class="line">    - Returns and index in [0..N].</span><br><span class="line">    - Returns &apos;N&apos; when &apos;*nSEED&gt;nVEC[N-1]&apos;.</span><br><span class="line">    - Uses binary search to find the range for &apos;*nSEED&apos;.</span><br><span class="line">*/</span><br><span class="line">int binary_range( int *nSEED, int nVEC[] , int N ) &#123;</span><br><span class="line">    int lo,hi, mid,plus;</span><br><span class="line"></span><br><span class="line">    if ( *nSEED &gt; nVEC[N-1] ) &#123;</span><br><span class="line">        return N;</span><br><span class="line">    &#125;</span><br><span class="line">    for (;;) &#123; /* lo = binary_range_search() */</span><br><span class="line">        lo = 0;</span><br><span class="line">        hi = N-1;</span><br><span class="line">        for (;;) &#123;</span><br><span class="line">            plus = (hi-lo)&gt;&gt;1; /* mid = (hi+lo)/2; */</span><br><span class="line">            if ( plus == 0 ) &#123;   assert( hi-lo==1 );</span><br><span class="line">                if (*nSEED &lt;= nVEC[lo]) &#123;</span><br><span class="line">                    hi = lo;</span><br><span class="line">                &#125;</span><br><span class="line">                else &#123;</span><br><span class="line">                    lo = hi;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            mid = lo + plus; /* mid = lo + (hi-lo)/2; */</span><br><span class="line"></span><br><span class="line">            if (*nSEED &lt;= nVEC[mid]) &#123;</span><br><span class="line">                hi = mid;</span><br><span class="line">            &#125;</span><br><span class="line">            else &#123;</span><br><span class="line">                lo = mid;</span><br><span class="line">            &#125;</span><br><span class="line">            if (lo&gt;=hi) &#123; break; &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        break;</span><br><span class="line">    &#125; /* &apos;lo&apos; is the index */</span><br><span class="line">    /* This implementation does not use division. */</span><br><span class="line">    /* =========================================  */</span><br><span class="line"></span><br><span class="line">    assert( *nSEED &lt;= nVEC[lo] );</span><br><span class="line">    return lo;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/** Find the biggest index &apos;i&apos; such that &apos;*nSEED &lt;= nVEC[i]&apos;.</span><br><span class="line">    - nVEC[0..N-1] is an strict ascending order array.</span><br><span class="line">    - Returns and index in [0..N].</span><br><span class="line">    - Returns &apos;N&apos; when &apos;*nSEED&gt;nVEC[N-1]&apos;.</span><br><span class="line">    - Uses sequential search to find the range for &apos;*nSEED&apos;.</span><br><span class="line">*/</span><br><span class="line">int sequential_range( int* nSEED, int nVEC[] , int N ) &#123;</span><br><span class="line">    int i;</span><br><span class="line">    if ( *nSEED &gt; nVEC[N-1] ) &#123;</span><br><span class="line">        return N;</span><br><span class="line">    &#125;</span><br><span class="line">    i=0;</span><br><span class="line">    while ( i&lt;N ) &#123;</span><br><span class="line">        if ( *nSEED &lt;= nVEC[i] ) &#123; break; &#125;</span><br><span class="line">        ++i;</span><br><span class="line">    &#125;</span><br><span class="line">    return i;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/** test-&gt;stackoverflow.10935635(). */</span><br><span class="line">void test_10935635() &#123;</span><br><span class="line">&#123;&#123;  /* test.stackoverflow.10935635()                                  */</span><br><span class="line">    /* http://stackoverflow.com/questions/10935635                    */</span><br><span class="line">    /* binary_range search to find the range in which the number lies */</span><br><span class="line">    /*              0  1  2  3  4                                     */</span><br><span class="line">    int nVEC[] = &#123; 12,20,32,40,52 &#125;; int val;</span><br><span class="line">    int N = sizeof(nVEC)/sizeof(nVEC[0]); /* N = DIM(nVEC[]) */</span><br><span class="line"></span><br><span class="line">    val=19; val   = binary_range( &amp;val,nVEC,N );</span><br><span class="line"></span><br><span class="line">    /* 19 -&gt; [12 &lt; (19) &lt;= 20] -&gt; return 1 */</span><br><span class="line">    val=19; assert( binary_range( &amp;val,nVEC,N ) == 1 );</span><br><span class="line"></span><br><span class="line">    /* 22 -&gt; [20 &lt; (22) &lt;= 32] -&gt; return 2 */</span><br><span class="line">    val=22; assert( binary_range( &amp;val,nVEC,N ) == 2 );</span><br><span class="line"></span><br><span class="line">    /* 40 -&gt; [32 &lt; (40) &lt;= 40] -&gt; return 3 */</span><br><span class="line">    val=40; assert( binary_range( &amp;val,nVEC,N ) == 3 );</span><br><span class="line"></span><br><span class="line">    /* Everything over 52 returns N */</span><br><span class="line">    val=53; assert( binary_range( &amp;val,nVEC,N ) == N );</span><br><span class="line">&#125;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/** Test program. */</span><br><span class="line">int main() &#123;</span><br><span class="line">    if (1) &#123;</span><br><span class="line">        printf( &quot;\ntest_10935635()&quot; );</span><br><span class="line">        test_10935635();</span><br><span class="line">    &#125;</span><br><span class="line">    printf( &quot;\nEND&quot; );</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/* Compiler: gcc.exe (tdm-1) 4.9.2 */</span><br><span class="line">/* IDE:      Code::Blocks 16.01    */</span><br><span class="line">/* Language: C &amp;&amp; C++              */</span><br><span class="line"></span><br><span class="line">/* EOF: binary_range.c */</span><br></pre></td></tr></table></figure>
+
+<p><strong>===============&gt;&gt;#9 票数：0</strong></p>
+
+我知道这是一个旧线程，但是由于我必须解决类似的问题，所以我认为我会分享它。 给定一组不重叠的整数范围，我需要测试给定值是否位于这些范围中的任何一个范围内。 以下内容（在Java中）使用修改后的二进制搜索来测试值是否在排序范围内（从最低到最高）的整数范围内。
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br></pre></td><td class="code"><pre><span class="line"> /**</span><br><span class="line"> * Very basic Range representation for long values</span><br><span class="line"> *</span><br><span class="line"> */</span><br><span class="line">public class Range &#123;</span><br><span class="line"></span><br><span class="line">private long low;</span><br><span class="line">private long high;</span><br><span class="line"></span><br><span class="line">public Range(long low, long high) &#123;</span><br><span class="line">    this.low = low;</span><br><span class="line">    this.high = high;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public boolean isInRange(long val) &#123;</span><br><span class="line">    return val &gt;= low &amp;&amp; val &lt;= high;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public long getLow() &#123;</span><br><span class="line">    return low;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public void setLow(long low) &#123;</span><br><span class="line">    this.low = low;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public long getHigh() &#123;</span><br><span class="line">    return high;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public void setHigh(long high) &#123;</span><br><span class="line">    this.high = high;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@Override</span><br><span class="line">public String toString() &#123;</span><br><span class="line">    return &quot;Range [low=&quot; + low + &quot;, high=&quot; + high + &quot;]&quot;;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">import java.util.ArrayList;</span><br><span class="line">import java.util.Arrays;</span><br><span class="line">import java.util.List;</span><br><span class="line"></span><br><span class="line">//Java implementation of iterative Binary Search over Ranges</span><br><span class="line">class BinaryRangeSearch &#123; </span><br><span class="line">// Returns index of x if it is present in the list of Range, </span><br><span class="line">// else return -1 </span><br><span class="line">int binarySearch(List&lt;Range&gt; ranges, int x) </span><br><span class="line">&#123; </span><br><span class="line"></span><br><span class="line">    Range[] arr = new Range[ranges.size()];</span><br><span class="line">    arr = ranges.toArray(arr);</span><br><span class="line">    int low = 0, high = arr.length - 1; </span><br><span class="line">    int iters = 0;</span><br><span class="line">    while (low &lt;= high) &#123; </span><br><span class="line">        int mid = low + (high - low) / 2; // find mid point</span><br><span class="line"></span><br><span class="line">        // Check if x is present a</span><br><span class="line">        if (arr[mid].getLow() == x) &#123;</span><br><span class="line">            System.out.println(iters + &quot; iterations&quot;);</span><br><span class="line">            return mid;                 </span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        // If x greater, ignore left half </span><br><span class="line">        if (x &gt; arr[mid].getHigh()) &#123;</span><br><span class="line">            low = mid + 1; </span><br><span class="line">        &#125;</span><br><span class="line">        else if (x &gt;= arr[mid].getLow()) &#123;</span><br><span class="line">            System.out.println(iters + &quot; iterations&quot;);</span><br><span class="line">            return mid;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        // If x is smaller, ignore right half of remaining Ranges</span><br><span class="line">        else</span><br><span class="line">            high = mid - 1; </span><br><span class="line">        iters++;</span><br><span class="line">    &#125; </span><br><span class="line"></span><br><span class="line">    return -1; // not in any of the given Ranges</span><br><span class="line">&#125; </span><br><span class="line"></span><br><span class="line">// Driver method to test above </span><br><span class="line">public static void main(String args[]) </span><br><span class="line">&#123; </span><br><span class="line">    BinaryRangeSearch ob = new BinaryRangeSearch(); </span><br><span class="line"></span><br><span class="line">    // make a test list of long Range</span><br><span class="line">    int multiplier = 1;</span><br><span class="line"></span><br><span class="line">    List&lt;Range&gt; ranges = new ArrayList&lt;&gt;();</span><br><span class="line">    int high = 0;</span><br><span class="line">    for(int i = 0; i &lt;7; i++) &#123;</span><br><span class="line"></span><br><span class="line">        int low = i + high;</span><br><span class="line">        high = (i+10) * multiplier;</span><br><span class="line">        Range r = new Range(low, high);</span><br><span class="line">        multiplier *= 10;</span><br><span class="line">        ranges.add(r);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    System.out.println(Arrays.toString(ranges.toArray()));</span><br><span class="line"></span><br><span class="line">    int result = ob.binarySearch(ranges, 11); </span><br><span class="line">    if (result == -1) </span><br><span class="line">        System.out.println(&quot;Element not present&quot;); </span><br><span class="line">    else</span><br><span class="line">        System.out.println(&quot;Element found at &quot;</span><br><span class="line">                        + &quot;index &quot; + result); </span><br><span class="line">&#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>===============&gt;&gt;#10 票数：0</strong></p>
+
+我的python实现： 时间复杂度：O（log（n））空间复杂度：O（log（n））
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"> def searchForRange(array, target):</span><br><span class="line">    range = [-1, -1]</span><br><span class="line">    alteredBinarySerach(array, target, 0, len(array) -1, range, True)</span><br><span class="line">    alteredBinarySerach(array, target, 0, len(array) -1, range, False)</span><br><span class="line">    return range</span><br><span class="line"></span><br><span class="line">def alteredBinarySerach(array, target, left, right, range, goLeft):</span><br><span class="line">    if left &gt; right:</span><br><span class="line">        return</span><br><span class="line"></span><br><span class="line">    middle = (left+ right)//2</span><br><span class="line"></span><br><span class="line">    if array[middle] &gt; target:</span><br><span class="line">        alteredBinarySerach(array, target, left, middle -1, range, goLeft)</span><br><span class="line">    elif array[middle] &lt; target:</span><br><span class="line">        alteredBinarySerach(array, target, middle +1, right, range, goLeft)</span><br><span class="line">    else:</span><br><span class="line">        if goLeft:</span><br><span class="line">            if middle == 0 or array[middle -1] != target:</span><br><span class="line">                range[0] = middle</span><br><span class="line">            else:</span><br><span class="line">                alteredBinarySerach(array, target, left, middle -1 , range, goLeft)</span><br><span class="line">        else:</span><br><span class="line">            if middle == len(array) -1 or array[middle+1] != target:</span><br><span class="line">                range[1] = middle</span><br><span class="line">            else:</span><br><span class="line">                alteredBinarySerach(array, target, middle +1, right , range, goLeft)</span><br></pre></td></tr></table></figure>
+
+</=键<=></的惯例，可以避免对包含的类型施加额外的（不必要的）要求。></而不是<=>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="tags/问题锦集/" rel="tag"># 问题锦集</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="amazons3栅格数据包不会从Amazonec2实例上的RStudio中的URL中读取文件堆栈内存溢出.html" rel="next" title="amazons3栅格数据包不会从Amazonec2实例上的RStudio中的URL中读取文件堆栈内存溢出">
+                <i class="fa fa-chevron-left"></i> amazons3栅格数据包不会从Amazonec2实例上的RStudio中的URL中读取文件堆栈内存溢出
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="c为什么要使用params关键字堆栈内存溢出.html" rel="prev" title="c为什么要使用params关键字堆栈内存溢出">
+                c为什么要使用params关键字堆栈内存溢出 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    <!-- 乱码三千文章内嵌广告 -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-2626449904708114" data-ad-slot="1549007621"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+  <!-- 乱码三千信息流广告 -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle" style="display:block" data-ad-format="fluid" data-ad-layout-key="-6t+ed+2i-1n-4w" data-ad-client="ca-pub-2626449904708114" data-ad-slot="9471729671"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">开发者</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="http://code.newban.cn/archives/">
+              
+                  <span class="site-state-item-count">1724</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#原文标题"><span class="nav-number">1.</span> <span class="nav-text">原文标题:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题"><span class="nav-number">2.</span> <span class="nav-text">问题:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解决方案"><span class="nav-number">3.</span> <span class="nav-text">解决方案:</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">开发者</span>
+  <div>
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+  </div>
+  
+</div>
+
+
+  <div class="powered-by">由 <a rel="external nofollow" class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a rel="external nofollow" class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+      <style>
+        a.gitment-editor-footer-tip { display: none; }
+        .gitment-container.gitment-footer-container { display: none; }
+      </style>
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: 'songjianzaina',
+            repo: 'codesan_comment',
+            
+            lang: "zh" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: '75fa01da04fd1029841debfa65ce027b566a47e3',
+            
+                client_id: '01a471de64bf7a7789f3'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

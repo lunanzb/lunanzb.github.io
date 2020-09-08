@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="问题锦集,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="开发者博客" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="原文标题: How do I parse command line arguments in Bash?   问题: 说，我有一个脚本被此行调用：  1./myscript -vfd ./foo/bar/someFile -o /fizz/someOtherFile   或这一个：  1./myscript -v -f -d -o /fizz/someOtherFile ./foo/bar/som">
+<meta name="keywords" content="问题锦集">
+<meta property="og:type" content="article">
+<meta property="og:title" content="bash如何在Bash中解析命令行参数堆栈内存溢出">
+<meta property="og:url" content="https://luna.newban.cn/bash如何在Bash中解析命令行参数堆栈内存溢出.html">
+<meta property="og:site_name" content="开发者博客">
+<meta property="og:description" content="原文标题: How do I parse command line arguments in Bash?   问题: 说，我有一个脚本被此行调用：  1./myscript -vfd ./foo/bar/someFile -o /fizz/someOtherFile   或这一个：  1./myscript -v -f -d -o /fizz/someOtherFile ./foo/bar/som">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-09-08T08:47:27.192Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="bash如何在Bash中解析命令行参数堆栈内存溢出">
+<meta name="twitter:description" content="原文标题: How do I parse command line arguments in Bash?   问题: 说，我有一个脚本被此行调用：  1./myscript -vfd ./foo/bar/someFile -o /fizz/someOtherFile   或这一个：  1./myscript -v -f -d -o /fizz/someOtherFile ./foo/bar/som">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+<!--谷歌广告验证代码-->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({
+          google_ad_client: "ca-pub-2626449904708114",
+          enable_page_level_ads: true
+     });
+</script>
+<!--谷歌广告验证代码-->
+
+
+
+  <link rel="canonical" href="https://luna.newban.cn/bash如何在Bash中解析命令行参数堆栈内存溢出.html">
+
+
+
+
+
+  <title>bash如何在Bash中解析命令行参数堆栈内存溢出 | 开发者博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+  
+<a href="https://www.github.com/songjianzaina" class="github-corner" aria-label="View source on Github"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">开发者博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">开发者的博客 – 全栈</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="http://www.newban.cn/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="http://code.newban.cn/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://luna.newban.cn">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="开发者">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="开发者博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">bash如何在Bash中解析命令行参数堆栈内存溢出</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-08-28T00:00:00+00:00">
+                2020-08-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="原文标题"><a href="#原文标题" class="headerlink" title="原文标题:"></a>原文标题:</h2>
+How do I parse command line arguments in Bash?
+
+
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题:"></a>问题:</h2>
+说，我有一个脚本被此行调用：
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./myscript -vfd ./foo/bar/someFile -o /fizz/someOtherFile</span><br></pre></td></tr></table></figure>
+
+
+或这一个：
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./myscript -v -f -d -o /fizz/someOtherFile ./foo/bar/someFile</span><br></pre></td></tr></table></figure>
+
+
+在每种情况下（或两者的某种组合） $v ， $f和$d都将都设置为true而$outFile等于/fizz/someOtherFile $outFile方式是什么？
+
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案:"></a>解决方案:</h2><p><strong>===============&gt;&gt;#1 票数：2469 已采纳</strong></p>
+
+更新：距我开始回答已有5年了。 感谢您提供大量修改/评论/建议。 为了节省维护时间，我将代码块修改为100％复制粘贴就绪。 请不要发表“如果您将X更改为Y ...该怎么办”之类的评论。 取而代之的是，复制粘贴代码块，查看输出，进行更改，重新运行脚本，并注释“我将X更改为Y，然后……”，我没有时间测试您的想法并告诉您它们是否可行。 传递键值对参数的两种常见方法是： 用法demo-space-separated.sh -e conf -s /etc -l /usr/lib /etc/hosts 复制粘贴以上块的输出： 用法demo-equals-separated.sh -e=conf -s=/etc -l=/usr/lib /etc/hosts 复制粘贴以上块的输出： 为了更好地理解${i#*=} ，请在本指南中搜索“子字符串删除”。 它在功能上等效于`sed 's/[^=]*=//' <<< "$i"` ，它调用不必要的子进程或`echo "$i" | sed 's/[^=]*=//'` `echo "$i" | sed 's/[^=]*=//'`调用了两个不必要的子进程。 来自： http : //mywiki.wooledge.org/BashFAQ/035#getopts getopt（1）限制 （较旧的，相对较新的getopt版本）： 最新的getopt版本没有这些限制。 另外，POSIX shell（和其他）提供了getopts ，而没有这些限制。 我提供了一个简单的getopts示例。 用法demo-getopts.sh -vf /etc/hosts foo bar 复制粘贴以上块的输出： getopts的优点是： getopts的缺点在于，它只能处理简短的选项（ -h ，而不是--help ），而无需其他代码。 有一个getopts教程 ，它解释了所有语法和变量的含义。 在bash中，还help getopts ，它可能会提供参考。
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"> cat &gt;/tmp/demo-space-separated.sh &lt;&lt;&apos;EOF&apos;</span><br><span class="line">#!/bin/bash</span><br><span class="line"></span><br><span class="line">POSITIONAL=()</span><br><span class="line">while [[ $# -gt 0 ]]</span><br><span class="line">do</span><br><span class="line">key=&quot;$1&quot;</span><br><span class="line"></span><br><span class="line">case $key in</span><br><span class="line">    -e|--extension)</span><br><span class="line">    EXTENSION=&quot;$2&quot;</span><br><span class="line">    shift # past argument</span><br><span class="line">    shift # past value</span><br><span class="line">    ;;</span><br><span class="line">    -s|--searchpath)</span><br><span class="line">    SEARCHPATH=&quot;$2&quot;</span><br><span class="line">    shift # past argument</span><br><span class="line">    shift # past value</span><br><span class="line">    ;;</span><br><span class="line">    -l|--lib)</span><br><span class="line">    LIBPATH=&quot;$2&quot;</span><br><span class="line">    shift # past argument</span><br><span class="line">    shift # past value</span><br><span class="line">    ;;</span><br><span class="line">    --default)</span><br><span class="line">    DEFAULT=YES</span><br><span class="line">    shift # past argument</span><br><span class="line">    ;;</span><br><span class="line">    *)    # unknown option</span><br><span class="line">    POSITIONAL+=(&quot;$1&quot;) # save it in an array for later</span><br><span class="line">    shift # past argument</span><br><span class="line">    ;;</span><br><span class="line">esac</span><br><span class="line">done</span><br><span class="line">set -- &quot;$&#123;POSITIONAL[@]&#125;&quot; # restore positional parameters</span><br><span class="line"></span><br><span class="line">echo &quot;FILE EXTENSION  = $&#123;EXTENSION&#125;&quot;</span><br><span class="line">echo &quot;SEARCH PATH     = $&#123;SEARCHPATH&#125;&quot;</span><br><span class="line">echo &quot;LIBRARY PATH    = $&#123;LIBPATH&#125;&quot;</span><br><span class="line">echo &quot;DEFAULT         = $&#123;DEFAULT&#125;&quot;</span><br><span class="line">echo &quot;Number files in SEARCH PATH with EXTENSION:&quot; $(ls -1 &quot;$&#123;SEARCHPATH&#125;&quot;/*.&quot;$&#123;EXTENSION&#125;&quot; | wc -l)</span><br><span class="line">if [[ -n $1 ]]; then</span><br><span class="line">    echo &quot;Last line of file specified as non-opt/last argument:&quot;</span><br><span class="line">    tail -1 &quot;$1&quot;</span><br><span class="line">fi</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line">chmod +x /tmp/demo-space-separated.sh</span><br><span class="line"></span><br><span class="line">/tmp/demo-space-separated.sh -e conf -s /etc -l /usr/lib /etc/hosts</span><br></pre></td></tr></table></figure>
+
+<p><strong>===============&gt;&gt;#2 票数：500</strong></p>
+
+没有答案提到增强的getopt 。 投票最多的答案是令人误解的：它要么忽略-⁠vfd样式短选项（OP要求），要么忽略位置参数后的选项（OP也要求）； 并且它忽略了解析错误。 代替： 以下电话 全部返回 与以下myscript 在大多数“ bash系统”（包括Cygwin）上都可以使用1个增强的getopt。 在OS X上尝试brew install gnu-getopt或sudo port install getopt 2 POSIX exec()约定没有可靠的方法在命令行参数中传递二进制NULL； 这些字节过早地结束了参数 3个第一个版本发布于1997年或之前（我只能追溯到1997年）
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"> myscript -vfd ./foo/bar/someFile -o /fizz/someOtherFile</span><br><span class="line">myscript -v -f -d -o/fizz/someOtherFile -- ./foo/bar/someFile</span><br><span class="line">myscript --verbose --force --debug ./foo/bar/someFile -o/fizz/someOtherFile</span><br><span class="line">myscript --output=/fizz/someOtherFile ./foo/bar/someFile -vfd</span><br><span class="line">myscript ./foo/bar/someFile -df -v --output /fizz/someOtherFile</span><br></pre></td></tr></table></figure>
+
+<p><strong>===============&gt;&gt;#3 票数：123</strong></p>
+
+来自： digitalpeer.com ，进行了少量修改 用法myscript.sh -p=my_prefix -s=dirname -l=libname 为了更好地理解${i#*=} ，请在本指南中搜索“子字符串删除”。 它在功能上等效于`sed 's/[^=]*=//' <<< "$i"` ，它调用不必要的子进程或`echo "$i" | sed 's/[^=]*=//'` `echo "$i" | sed 's/[^=]*=//'`调用了两个不必要的子进程。
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"> #!/bin/bash</span><br><span class="line">for i in &quot;$@&quot;</span><br><span class="line">do</span><br><span class="line">case $i in</span><br><span class="line">    -p=*|--prefix=*)</span><br><span class="line">    PREFIX=&quot;$&#123;i#*=&#125;&quot;</span><br><span class="line"></span><br><span class="line">    ;;</span><br><span class="line">    -s=*|--searchpath=*)</span><br><span class="line">    SEARCHPATH=&quot;$&#123;i#*=&#125;&quot;</span><br><span class="line">    ;;</span><br><span class="line">    -l=*|--lib=*)</span><br><span class="line">    DIR=&quot;$&#123;i#*=&#125;&quot;</span><br><span class="line">    ;;</span><br><span class="line">    --default)</span><br><span class="line">    DEFAULT=YES</span><br><span class="line">    ;;</span><br><span class="line">    *)</span><br><span class="line">            # unknown option</span><br><span class="line">    ;;</span><br><span class="line">esac</span><br><span class="line">done</span><br><span class="line">echo PREFIX = $&#123;PREFIX&#125;</span><br><span class="line">echo SEARCH PATH = $&#123;SEARCHPATH&#125;</span><br><span class="line">echo DIRS = $&#123;DIR&#125;</span><br><span class="line">echo DEFAULT = $&#123;DEFAULT&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>===============&gt;&gt;#4 票数：106</strong></p>
+
+script.sh 用法：
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"> #!/bin/bash</span><br><span class="line"></span><br><span class="line">while [[ &quot;$#&quot; -gt 0 ]]; do case $1 in</span><br><span class="line">  -d|--deploy) deploy=&quot;$2&quot;; shift;;</span><br><span class="line">  -u|--uglify) uglify=1;;</span><br><span class="line">  *) echo &quot;Unknown parameter passed: $1&quot;; exit 1;;</span><br><span class="line">esac; shift; done</span><br><span class="line"></span><br><span class="line">echo &quot;Should deploy? $deploy&quot;</span><br><span class="line">echo &quot;Should uglify? $uglify&quot;</span><br></pre></td></tr></table></figure>
+
+<p><strong>===============&gt;&gt;#5 票数：104</strong></p>
+
+getopt() / getopts()是一个不错的选择。 从这里被盗： 这个迷你脚本显示了“ getopt”的简单用法： 我们所说的是-a，-b，-c或-d中的任何一个都将被允许，但是-c后跟一个参数（“ c：”表示）。 如果我们称它为“ g”并尝试一下： 我们从两个参数开始，“ getopt”将选项分开，并将每个选项置于自己的参数中。 它还添加了“-”。
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"> #!/bin/bash</span><br><span class="line">echo &quot;Before getopt&quot;</span><br><span class="line">for i</span><br><span class="line">do</span><br><span class="line">  echo $i</span><br><span class="line">done</span><br><span class="line">args=`getopt abc:d $*`</span><br><span class="line">set -- $args</span><br><span class="line">echo &quot;After getopt&quot;</span><br><span class="line">for i</span><br><span class="line">do</span><br><span class="line">  echo &quot;--&gt;$i&quot;</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+
+<p><strong>===============&gt;&gt;#6 票数：93</strong></p>
+
+这是我的计划，冒着添加另一个示例来忽略的风险。 希望对某人有用。
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"> while [ &quot;$#&quot; -gt 0 ]; do</span><br><span class="line">  case &quot;$1&quot; in</span><br><span class="line">    -n) name=&quot;$2&quot;; shift 2;;</span><br><span class="line">    -p) pidfile=&quot;$2&quot;; shift 2;;</span><br><span class="line">    -l) logfile=&quot;$2&quot;; shift 2;;</span><br><span class="line"></span><br><span class="line">    --name=*) name=&quot;$&#123;1#*=&#125;&quot;; shift 1;;</span><br><span class="line">    --pidfile=*) pidfile=&quot;$&#123;1#*=&#125;&quot;; shift 1;;</span><br><span class="line">    --logfile=*) logfile=&quot;$&#123;1#*=&#125;&quot;; shift 1;;</span><br><span class="line">    --name|--pidfile|--logfile) echo &quot;$1 requires an argument&quot; &gt;&amp;2; exit 1;;</span><br><span class="line"></span><br><span class="line">    -*) echo &quot;unknown option: $1&quot; &gt;&amp;2; exit 1;;</span><br><span class="line">    *) handle_argument &quot;$1&quot;; shift 1;;</span><br><span class="line">  esac</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+
+<p><strong>===============&gt;&gt;#7 票数：41</strong></p>
+
+我这个问题迟到了4年，但想退回给我。 我以较早的答案为起点来整理旧的即席参数解析。 然后，我重构了以下模板代码。 它使用=或以空格分隔的参数来处理长参数和短参数，以及组合在一起的多个短参数。 最后，它将所有非参数参数重新插入到$ 1，$ 2 ..变量中。 我希望它有用。
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"> #!/usr/bin/env bash</span><br><span class="line"></span><br><span class="line"># NOTICE: Uncomment if your script depends on bashisms.</span><br><span class="line">#if [ -z &quot;$BASH_VERSION&quot; ]; then bash $0 $@ ; exit $? ; fi</span><br><span class="line"></span><br><span class="line">echo &quot;Before&quot;</span><br><span class="line">for i ; do echo - $i ; done</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># Code template for parsing command line parameters using only portable shell</span><br><span class="line"># code, while handling both long and short params, handling &apos;-f file&apos; and</span><br><span class="line"># &apos;-f=file&apos; style param data and also capturing non-parameters to be inserted</span><br><span class="line"># back into the shell positional parameters.</span><br><span class="line"></span><br><span class="line">while [ -n &quot;$1&quot; ]; do</span><br><span class="line">        # Copy so we can modify it (can&apos;t modify $1)</span><br><span class="line">        OPT=&quot;$1&quot;</span><br><span class="line">        # Detect argument termination</span><br><span class="line">        if [ x&quot;$OPT&quot; = x&quot;--&quot; ]; then</span><br><span class="line">                shift</span><br><span class="line">                for OPT ; do</span><br><span class="line">                        REMAINS=&quot;$REMAINS \&quot;$OPT\&quot;&quot;</span><br><span class="line">                done</span><br><span class="line">                break</span><br><span class="line">        fi</span><br><span class="line">        # Parse current opt</span><br><span class="line">        while [ x&quot;$OPT&quot; != x&quot;-&quot; ] ; do</span><br><span class="line">                case &quot;$OPT&quot; in</span><br><span class="line">                        # Handle --flag=value opts like this</span><br><span class="line">                        -c=* | --config=* )</span><br><span class="line">                                CONFIGFILE=&quot;$&#123;OPT#*=&#125;&quot;</span><br><span class="line">                                shift</span><br><span class="line">                                ;;</span><br><span class="line">                        # and --flag value opts like this</span><br><span class="line">                        -c* | --config )</span><br><span class="line">                                CONFIGFILE=&quot;$2&quot;</span><br><span class="line">                                shift</span><br><span class="line">                                ;;</span><br><span class="line">                        -f* | --force )</span><br><span class="line">                                FORCE=true</span><br><span class="line">                                ;;</span><br><span class="line">                        -r* | --retry )</span><br><span class="line">                                RETRY=true</span><br><span class="line">                                ;;</span><br><span class="line">                        # Anything unknown is recorded for later</span><br><span class="line">                        * )</span><br><span class="line">                                REMAINS=&quot;$REMAINS \&quot;$OPT\&quot;&quot;</span><br><span class="line">                                break</span><br><span class="line">                                ;;</span><br><span class="line">                esac</span><br><span class="line">                # Check for multiple short options</span><br><span class="line">                # NOTICE: be sure to update this pattern to match valid options</span><br><span class="line">                NEXTOPT=&quot;$&#123;OPT#-[cfr]&#125;&quot; # try removing single short opt</span><br><span class="line">                if [ x&quot;$OPT&quot; != x&quot;$NEXTOPT&quot; ] ; then</span><br><span class="line">                        OPT=&quot;-$NEXTOPT&quot;  # multiple short opts, keep going</span><br><span class="line">                else</span><br><span class="line">                        break  # long form, exit inner loop</span><br><span class="line">                fi</span><br><span class="line">        done</span><br><span class="line">        # Done with that param. move to next</span><br><span class="line">        shift</span><br><span class="line">done</span><br><span class="line"># Set the non-parameters back into the positional parameters ($1 $2 ..)</span><br><span class="line">eval set -- $REMAINS</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">echo -e &quot;After: \n configfile=&apos;$CONFIGFILE&apos; \n force=&apos;$FORCE&apos; \n retry=&apos;$RETRY&apos; \n remains=&apos;$REMAINS&apos;&quot;</span><br><span class="line">for i ; do echo - $i ; done</span><br></pre></td></tr></table></figure>
+
+<p><strong>===============&gt;&gt;#8 票数：29</strong></p>
+
+我发现在脚本中编写可移植的解析非常令人沮丧，以至于我写了Argbash -FOSS代码生成器，可以为您的脚本生成参数解析代码，并且具有一些不错的功能： https://argbash.io
+**===============>>#9 票数：27**
+
+我的答案主要基于Bruno Bronosky的答案 ，但是我将他的两个纯bash实现混搭为一个我经常使用的实现。 这使您可以同时使用空格分隔的选项/值以及相等的定义值。 因此，您可以使用以下命令运行脚本： 以及： 两者的最终结果应该相同。 优点： 允许-arg = value和-arg值 与您可以在bash中使用的任何arg名称一起使用 纯扑 无需学习/使用getopt或getopts 缺点： 不能合并参数 这些是我能想到的唯一优点/缺点
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"> # As long as there is at least one more argument, keep looping</span><br><span class="line">while [[ $# -gt 0 ]]; do</span><br><span class="line">    key=&quot;$1&quot;</span><br><span class="line">    case &quot;$key&quot; in</span><br><span class="line">        # This is a flag type option. Will catch either -f or --foo</span><br><span class="line">        -f|--foo)</span><br><span class="line">        FOO=1</span><br><span class="line">        ;;</span><br><span class="line">        # Also a flag type option. Will catch either -b or --bar</span><br><span class="line">        -b|--bar)</span><br><span class="line">        BAR=1</span><br><span class="line">        ;;</span><br><span class="line">        # This is an arg value type option. Will catch -o value or --output-file value</span><br><span class="line">        -o|--output-file)</span><br><span class="line">        shift # past the key and to the value</span><br><span class="line">        OUTPUTFILE=&quot;$1&quot;</span><br><span class="line">        ;;</span><br><span class="line">        # This is an arg=value type option. Will catch -o=value or --output-file=value</span><br><span class="line">        -o=*|--output-file=*)</span><br><span class="line">        # No need to shift here since the value is part of the same string</span><br><span class="line">        OUTPUTFILE=&quot;$&#123;key#*=&#125;&quot;</span><br><span class="line">        ;;</span><br><span class="line">        *)</span><br><span class="line">        # Do whatever you want with extra options</span><br><span class="line">        echo &quot;Unknown option &apos;$key&apos;&quot;</span><br><span class="line">        ;;</span><br><span class="line">    esac</span><br><span class="line">    # Shift after checking all the cases to get the next option</span><br><span class="line">    shift</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+
+<p><strong>===============&gt;&gt;#10 票数：14</strong></p>
+
+我认为这个简单易用： 调用示例：
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"> #!/bin/bash</span><br><span class="line">#</span><br><span class="line"></span><br><span class="line">readopt=&apos;getopts $opts opt;rc=$?;[ $rc$opt == 0? ]&amp;&amp;exit 1;[ $rc == 0 ]||&#123; shift $[OPTIND-1];false; &#125;&apos;</span><br><span class="line"></span><br><span class="line">opts=vfdo:</span><br><span class="line"></span><br><span class="line"># Enumerating options</span><br><span class="line">while eval $readopt</span><br><span class="line">do</span><br><span class="line">    echo OPT:$opt $&#123;OPTARG+OPTARG:$OPTARG&#125;</span><br><span class="line">done</span><br><span class="line"></span><br><span class="line"># Enumerating arguments</span><br><span class="line">for arg</span><br><span class="line">do</span><br><span class="line">    echo ARG:$arg</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+
+<p><strong>===============&gt;&gt;#11 票数：13</strong></p>
+
+扩展@guneysus的出色答案，这是一项调整，使用户可以使用他们喜欢的任何语法，例如 与 也就是说，等于可以用空格代替。 这种“模糊的解释”可能并不符合您的喜好，但是如果您要编写可与其他实用程序互换的脚本（像我的情况那样，必须与ffmpeg一起使用），那么灵活性就很有用。
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">command -x=myfilename.ext --another_switch</span><br></pre></td></tr></table></figure>
+
+<p><strong>===============&gt;&gt;#12 票数：9</strong></p>
+
+我给你的功能parse_params将从命令行解析参数。 下面的脚本是一个复制粘贴工作演示。 请参阅show_use函数以了解如何使用parse_params 。 局限性：
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br></pre></td><td class="code"><pre><span class="line"> #!/bin/bash</span><br><span class="line"></span><br><span class="line"># Universal Bash parameter parsing</span><br><span class="line"># Parse equal sign separated params into named local variables</span><br><span class="line"># Standalone named parameter value will equal its param name (--force creates variable $force==&quot;force&quot;)</span><br><span class="line"># Parses multi-valued named params into an array (--path=path1 --path=path2 creates $&#123;path[*]&#125; array)</span><br><span class="line"># Puts un-named params as-is into $&#123;ARGV[*]&#125; array</span><br><span class="line"># Additionally puts all named params as-is into $&#123;ARGN[*]&#125; array</span><br><span class="line"># Additionally puts all standalone &quot;option&quot; params as-is into $&#123;ARGO[*]&#125; array</span><br><span class="line"># @author Oleksii Chekulaiev</span><br><span class="line"># @version v1.4.1 (Jul-27-2018)</span><br><span class="line">parse_params ()</span><br><span class="line">&#123;</span><br><span class="line">    local existing_named</span><br><span class="line">    local ARGV=() # un-named params</span><br><span class="line">    local ARGN=() # named params</span><br><span class="line">    local ARGO=() # options (--params)</span><br><span class="line">    echo &quot;local ARGV=(); local ARGN=(); local ARGO=();&quot;</span><br><span class="line">    while [[ &quot;$1&quot; != &quot;&quot; ]]; do</span><br><span class="line">        # Escape asterisk to prevent bash asterisk expansion, and quotes to prevent string breakage</span><br><span class="line">        _escaped=$&#123;1/\*/\&apos;\&quot;*\&quot;\&apos;&#125;</span><br><span class="line">        _escaped=$&#123;_escaped//\&apos;/\\\&apos;&#125;</span><br><span class="line">        _escaped=$&#123;_escaped//\&quot;/\\\&quot;&#125;</span><br><span class="line">        # If equals delimited named parameter</span><br><span class="line">        nonspace=&quot;[^[:space:]]&quot;</span><br><span class="line">        if [[ &quot;$1&quot; =~ ^$&#123;nonspace&#125;$&#123;nonspace&#125;*=..* ]]; then</span><br><span class="line">            # Add to named parameters array</span><br><span class="line">            echo &quot;ARGN+=(&apos;$_escaped&apos;);&quot;</span><br><span class="line">            # key is part before first =</span><br><span class="line">            local _key=$(echo &quot;$1&quot; | cut -d = -f 1)</span><br><span class="line">            # Just add as non-named when key is empty or contains space</span><br><span class="line">            if [[ &quot;$_key&quot; == &quot;&quot; || &quot;$_key&quot; =~ &quot; &quot; ]]; then</span><br><span class="line">                echo &quot;ARGV+=(&apos;$_escaped&apos;);&quot;</span><br><span class="line">                shift</span><br><span class="line">                continue</span><br><span class="line">            fi</span><br><span class="line">            # val is everything after key and = (protect from param==value error)</span><br><span class="line">            local _val=&quot;$&#123;1/$_key=&#125;&quot;</span><br><span class="line">            # remove dashes from key name</span><br><span class="line">            _key=$&#123;_key//\-&#125;</span><br><span class="line">            # skip when key is empty</span><br><span class="line">            # search for existing parameter name</span><br><span class="line">            if (echo &quot;$existing_named&quot; | grep &quot;\b$_key\b&quot; &gt;/dev/null); then</span><br><span class="line">                # if name already exists then it&apos;s a multi-value named parameter</span><br><span class="line">                # re-declare it as an array if needed</span><br><span class="line">                if ! (declare -p _key 2&gt; /dev/null | grep -q &apos;declare \-a&apos;); then</span><br><span class="line">                    echo &quot;$_key=(\&quot;\$$_key\&quot;);&quot;</span><br><span class="line">                fi</span><br><span class="line">                # append new value</span><br><span class="line">                echo &quot;$_key+=(&apos;$_val&apos;);&quot;</span><br><span class="line">            else</span><br><span class="line">                # single-value named parameter</span><br><span class="line">                echo &quot;local $_key=&apos;$_val&apos;;&quot;</span><br><span class="line">                existing_named=&quot; $_key&quot;</span><br><span class="line">            fi</span><br><span class="line">        # If standalone named parameter</span><br><span class="line">        elif [[ &quot;$1&quot; =~ ^\-$&#123;nonspace&#125;+ ]]; then</span><br><span class="line">            # remove dashes</span><br><span class="line">            local _key=$&#123;1//\-&#125;</span><br><span class="line">            # Just add as non-named when key is empty or contains space</span><br><span class="line">            if [[ &quot;$_key&quot; == &quot;&quot; || &quot;$_key&quot; =~ &quot; &quot; ]]; then</span><br><span class="line">                echo &quot;ARGV+=(&apos;$_escaped&apos;);&quot;</span><br><span class="line">                shift</span><br><span class="line">                continue</span><br><span class="line">            fi</span><br><span class="line">            # Add to options array</span><br><span class="line">            echo &quot;ARGO+=(&apos;$_escaped&apos;);&quot;</span><br><span class="line">            echo &quot;local $_key=\&quot;$_key\&quot;;&quot;</span><br><span class="line">        # non-named parameter</span><br><span class="line">        else</span><br><span class="line">            # Escape asterisk to prevent bash asterisk expansion</span><br><span class="line">            _escaped=$&#123;1/\*/\&apos;\&quot;*\&quot;\&apos;&#125;</span><br><span class="line">            echo &quot;ARGV+=(&apos;$_escaped&apos;);&quot;</span><br><span class="line">        fi</span><br><span class="line">        shift</span><br><span class="line">    done</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">#--------------------------- DEMO OF THE USAGE -------------------------------</span><br><span class="line"></span><br><span class="line">show_use ()</span><br><span class="line">&#123;</span><br><span class="line">    eval $(parse_params &quot;$@&quot;)</span><br><span class="line">    # --</span><br><span class="line">    echo &quot;$&#123;ARGV[0]&#125;&quot; # print first unnamed param</span><br><span class="line">    echo &quot;$&#123;ARGV[1]&#125;&quot; # print second unnamed param</span><br><span class="line">    echo &quot;$&#123;ARGN[0]&#125;&quot; # print first named param</span><br><span class="line">    echo &quot;$&#123;ARG0[0]&#125;&quot; # print first option param (--force)</span><br><span class="line">    echo &quot;$anyparam&quot;  # print --anyparam value</span><br><span class="line">    echo &quot;$k&quot;         # print k=5 value</span><br><span class="line">    echo &quot;$&#123;multivalue[0]&#125;&quot; # print first value of multi-value</span><br><span class="line">    echo &quot;$&#123;multivalue[1]&#125;&quot; # print second value of multi-value</span><br><span class="line">    [[ &quot;$force&quot; == &quot;force&quot; ]] &amp;&amp; echo &quot;\$force is set so let the force be with you&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">show_use &quot;param 1&quot; --anyparam=&quot;my value&quot; param2 k=5 --force --multi-value=test1 --multi-value=test2</span><br></pre></td></tr></table></figure>
+
+<p><strong>===============&gt;&gt;#13 票数：9</strong></p>
+
+EasyOptions不需要任何解析：
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"> ## Options:</span><br><span class="line">##   --verbose, -v  Verbose mode</span><br><span class="line">##   --output=FILE  Output filename</span><br><span class="line"></span><br><span class="line">source easyoptions || exit</span><br><span class="line"></span><br><span class="line">if test -n &quot;$&#123;verbose&#125;&quot;; then</span><br><span class="line">    echo &quot;output file is $&#123;output&#125;&quot;</span><br><span class="line">    echo &quot;$&#123;arguments[@]&#125;&quot;</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+
+<p><strong>===============&gt;&gt;#14 票数：8</strong></p>
+
+如果安装了＃1，并且打算在同一平台上运行＃2，则getopts效果很好。 例如，OSX和Linux在这方面的行为有所不同。 这是一个支持equals，non-equals和boolean标志的（非getopts）解决方案。 例如，您可以通过以下方式运行脚本：
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"> ./script --arg1=value1 --arg2 value2 --shouldClean</span><br><span class="line"></span><br><span class="line"># parse the arguments.</span><br><span class="line">COUNTER=0</span><br><span class="line">ARGS=(&quot;$@&quot;)</span><br><span class="line">while [ $COUNTER -lt $# ]</span><br><span class="line">do</span><br><span class="line">    arg=$&#123;ARGS[$COUNTER]&#125;</span><br><span class="line">    let COUNTER=COUNTER+1</span><br><span class="line">    nextArg=$&#123;ARGS[$COUNTER]&#125;</span><br><span class="line"></span><br><span class="line">    if [[ $skipNext -eq 1 ]]; then</span><br><span class="line">        echo &quot;Skipping&quot;</span><br><span class="line">        skipNext=0</span><br><span class="line">        continue</span><br><span class="line">    fi</span><br><span class="line"></span><br><span class="line">    argKey=&quot;&quot;</span><br><span class="line">    argVal=&quot;&quot;</span><br><span class="line">    if [[ &quot;$arg&quot; =~ ^\- ]]; then</span><br><span class="line">        # if the format is: -key=value</span><br><span class="line">        if [[ &quot;$arg&quot; =~ \= ]]; then</span><br><span class="line">            argVal=$(echo &quot;$arg&quot; | cut -d&apos;=&apos; -f2)</span><br><span class="line">            argKey=$(echo &quot;$arg&quot; | cut -d&apos;=&apos; -f1)</span><br><span class="line">            skipNext=0</span><br><span class="line"></span><br><span class="line">        # if the format is: -key value</span><br><span class="line">        elif [[ ! &quot;$nextArg&quot; =~ ^\- ]]; then</span><br><span class="line">            argKey=&quot;$arg&quot;</span><br><span class="line">            argVal=&quot;$nextArg&quot;</span><br><span class="line">            skipNext=1</span><br><span class="line"></span><br><span class="line">        # if the format is: -key (a boolean flag)</span><br><span class="line">        elif [[ &quot;$nextArg&quot; =~ ^\- ]] || [[ -z &quot;$nextArg&quot; ]]; then</span><br><span class="line">            argKey=&quot;$arg&quot;</span><br><span class="line">            argVal=&quot;&quot;</span><br><span class="line">            skipNext=0</span><br><span class="line">        fi</span><br><span class="line">    # if the format has not flag, just a value.</span><br><span class="line">    else</span><br><span class="line">        argKey=&quot;&quot;</span><br><span class="line">        argVal=&quot;$arg&quot;</span><br><span class="line">        skipNext=0</span><br><span class="line">    fi</span><br><span class="line"></span><br><span class="line">    case &quot;$argKey&quot; in </span><br><span class="line">        --source-scmurl)</span><br><span class="line">            SOURCE_URL=&quot;$argVal&quot;</span><br><span class="line">        ;;</span><br><span class="line">        --dest-scmurl)</span><br><span class="line">            DEST_URL=&quot;$argVal&quot;</span><br><span class="line">        ;;</span><br><span class="line">        --version-num)</span><br><span class="line">            VERSION_NUM=&quot;$argVal&quot;</span><br><span class="line">        ;;</span><br><span class="line">        -c|--clean)</span><br><span class="line">            CLEAN_BEFORE_START=&quot;1&quot;</span><br><span class="line">        ;;</span><br><span class="line">        -h|--help|-help|--h)</span><br><span class="line">            showUsage</span><br><span class="line">            exit</span><br><span class="line">        ;;</span><br><span class="line">    esac</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+
+<p><strong>===============&gt;&gt;#15 票数：7</strong></p>
+
+这是我在函数中所做的操作，以避免破坏同时在堆栈中较高位置运行的getopts：
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"> function waitForWeb () &#123;</span><br><span class="line">   local OPTIND=1 OPTARG OPTION</span><br><span class="line">   local host=localhost port=8080 proto=http</span><br><span class="line">   while getopts &quot;h:p:r:&quot; OPTION; do</span><br><span class="line">      case &quot;$OPTION&quot; in</span><br><span class="line">      h)</span><br><span class="line">         host=&quot;$OPTARG&quot;</span><br><span class="line">         ;;</span><br><span class="line">      p)</span><br><span class="line">         port=&quot;$OPTARG&quot;</span><br><span class="line">         ;;</span><br><span class="line">      r)</span><br><span class="line">         proto=&quot;$OPTARG&quot;</span><br><span class="line">         ;;</span><br><span class="line">      esac</span><br><span class="line">   done</span><br><span class="line">...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>===============&gt;&gt;#16 票数：5</strong></p>
+
+本示例说明如何使用getopt和eval以及HEREDOC以及shift来处理带有和不带有必需值的短和长参数。 同样，switch / case语句简洁明了，易于遵循。 上面脚本中最重要的几行是： 简而言之，可读性强，几乎可以处理所有内容（IMHO）。 希望能对某人有所帮助。
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"> #!/usr/bin/env bash</span><br><span class="line"></span><br><span class="line"># usage function</span><br><span class="line">function usage()</span><br><span class="line">&#123;</span><br><span class="line">   cat &lt;&lt; HEREDOC</span><br><span class="line"></span><br><span class="line">   Usage: $progname [--num NUM] [--time TIME_STR] [--verbose] [--dry-run]</span><br><span class="line"></span><br><span class="line">   optional arguments:</span><br><span class="line">     -h, --help           show this help message and exit</span><br><span class="line">     -n, --num NUM        pass in a number</span><br><span class="line">     -t, --time TIME_STR  pass in a time string</span><br><span class="line">     -v, --verbose        increase the verbosity of the bash script</span><br><span class="line">     --dry-run            do a dry run, dont change any files</span><br><span class="line"></span><br><span class="line">HEREDOC</span><br><span class="line">&#125;  </span><br><span class="line"></span><br><span class="line"># initialize variables</span><br><span class="line">progname=$(basename $0)</span><br><span class="line">verbose=0</span><br><span class="line">dryrun=0</span><br><span class="line">num_str=</span><br><span class="line">time_str=</span><br><span class="line"></span><br><span class="line"># use getopt and store the output into $OPTS</span><br><span class="line"># note the use of -o for the short options, --long for the long name options</span><br><span class="line"># and a : for any option that takes a parameter</span><br><span class="line">OPTS=$(getopt -o &quot;hn:t:v&quot; --long &quot;help,num:,time:,verbose,dry-run&quot; -n &quot;$progname&quot; -- &quot;$@&quot;)</span><br><span class="line">if [ $? != 0 ] ; then echo &quot;Error in command line arguments.&quot; &gt;&amp;2 ; usage; exit 1 ; fi</span><br><span class="line">eval set -- &quot;$OPTS&quot;</span><br><span class="line"></span><br><span class="line">while true; do</span><br><span class="line">  # uncomment the next line to see how shift is working</span><br><span class="line">  # echo &quot;\$1:\&quot;$1\&quot; \$2:\&quot;$2\&quot;&quot;</span><br><span class="line">  case &quot;$1&quot; in</span><br><span class="line">    -h | --help ) usage; exit; ;;</span><br><span class="line">    -n | --num ) num_str=&quot;$2&quot;; shift 2 ;;</span><br><span class="line">    -t | --time ) time_str=&quot;$2&quot;; shift 2 ;;</span><br><span class="line">    --dry-run ) dryrun=1; shift ;;</span><br><span class="line">    -v | --verbose ) verbose=$((verbose + 1)); shift ;;</span><br><span class="line">    -- ) shift; break ;;</span><br><span class="line">    * ) break ;;</span><br><span class="line">  esac</span><br><span class="line">done</span><br><span class="line"></span><br><span class="line">if (( $verbose &gt; 0 )); then</span><br><span class="line"></span><br><span class="line">   # print out all the parameters we read in</span><br><span class="line">   cat &lt;&lt;-EOM</span><br><span class="line">   num=$num_str</span><br><span class="line">   time=$time_str</span><br><span class="line">   verbose=$verbose</span><br><span class="line">   dryrun=$dryrun</span><br><span class="line">EOM</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line"># The rest of your script below</span><br></pre></td></tr></table></figure>
+
+<p><strong>===============&gt;&gt;#17 票数：4</strong></p>
+
+我想提供我的选项解析版本，该版本允许以下操作： 也允许这样做（可能是不需要的）： 您必须在使用前决定是否在选项上使用=。 这是为了保持代码干净。
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"> -s p1</span><br><span class="line">--stage p1</span><br><span class="line">-w somefolder</span><br><span class="line">--workfolder somefolder</span><br><span class="line">-sw p1 somefolder</span><br><span class="line">-e=hello</span><br></pre></td></tr></table></figure>
+
+<p><strong>===============&gt;&gt;#18 票数：4</strong></p>
+
+我想提交我的项目： https : //github.com/flyingangel/argparser 就那么简单。 将使用与参数同名的变量填充环境
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"> source argparser.sh</span><br><span class="line">parse_args &quot;$@&quot;</span><br></pre></td></tr></table></figure>
+
+<p><strong>===============&gt;&gt;#19 票数：3</strong></p>
+
+请注意， getopt(1)是AT＆T的短暂错误。 getopt创建于1984年，但由于它实际上不可用而已于1986年被埋葬。 关于getopt非常过时的事实的证明是， getopt(1)手册页仍然提到"$*"而不是"$@" ，1986年，它与内置的getopts(1) shell一起添加到了Bourne Shell中。为了处理内部带有空格的参数。 顺便说一句：如果您有兴趣解析shell脚本中的长选项，可能想知道libc（Solaris）和ksh93的getopt(3)实现都添加了统一的长选项实现，该实现支持长选项作为short的别名。选项。 这使ksh93和Bourne Shell通过getopts为长选项实现统一的接口。 Bourne Shell手册页中的长选项示例： 显示了在Bourne Shell和ksh93中可以使用多长时间的选项别名。 请参阅最新的Bourne Shell的手册页： http://schillix.sourceforge.net/man/man1/bosh.1.html 以及来自OpenSolaris的getopt（3）的手册页： http://schillix.sourceforge.net/man/man3c/getopt.3c.html 最后，使用getopt（1）手册页来验证过时的$ *： http://schillix.sourceforge.net/man/man1/getopt.1.html
+**===============>>#20 票数：3**
+
+这是我的解决方案。 它非常灵活，并且与其他应用程序不同，它不需要外部程序包并且可以干净地处理剩余的参数。 用法是： ./myscript -flag flagvariable -otherflag flagvar2 您所要做的就是编辑有效标志行。 它加上一个连字符并搜索所有参数。 然后将下一个参数定义为标志名称，例如 主要代码（简短版本，详细示例如下，还有错误输出的版本）： 内置回显示例的详细版本： 最后一个，如果传递了无效的参数，则会出错。 优点：它的作用非常好。 它保留了未使用的参数，而这里的许多其他解决方案则没有。 它还允许在脚本中无需手动定义就调用变量。 如果没有给出相应的参数，它也允许预填充变量。 （请参见详细示例）。 缺点：无法解析单个复杂的arg字符串，例如-xcvf将作为单个参数进行处理。 您可以轻松地向我的代码中编写其他代码，以添加此功能。
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"> ./myscript -flag flagvariable -otherflag flagvar2</span><br><span class="line">echo $flag $otherflag</span><br><span class="line">flagvariable flagvar2</span><br></pre></td></tr></table></figure>
+
+<p><strong>===============&gt;&gt;#21 票数：3</strong></p>
+
+假设我们创建一个名为test_args.sh的shell脚本，如下所示 运行以下命令后： 输出为：
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"> #!/bin/sh</span><br><span class="line">until [ $# -eq 0 ]</span><br><span class="line">do</span><br><span class="line">  name=$&#123;1:1&#125;; shift;</span><br><span class="line">  if [[ -z &quot;$1&quot; || $1 == -* ]] ; then eval &quot;export $name=true&quot;; else eval &quot;export $name=$1&quot;; shift; fi  </span><br><span class="line">done</span><br><span class="line">echo &quot;year=$year month=$month day=$day flag=$flag&quot;</span><br></pre></td></tr></table></figure>
+
+<p><strong>===============&gt;&gt;#22 票数：3</strong></p>
+
+在扩展@ bruno-bronosky的答案时，我添加了一个“预处理器”来处理一些常见的格式设置：
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"> #!/bin/bash</span><br><span class="line"></span><br><span class="line"># Report usage</span><br><span class="line">usage() &#123;</span><br><span class="line">  echo &quot;Usage:&quot;</span><br><span class="line">  echo &quot;$(basename $0) [options] [--] [file1, ...]&quot;</span><br><span class="line"></span><br><span class="line">  # Optionally exit with a status code</span><br><span class="line">  if [ -n &quot;$1&quot; ]; then</span><br><span class="line">    exit &quot;$1&quot;</span><br><span class="line">  fi</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">invalid() &#123;</span><br><span class="line">  echo &quot;ERROR: Unrecognized argument: $1&quot; &gt;&amp;2</span><br><span class="line">  usage 1</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># Pre-process options to:</span><br><span class="line"># - expand -xyz into -x -y -z</span><br><span class="line"># - expand --longopt=arg into --longopt arg</span><br><span class="line">ARGV=()</span><br><span class="line">END_OF_OPT=</span><br><span class="line">while [[ $# -gt 0 ]]; do</span><br><span class="line">  arg=&quot;$1&quot;; shift</span><br><span class="line">  case &quot;$&#123;END_OF_OPT&#125;$&#123;arg&#125;&quot; in</span><br><span class="line">    --) ARGV+=(&quot;$arg&quot;); END_OF_OPT=1 ;;</span><br><span class="line">    --*=*)ARGV+=(&quot;$&#123;arg%%=*&#125;&quot; &quot;$&#123;arg#*=&#125;&quot;) ;;</span><br><span class="line">    --*) ARGV+=(&quot;$arg&quot;); END_OF_OPT=1 ;;</span><br><span class="line">    -*) for i in $(seq 2 $&#123;#arg&#125;); do ARGV+=(&quot;-$&#123;arg:i-1:1&#125;&quot;); done ;;</span><br><span class="line">    *) ARGV+=(&quot;$arg&quot;) ;;</span><br><span class="line">  esac</span><br><span class="line">done</span><br><span class="line"></span><br><span class="line"># Apply pre-processed options</span><br><span class="line">set -- &quot;$&#123;ARGV[@]&#125;&quot;</span><br><span class="line"></span><br><span class="line"># Parse options</span><br><span class="line">END_OF_OPT=</span><br><span class="line">POSITIONAL=()</span><br><span class="line">while [[ $# -gt 0 ]]; do</span><br><span class="line">  case &quot;$&#123;END_OF_OPT&#125;$&#123;1&#125;&quot; in</span><br><span class="line">    -h|--help)      usage 0 ;;</span><br><span class="line">    -p|--password)  shift; PASSWORD=&quot;$1&quot; ;;</span><br><span class="line">    -u|--username)  shift; USERNAME=&quot;$1&quot; ;;</span><br><span class="line">    -n|--name)      shift; names+=(&quot;$1&quot;) ;;</span><br><span class="line">    -q|--quiet)     QUIET=1 ;;</span><br><span class="line">    -C|--copy)      COPY=1 ;;</span><br><span class="line">    -N|--notify)    NOTIFY=1 ;;</span><br><span class="line">    --stdin)        READ_STDIN=1 ;;</span><br><span class="line">    --)             END_OF_OPT=1 ;;</span><br><span class="line">    -*)             invalid &quot;$1&quot; ;;</span><br><span class="line">    *)              POSITIONAL+=(&quot;$1&quot;) ;;</span><br><span class="line">  esac</span><br><span class="line">  shift</span><br><span class="line">done</span><br><span class="line"></span><br><span class="line"># Restore positional parameters</span><br><span class="line">set -- &quot;$&#123;POSITIONAL[@]&#125;&quot;</span><br></pre></td></tr></table></figure>
+
+<p><strong>===============&gt;&gt;#23 票数：2</strong></p>
+
+使用bash-modules中的模块“参数” 例：
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"> #!/bin/bash</span><br><span class="line">. import.sh log arguments</span><br><span class="line"></span><br><span class="line">NAME=&quot;world&quot;</span><br><span class="line"></span><br><span class="line">parse_arguments &quot;-n|--name)NAME;S&quot; -- &quot;$@&quot; || &#123;</span><br><span class="line">  error &quot;Cannot parse command line.&quot;</span><br><span class="line">  exit 1</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">info &quot;Hello, $NAME!&quot;</span><br></pre></td></tr></table></figure>
+
+<p><strong>===============&gt;&gt;#24 票数：2 –param = arg（等号分隔） –param arg（以空格分隔）</strong></p>
+
+在位置参数之间自由混合标志： 可以用相当简洁的方法来完成： 通常不混合--flag=value和--flag value样式会更清楚。 这有点儿易读，但仍然有效 资源
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"> ./script.sh dumbo 127.0.0.1 --environment=production -q -d</span><br><span class="line">./script.sh dumbo --environment=production 127.0.0.1 --quiet -d</span><br></pre></td></tr></table></figure>
+
+<p><strong>===============&gt;&gt;#25 票数：2</strong></p>
+
+我已经写了一个bash助手来编写一个不错的bash工具 项目主页： https : //gitlab.mbedsys.org/mbedsys/bashopts 例： 将提供帮助： 请享用 ：）
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"> #!/bin/bash -ei</span><br><span class="line"></span><br><span class="line"># load the library</span><br><span class="line">. bashopts.sh</span><br><span class="line"></span><br><span class="line"># Enable backtrace dusplay on error</span><br><span class="line">trap &apos;bashopts_exit_handle&apos; ERR</span><br><span class="line"></span><br><span class="line"># Initialize the library</span><br><span class="line">bashopts_setup -n &quot;$0&quot; -d &quot;This is myapp tool description displayed on help message&quot; -s &quot;$HOME/.config/myapprc&quot;</span><br><span class="line"></span><br><span class="line"># Declare the options</span><br><span class="line">bashopts_declare -n first_name -l first -o f -d &quot;First name&quot; -t string -i -s -r</span><br><span class="line">bashopts_declare -n last_name -l last -o l -d &quot;Last name&quot; -t string -i -s -r</span><br><span class="line">bashopts_declare -n display_name -l display-name -t string -d &quot;Display name&quot; -e &quot;\$first_name \$last_name&quot;</span><br><span class="line">bashopts_declare -n age -l number -d &quot;Age&quot; -t number</span><br><span class="line">bashopts_declare -n email_list -t string -m add -l email -d &quot;Email adress&quot;</span><br><span class="line"></span><br><span class="line"># Parse arguments</span><br><span class="line">bashopts_parse_args &quot;$@&quot;</span><br><span class="line"></span><br><span class="line"># Process argument</span><br><span class="line">bashopts_process_args</span><br></pre></td></tr></table></figure>
+
+<p><strong>===============&gt;&gt;#26 票数：2</strong></p>
+
+这是我的方法-使用regexp。 脚本：
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"> #!/usr/bin/env sh</span><br><span class="line"></span><br><span class="line">help_menu() &#123;</span><br><span class="line">  echo &quot;Usage:</span><br><span class="line"></span><br><span class="line">  $&#123;0##*/&#125; [-h][-l FILENAME][-d]</span><br><span class="line"></span><br><span class="line">Options:</span><br><span class="line"></span><br><span class="line">  -h, --help</span><br><span class="line">    display this help and exit</span><br><span class="line"></span><br><span class="line">  -l, --logfile=FILENAME</span><br><span class="line">    filename</span><br><span class="line"></span><br><span class="line">  -d, --debug</span><br><span class="line">    enable debug</span><br><span class="line">  &quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">parse_options() &#123;</span><br><span class="line">  case $opt in</span><br><span class="line">    h|help)</span><br><span class="line">      help_menu</span><br><span class="line">      exit</span><br><span class="line">     ;;</span><br><span class="line">    l|logfile)</span><br><span class="line">      logfile=$&#123;attr&#125;</span><br><span class="line">      ;;</span><br><span class="line">    d|debug)</span><br><span class="line">      debug=true</span><br><span class="line">      ;;</span><br><span class="line">    *)</span><br><span class="line">      echo &quot;Unknown option: $&#123;opt&#125;\nRun $&#123;0##*/&#125; -h for help.&quot;&gt;&amp;2</span><br><span class="line">      exit 1</span><br><span class="line">  esac</span><br><span class="line">&#125;</span><br><span class="line">options=$@</span><br><span class="line"></span><br><span class="line">until [ &quot;$options&quot; = &quot;&quot; ]; do</span><br><span class="line">  if [[ $options =~ (^ *(--([a-zA-Z0-9-]+)|-([a-zA-Z0-9-]+))(( |=)(([\_\.\?\/\\a-zA-Z0-9]?[ -]?[\_\.\?a-zA-Z0-9]+)+))?(.*)|(.+)) ]]; then</span><br><span class="line">    if [[ $&#123;BASH_REMATCH[3]&#125; ]]; then # for --option[=][attribute] or --option[=][attribute]</span><br><span class="line">      opt=$&#123;BASH_REMATCH[3]&#125;</span><br><span class="line">      attr=$&#123;BASH_REMATCH[7]&#125;</span><br><span class="line">      options=$&#123;BASH_REMATCH[9]&#125;</span><br><span class="line">    elif [[ $&#123;BASH_REMATCH[4]&#125; ]]; then # for block options -qwert[=][attribute] or single short option -a[=][attribute]</span><br><span class="line">      pile=$&#123;BASH_REMATCH[4]&#125;</span><br><span class="line">      while (( $&#123;#pile&#125; &gt; 1 )); do</span><br><span class="line">        opt=$&#123;pile:0:1&#125;</span><br><span class="line">        attr=&quot;&quot;</span><br><span class="line">        pile=$&#123;pile/$&#123;pile:0:1&#125;/&#125;</span><br><span class="line">        parse_options</span><br><span class="line">      done</span><br><span class="line">      opt=$pile</span><br><span class="line">      attr=$&#123;BASH_REMATCH[7]&#125;</span><br><span class="line">      options=$&#123;BASH_REMATCH[9]&#125;</span><br><span class="line">    else # leftovers that don&apos;t match</span><br><span class="line">      opt=$&#123;BASH_REMATCH[10]&#125;</span><br><span class="line">      options=&quot;&quot;</span><br><span class="line">    fi</span><br><span class="line">    parse_options</span><br><span class="line">  fi</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+
+<p><strong>===============&gt;&gt;#27 票数：1</strong></p>
+
+知道这也可能很有用，您可以设置一个值，如果有人提供输入，则用该值覆盖默认值。 myscript.sh -f ./serverlist.txt或仅./myscript.sh（需要使用默认值）
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"> #!/bin/bash</span><br><span class="line"># --- set the value, if there is inputs, override the defaults.</span><br><span class="line"></span><br><span class="line">HOME_FOLDER=&quot;$&#123;HOME&#125;/owned_id_checker&quot;</span><br><span class="line">SERVER_FILE_LIST=&quot;$&#123;HOME_FOLDER&#125;/server_list.txt&quot;</span><br><span class="line"></span><br><span class="line">while [[ $# &gt; 1 ]]</span><br><span class="line">do</span><br><span class="line">key=&quot;$1&quot;</span><br><span class="line">shift</span><br><span class="line"></span><br><span class="line">case $key in</span><br><span class="line">    -i|--inputlist)</span><br><span class="line">    SERVER_FILE_LIST=&quot;$1&quot;</span><br><span class="line">    shift</span><br><span class="line">    ;;</span><br><span class="line">esac</span><br><span class="line">done</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">echo &quot;SERVER LIST   = $&#123;SERVER_FILE_LIST&#125;&quot;</span><br></pre></td></tr></table></figure>
+
+<p><strong>===============&gt;&gt;#28 票数：1</strong></p>
+
+这是我使用变量数组对布鲁诺·布鲁诺斯基的答案的改进解决方案。 它可以让您混合参数位置，并为您提供一个保留参数顺序的参数数组 将输出例如：
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"> #!/bin/bash</span><br><span class="line"></span><br><span class="line">echo $@</span><br><span class="line"></span><br><span class="line">PARAMS=()</span><br><span class="line">SOFT=0</span><br><span class="line">SKIP=()</span><br><span class="line">for i in &quot;$@&quot;</span><br><span class="line">do</span><br><span class="line">case $i in</span><br><span class="line">    -n=*|--skip=*)</span><br><span class="line">    SKIP+=(&quot;$&#123;i#*=&#125;&quot;)</span><br><span class="line">    ;;</span><br><span class="line">    -s|--soft)</span><br><span class="line">    SOFT=1</span><br><span class="line">    ;;</span><br><span class="line">    *)</span><br><span class="line">        # unknown option</span><br><span class="line">        PARAMS+=(&quot;$i&quot;)</span><br><span class="line">    ;;</span><br><span class="line">esac</span><br><span class="line">done</span><br><span class="line">echo &quot;SKIP            = $&#123;SKIP[@]&#125;&quot;</span><br><span class="line">echo &quot;SOFT            = $SOFT&quot;</span><br><span class="line">    echo &quot;Parameters:&quot;</span><br><span class="line">    echo $&#123;PARAMS[@]&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>===============&gt;&gt;#29 票数：1 可选参数 带有等号的选项参数</strong></p>
+
+与Bruno Bronosky发布的解决方案类似，这是一种不使用getopt(s) 的解决方案 。 我的解决方案的主要区别特征在于，它允许将选项串联在一起，就像tar -xzf foo.tar.gz等于tar -x -z -f foo.tar.gz 。 就像在tar ， ps等中一样，对于短选项块，前导连字符是可选的（但可以轻松更改）。 也支持长选项（但是，当一个块以一个开头时，则需要两个前导连字符）。 有关示例用法，请参见下面的示例。 出于什么价值，带有参数的选项不是最后一个（只需要长选项）。 因此，例如在tar （至少在某些实现中）， f选项需要最后一个，因为文件名紧随tar xzf bar.tar.gz （ tar xzf bar.tar.gz有效，但tar xfz bar.tar.gz无效），在此情况并非如此（请参阅后面的示例）。 作为另一个好处，选项参数由带有必需选项的参数按选项顺序使用。 只需在命令行abc XYZ （或-abc XYZ ）中查看我的脚本的输出-abc XYZ ： 同样，您也可以在选项块中使用长选项，因为它们出现在选项块的最后。 因此，以下命令行都是等效的（包括选项及其参数的处理顺序）： 所有这些导致： 带有一些可选参数的选项应该可以通过一些工作来实现，例如，通过检查是否存在不带连字符的块； 然后，用户需要在带参数的块之后的每个块前面放置连字符。 也许这太复杂以至于无法与用户进行交流，所以在这种情况下最好只要求使用连字符。 使用多个可能的参数，事情变得更加复杂。 我建议不要通过确定某个参数是否适合它来使选项变得聪明（例如，使用选项仅将数字作为可选参数），因为这可能会在将来中断。 我个人更喜欢其他选项，而不是可选参数。 就像带有可选参数一样，我也不喜欢这样做（顺便说一句，是否有一个讨论不同参数样式的利弊的线程？），但是如果您希望这样做，可以自己实现，就像在http：//上完成一样。 mywiki.wooledge.org/BashFAQ/035#Manual_loop带有--long-with-arg=?* case语句，然后剥离等号（这是BTW网站，说可以很--long-with-arg=?*进行参数串联，但是“留给读者作为练习”，这让我信服了他们的话，但我还是从零开始。 兼容POSIX，甚至可以在我不得不处理的古老Busybox设置上运行（例如缺少cut ， head和getopts ）。
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br></pre></td><td class="code"><pre><span class="line"> #!/bin/sh</span><br><span class="line"></span><br><span class="line">echo</span><br><span class="line">echo &quot;POSIX-compliant getopt(s)-free old-style-supporting option parser from phk@[se.unix]&quot;</span><br><span class="line">echo</span><br><span class="line"></span><br><span class="line">print_usage() &#123;</span><br><span class="line">  echo &quot;Usage:</span><br><span class="line"></span><br><span class="line">  $0 &#123;a|b|c&#125; [ARG...]</span><br><span class="line"></span><br><span class="line">Options:</span><br><span class="line"></span><br><span class="line">  --aaa-0-args</span><br><span class="line">  -a</span><br><span class="line">    Option without arguments.</span><br><span class="line"></span><br><span class="line">  --bbb-1-args ARG</span><br><span class="line">  -b ARG</span><br><span class="line">    Option with one argument.</span><br><span class="line"></span><br><span class="line">  --ccc-2-args ARG1 ARG2</span><br><span class="line">  -c ARG1 ARG2</span><br><span class="line">    Option with two arguments.</span><br><span class="line"></span><br><span class="line">&quot; &gt;&amp;2</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">if [ $# -le 0 ]; then</span><br><span class="line">  print_usage</span><br><span class="line">  exit 1</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">opt=</span><br><span class="line">while :; do</span><br><span class="line"></span><br><span class="line">  if [ $# -le 0 ]; then</span><br><span class="line"></span><br><span class="line">    # no parameters remaining -&gt; end option parsing</span><br><span class="line">    break</span><br><span class="line"></span><br><span class="line">  elif [ ! &quot;$opt&quot; ]; then</span><br><span class="line"></span><br><span class="line">    # we are at the beginning of a fresh block</span><br><span class="line">    # remove optional leading hyphen and strip trailing whitespaces</span><br><span class="line">    opt=$(echo &quot;$1&quot; | sed &apos;s/^-\?\([a-zA-Z0-9\?-]*\)/\1/&apos;)</span><br><span class="line"></span><br><span class="line">  fi</span><br><span class="line"></span><br><span class="line">  # get the first character -&gt; check whether long option</span><br><span class="line">  first_chr=$(echo &quot;$opt&quot; | awk &apos;&#123;print substr($1, 1, 1)&#125;&apos;)</span><br><span class="line">  [ &quot;$first_chr&quot; = - ] &amp;&amp; long_option=T || long_option=F</span><br><span class="line"></span><br><span class="line">  # note to write the options here with a leading hyphen less</span><br><span class="line">  # also do not forget to end short options with a star</span><br><span class="line">  case $opt in</span><br><span class="line"></span><br><span class="line">    -)</span><br><span class="line"></span><br><span class="line">      # end of options</span><br><span class="line">      shift</span><br><span class="line">      break</span><br><span class="line">      ;;</span><br><span class="line"></span><br><span class="line">    a*|-aaa-0-args)</span><br><span class="line"></span><br><span class="line">      echo &quot;Option AAA activated!&quot;</span><br><span class="line">      ;;</span><br><span class="line"></span><br><span class="line">    b*|-bbb-1-args)</span><br><span class="line"></span><br><span class="line">      if [ &quot;$2&quot; ]; then</span><br><span class="line">        echo &quot;Option BBB with argument &apos;$2&apos; activated!&quot;</span><br><span class="line">        shift</span><br><span class="line">      else</span><br><span class="line">        echo &quot;BBB parameters incomplete!&quot; &gt;&amp;2</span><br><span class="line">        print_usage</span><br><span class="line">        exit 1</span><br><span class="line">      fi</span><br><span class="line">      ;;</span><br><span class="line"></span><br><span class="line">    c*|-ccc-2-args)</span><br><span class="line"></span><br><span class="line">      if [ &quot;$2&quot; ] &amp;&amp; [ &quot;$3&quot; ]; then</span><br><span class="line">        echo &quot;Option CCC with arguments &apos;$2&apos; and &apos;$3&apos; activated!&quot;</span><br><span class="line">        shift 2</span><br><span class="line">      else</span><br><span class="line">        echo &quot;CCC parameters incomplete!&quot; &gt;&amp;2</span><br><span class="line">        print_usage</span><br><span class="line">        exit 1</span><br><span class="line">      fi</span><br><span class="line">      ;;</span><br><span class="line"></span><br><span class="line">    h*|\?*|-help)</span><br><span class="line"></span><br><span class="line">      print_usage</span><br><span class="line">      exit 0</span><br><span class="line">      ;;</span><br><span class="line"></span><br><span class="line">    *)</span><br><span class="line"></span><br><span class="line">      if [ &quot;$long_option&quot; = T ]; then</span><br><span class="line">        opt=$(echo &quot;$opt&quot; | awk &apos;&#123;print substr($1, 2)&#125;&apos;)</span><br><span class="line">      else</span><br><span class="line">        opt=$first_chr</span><br><span class="line">      fi</span><br><span class="line">      printf &apos;Error: Unknown option: &quot;%s&quot;\n&apos; &quot;$opt&quot; &gt;&amp;2</span><br><span class="line">      print_usage</span><br><span class="line">      exit 1</span><br><span class="line">      ;;</span><br><span class="line"></span><br><span class="line">  esac</span><br><span class="line"></span><br><span class="line">  if [ &quot;$long_option&quot; = T ]; then</span><br><span class="line"></span><br><span class="line">    # if we had a long option then we are going to get a new block next</span><br><span class="line">    shift</span><br><span class="line">    opt=</span><br><span class="line"></span><br><span class="line">  else</span><br><span class="line"></span><br><span class="line">    # if we had a short option then just move to the next character</span><br><span class="line">    opt=$(echo &quot;$opt&quot; | awk &apos;&#123;print substr($1, 2)&#125;&apos;)</span><br><span class="line"></span><br><span class="line">    # if block is now empty then shift to the next one</span><br><span class="line">    [ &quot;$opt&quot; ] || shift</span><br><span class="line"></span><br><span class="line">  fi</span><br><span class="line"></span><br><span class="line">done</span><br><span class="line"></span><br><span class="line">echo &quot;Doing something...&quot;</span><br><span class="line"></span><br><span class="line">exit 0</span><br></pre></td></tr></table></figure>
+
+<p><strong>===============&gt;&gt;#30 票数：1</strong></p>
+
+当我尝试此问题时，此问题的最高答案似乎有点问题-这是我发现的更可靠的解决方案：
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"> boolean_arg=&quot;&quot;</span><br><span class="line">arg_with_value=&quot;&quot;</span><br><span class="line"></span><br><span class="line">while [[ $# -gt 0 ]]</span><br><span class="line">do</span><br><span class="line">key=&quot;$1&quot;</span><br><span class="line">case $key in</span><br><span class="line">    -b|--boolean-arg)</span><br><span class="line">    boolean_arg=true</span><br><span class="line">    shift</span><br><span class="line">    ;;</span><br><span class="line">    -a|--arg-with-value)</span><br><span class="line">    arg_with_value=&quot;$2&quot;</span><br><span class="line">    shift</span><br><span class="line">    shift</span><br><span class="line">    ;;</span><br><span class="line">    -*)</span><br><span class="line">    echo &quot;Unknown option: $1&quot;</span><br><span class="line">    exit 1</span><br><span class="line">    ;;</span><br><span class="line">    *)</span><br><span class="line">    arg_num=$(( $arg_num + 1 ))</span><br><span class="line">    case $arg_num in</span><br><span class="line">        1)</span><br><span class="line">        first_normal_arg=&quot;$1&quot;</span><br><span class="line">        shift</span><br><span class="line">        ;;</span><br><span class="line">        2)</span><br><span class="line">        second_normal_arg=&quot;$1&quot;</span><br><span class="line">        shift</span><br><span class="line">        ;;</span><br><span class="line">        *)</span><br><span class="line">        bad_args=TRUE</span><br><span class="line">    esac</span><br><span class="line">    ;;</span><br><span class="line">esac</span><br><span class="line">done</span><br><span class="line"></span><br><span class="line"># Handy to have this here when adding arguments to</span><br><span class="line"># see if they&apos;re working. Just edit the &apos;0&apos; to be &apos;1&apos;.</span><br><span class="line">if [[ 0 == 1 ]]; then</span><br><span class="line">    echo &quot;first_normal_arg: $first_normal_arg&quot;</span><br><span class="line">    echo &quot;second_normal_arg: $second_normal_arg&quot;</span><br><span class="line">    echo &quot;boolean_arg: $boolean_arg&quot;</span><br><span class="line">    echo &quot;arg_with_value: $arg_with_value&quot;</span><br><span class="line">    exit 0</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">if [[ $bad_args == TRUE || $arg_num &lt; 2 ]]; then</span><br><span class="line">    echo &quot;Usage: $(basename &quot;$0&quot;) &lt;first-normal-arg&gt; &lt;second-normal-arg&gt; [--boolean-arg] [--arg-with-value VALUE]&quot;</span><br><span class="line">    exit 1</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="tags/问题锦集/" rel="tag"># 问题锦集</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="actionscript3CS4中缺少但在文档中存在的insertAt和removeAt向量方法堆栈内存溢出.html" rel="next" title="actionscript3CS4中缺少但在文档中存在的insertAt和removeAt向量方法堆栈内存溢出">
+                <i class="fa fa-chevron-left"></i> actionscript3CS4中缺少但在文档中存在的insertAt和removeAt向量方法堆栈内存溢出
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="ajax在Chrome开发人员工具中查看AJAX响应内容堆栈内存溢出.html" rel="prev" title="ajax在Chrome开发人员工具中查看AJAX响应内容堆栈内存溢出">
+                ajax在Chrome开发人员工具中查看AJAX响应内容堆栈内存溢出 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    <!-- 乱码三千文章内嵌广告 -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-2626449904708114" data-ad-slot="1549007621"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+  <!-- 乱码三千信息流广告 -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle" style="display:block" data-ad-format="fluid" data-ad-layout-key="-6t+ed+2i-1n-4w" data-ad-client="ca-pub-2626449904708114" data-ad-slot="9471729671"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">开发者</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="http://code.newban.cn/archives/">
+              
+                  <span class="site-state-item-count">1724</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#原文标题"><span class="nav-number">1.</span> <span class="nav-text">原文标题:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题"><span class="nav-number">2.</span> <span class="nav-text">问题:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解决方案"><span class="nav-number">3.</span> <span class="nav-text">解决方案:</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">开发者</span>
+  <div>
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+  </div>
+  
+</div>
+
+
+  <div class="powered-by">由 <a rel="external nofollow" class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a rel="external nofollow" class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+      <style>
+        a.gitment-editor-footer-tip { display: none; }
+        .gitment-container.gitment-footer-container { display: none; }
+      </style>
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: 'songjianzaina',
+            repo: 'codesan_comment',
+            
+            lang: "zh" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: '75fa01da04fd1029841debfa65ce027b566a47e3',
+            
+                client_id: '01a471de64bf7a7789f3'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

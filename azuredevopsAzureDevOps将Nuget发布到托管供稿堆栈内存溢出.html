@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="问题锦集,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="开发者博客" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="原文标题: Azure DevOps publish Nuget to hosted feed   问题: 我对使用托管（免费）AzureDevops管道有疑问。 我有一个小型的.NET Core项目，我想创建一个Azure Devops管道，完成以下操作  我在Azure Devops中的项目上具有以下供稿设置  哪个具有此提要的连接信息  它还具有以下安全性（请注意，Project Colle">
+<meta name="keywords" content="问题锦集">
+<meta property="og:type" content="article">
+<meta property="og:title" content="azuredevopsAzureDevOps将Nuget发布到托管供稿堆栈内存溢出">
+<meta property="og:url" content="https://luna.newban.cn/azuredevopsAzureDevOps将Nuget发布到托管供稿堆栈内存溢出.html">
+<meta property="og:site_name" content="开发者博客">
+<meta property="og:description" content="原文标题: Azure DevOps publish Nuget to hosted feed   问题: 我对使用托管（免费）AzureDevops管道有疑问。 我有一个小型的.NET Core项目，我想创建一个Azure Devops管道，完成以下操作  我在Azure Devops中的项目上具有以下供稿设置  哪个具有此提要的连接信息  它还具有以下安全性（请注意，Project Colle">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-09-08T08:47:27.192Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="azuredevopsAzureDevOps将Nuget发布到托管供稿堆栈内存溢出">
+<meta name="twitter:description" content="原文标题: Azure DevOps publish Nuget to hosted feed   问题: 我对使用托管（免费）AzureDevops管道有疑问。 我有一个小型的.NET Core项目，我想创建一个Azure Devops管道，完成以下操作  我在Azure Devops中的项目上具有以下供稿设置  哪个具有此提要的连接信息  它还具有以下安全性（请注意，Project Colle">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+<!--谷歌广告验证代码-->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({
+          google_ad_client: "ca-pub-2626449904708114",
+          enable_page_level_ads: true
+     });
+</script>
+<!--谷歌广告验证代码-->
+
+
+
+  <link rel="canonical" href="https://luna.newban.cn/azuredevopsAzureDevOps将Nuget发布到托管供稿堆栈内存溢出.html">
+
+
+
+
+
+  <title>azuredevopsAzureDevOps将Nuget发布到托管供稿堆栈内存溢出 | 开发者博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+  
+<a href="https://www.github.com/songjianzaina" class="github-corner" aria-label="View source on Github"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">开发者博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">开发者的博客 – 全栈</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="http://www.newban.cn/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="http://code.newban.cn/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://luna.newban.cn">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="开发者">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="开发者博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">azuredevopsAzureDevOps将Nuget发布到托管供稿堆栈内存溢出</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-08-28T00:00:00+00:00">
+                2020-08-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="原文标题"><a href="#原文标题" class="headerlink" title="原文标题:"></a>原文标题:</h2>
+Azure DevOps publish Nuget to hosted feed
+
+
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题:"></a>问题:</h2>
+我对使用托管（免费）AzureDevops管道有疑问。 我有一个小型的.NET Core项目，我想创建一个Azure Devops管道，完成以下操作
+
+我在Azure Devops中的项目上具有以下供稿设置
+
+哪个具有此提要的连接信息
+
+它还具有以下安全性（请注意，Project Collection Build Service设置为“ Contributor”）
+
+正如微软官方文档中本段所述
+
+若要发布到Azure Artifacts feed，请将Project Collection Build Service身份设置为该Feed的贡献者。
+
+然后，我有此构建管道设置（Yaml）
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># ASP.NET Core # Build and test ASP.NET Core projects targeting .NET Core. # Add steps that run tests, create a NuGet package, deploy, and more: # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core trigger: - master pool: vmImage: &apos;ubuntu-latest&apos; variables: buildConfiguration: &apos;Release&apos; Major: &apos;1&apos; Minor: &apos;0&apos; Patch: &apos;0&apos; steps: - task: DotNetCoreCLI@2 displayName: &apos;Restore&apos; inputs: command: restore projects: &apos;**/MathsLib.csproj&apos; - task: DotNetCoreCLI@2 displayName: Build inputs: command: build projects: &apos;**/MathsLib.csproj&apos; arguments: &apos;--configuration Release&apos; # Update this to match your need - task: DotNetCoreCLI@2 inputs: command: &apos;pack&apos; projects: &apos;**/MathsLib.csproj&apos; outputDir: &apos;$(Build.ArtifactStagingDirectory)&apos; versioningScheme: &apos;byPrereleaseNumber&apos; majorVersion: &apos;1&apos; minorVersion: &apos;0&apos; patchVersion: &apos;0&apos; - task: NuGetAuthenticate@0 displayName: &apos;NuGet Authenticate&apos; - task: NuGetCommand@2 displayName: &apos;NuGet push&apos; inputs: command: push publishVstsFeed: &apos;nugetprojectstestfeed&apos; allowPackageConflicts: true</span><br></pre></td></tr></table></figure>
+
+
+整个管道工作正常，直到Nuget推送为止。 如图所示
+
+但是如果我查看异常，我会看到这种情况
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">##[warning]Could not create provenance session: &#123;&quot;statusCode&quot;:500,&quot;result&quot;:&#123;&quot;$id&quot;:&quot;1&quot;,&quot;innerException&quot;:null,&quot;message&quot;:&quot;The feed with ID &apos;nugetprojectstestfeed&apos; doesn&apos;t exist.&quot;,&quot;typeName&quot;:&quot;Microsoft.VisualStudio.Services.Feed.WebApi.FeedIdNotFoundException, Microsoft.VisualStudio.Services.Feed.WebApi&quot;,&quot;typeKey&quot;:&quot;FeedIdNotFoundException&quot;,&quot;errorCode&quot;:0,&quot;eventId&quot;:3000&#125;&#125; [command]/usr/bin/mono /opt/hostedtoolcache/NuGet/4.1.0/x64/nuget.exe push /home/vsts/work/1/a/MathsLib.1.0.0-CI-20191114-115941.nupkg -NonInteractive -Source https://pkgs.dev.azure.com/XXXXX/_packaging/nugetprojectstestfeed/nuget/v3/index.json -ApiKey VSTS -Verbosity Detailed System.AggregateException: One or more errors occurred. (Unable to load the service index for source https://pkgs.dev.azure.com/XXXXX/_packaging/nugetprojectstestfeed/nuget/v3/index.json.) ---&gt; NuGet.Protocol.Core.Types.FatalProtocolException: Unable to load the service index for source https://pkgs.dev.azure.com/XXXXX/_packaging/nugetprojectstestfeed/nuget/v3/index.json. ---&gt; System.Net.Http.HttpRequestException: Response status code does not indicate success: 404 (Not Found - The feed with ID &apos;nugetprojectstestfeed&apos; doesn&apos;t exist. (DevOps Activity ID: F123AC3A-8E75-4D3A-B3B6-60EC4510FF54)).</span><br></pre></td></tr></table></figure>
+
+
+这是我最初的提要
+
+但这就是错误消息中显示的内容
+
+因此，看起来它试图访问某个根项目中的提要，而不是我在Azure DevOps中设置的“ NuGetProjects”项目。 我是否缺少一些设置/配置来告诉它定位“ NuGetProjects”项目中的提要
+
+正如我所说的，它似乎是在为构建管道为其设置的特定项目中寻找一些顶级提要
+
+逐步使用新的Feed
+
+因此，为了完整起见，这里完整介绍了我如何创建项目供稿以及它在事物组织中的位置（我尝试创建一个新的供稿，作为建议的尝试）
+
+我有一个组织“ sachabarber2019”，其中包含这些项目
+
+然后，我在组织的一个项目中创建了此提要
+
+使用这些设置
+
+这是当前的构建管道
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># ASP.NET Core # Build and test ASP.NET Core projects targeting .NET Core. # Add steps that run tests, create a NuGet package, deploy, and more: # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core trigger: - master pool: vmImage: &apos;ubuntu-latest&apos; variables: buildConfiguration: &apos;Release&apos; Major: &apos;1&apos; Minor: &apos;0&apos; Patch: &apos;0&apos; steps: - task: DotNetCoreCLI@2 displayName: &apos;Restore&apos; inputs: command: restore projects: &apos;**/MathsLib.csproj&apos; - task: DotNetCoreCLI@2 displayName: Build inputs: command: build projects: &apos;**/MathsLib.csproj&apos; arguments: &apos;--configuration Release&apos; # Update this to match your need - task: DotNetCoreCLI@2 inputs: command: &apos;pack&apos; projects: &apos;**/MathsLib.csproj&apos; outputDir: &apos;$(Build.ArtifactStagingDirectory)&apos; versioningScheme: &apos;byPrereleaseNumber&apos; majorVersion: &apos;1&apos; minorVersion: &apos;0&apos; patchVersion: &apos;0&apos; - task: NuGetCommand@2 displayName: &apos;NuGet push&apos; inputs: command: push feedsToUse: select packagesToPush: &apos;$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg&apos; vstsFeed: anotherfeed nuGetFeedType: internal publishVstsFeed: anotherfeed allowPackageConflicts: true</span><br></pre></td></tr></table></figure>
+
+
+和以前一样，我遇到了同样的错误
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">##[section]Starting: NuGet push ============================================================================== Task : NuGet Description : Restore, pack, or push NuGet packages, or run a NuGet command. Supports NuGet.org and authenticated feeds like Azure Artifacts and MyGet. Uses NuGet.exe and works with .NET Framework apps. For .NET Core and .NET Standard apps, use the .NET Core task. Version : 2.161.0 Author : Microsoft Corporation Help : https://docs.microsoft.com/azure/devops/pipelines/tasks/package/nuget ============================================================================== Caching tool: NuGet 4.1.0 x64 Found tool in cache: NuGet 4.1.0 x64 Resolved from tool cache: 4.1.0 Using version: 4.1.0 Found tool in cache: NuGet 4.1.0 x64 SYSTEMVSSCONNECTION exists true SYSTEMVSSCONNECTION exists true SYSTEMVSSCONNECTION exists true Detected NuGet version 4.1.0.2450 / 4.1.0 ##[warning]Could not create provenance session: &#123;&quot;statusCode&quot;:500,&quot;result&quot;:&#123;&quot;$id&quot;:&quot;1&quot;,&quot;innerException&quot;:null,&quot;message&quot;:&quot;The feed with ID &apos;anotherfeed&apos; doesn&apos;t exist.&quot;,&quot;typeName&quot;:&quot;Microsoft.VisualStudio.Services.Feed.WebApi.FeedIdNotFoundException, Microsoft.VisualStudio.Services.Feed.WebApi&quot;,&quot;typeKey&quot;:&quot;FeedIdNotFoundException&quot;,&quot;errorCode&quot;:0,&quot;eventId&quot;:3000&#125;&#125; [command]/usr/bin/mono /opt/hostedtoolcache/NuGet/4.1.0/x64/nuget.exe push /home/vsts/work/1/a/MathsLib.1.0.0-CI-20191120-121118.nupkg -NonInteractive -Source https://pkgs.dev.azure.com/sachabarber2019/_packaging/anotherfeed/nuget/v3/index.json -ApiKey VSTS -Verbosity Detailed NuGet Version: 4.1.0.2450 mono-sgen: /home/vsts/work/_tasks/NuGetCommand_333b11bd-d341-40d9-afcf-b32d5ce6f23b/2.161.0/CredentialProvider/CredentialProvider.TeamBuild.exe -uri https://pkgs.dev.azure.com/sachabarber2019/_packaging/anotherfeed/nuget/v3/index.json -nonInteractive -verbosity detailed mono-sgen: URI Prefixes: mono-sgen: https://dev.azure.com/sachabarber2019/ mono-sgen: https://pkgs.dev.azure.com/sachabarber2019/ mono-sgen: https://pkgsproduks1.pkgs.visualstudio.com/ mono-sgen: https://pkgs.dev.azure.com/sachabarber2019/ mono-sgen: https://sachabarber2019.pkgs.visualstudio.com/ mono-sgen: https://pkgs.dev.azure.com/sachabarber2019/ mono-sgen: URI: https://pkgs.dev.azure.com/sachabarber2019/_packaging/anotherfeed/nuget/v3/index.json mono-sgen: Is retry: False mono-sgen: Matched prefix: https://pkgs.dev.azure.com/sachabarber2019/ System.AggregateException: One or more errors occurred. (Unable to load the service index for source https://pkgs.dev.azure.com/sachabarber2019/_packaging/anotherfeed/nuget/v3/index.json.) ---&gt; NuGet.Protocol.Core.Types.FatalProtocolException: Unable to load the service index for source https://pkgs.dev.azure.com/sachabarber2019/_packaging/anotherfeed/nuget/v3/index.json. ---&gt; System.Net.Http.HttpRequestException: Response status code does not indicate success: 404 (Not Found - The feed with ID &apos;anotherfeed&apos; doesn&apos;t exist. (DevOps Activity ID: 9E8C7E28-9D51-44A1-9286-8F6F839BCBD6)). at System.Net.Http.HttpResponseMessage.EnsureSuccessStatusCode () [0x00040] in &lt;7ecf813f2d314058b05c6c092c47b77a&gt;:0 at NuGet.Protocol.HttpSource+&lt;&gt;c__DisplayClass12_0`1[T].&lt;GetAsync&gt;b__0 (System.Threading.CancellationToken lockedToken) [0x004a8] in &lt;d0f788a4af354971807e5d8ca6fc682e&gt;:0 at NuGet.Common.ConcurrencyUtilities.ExecuteWithFileLockedAsync[T] (System.String filePath, System.Func`2[T,TResult] action, System.Threading.CancellationToken token) [0x0024a] in &lt;d0f788a4af354971807e5d8ca6fc682e&gt;:0 at NuGet.Protocol.HttpSource.GetAsync[T] (NuGet.Protocol.HttpSourceCachedRequest request, System.Func`2[T,TResult] processAsync, NuGet.Common.ILogger log, System.Threading.CancellationToken token) [0x000ed] in &lt;d0f788a4af354971807e5d8ca6fc682e&gt;:0 at NuGet.Protocol.ServiceIndexResourceV3Provider.GetServiceIndexResourceV3 (NuGet.Protocol.Core.Types.SourceRepository source, System.DateTime utcNow, NuGet.Common.ILogger log, System.Threading.CancellationToken token) [0x00207] in &lt;d0f788a4af354971807e5d8ca6fc682e&gt;:0 --- End of inner exception stack trace --- at NuGet.Protocol.ServiceIndexResourceV3Provider.GetServiceIndexResourceV3 (NuGet.Protocol.Core.Types.SourceRepository source, System.DateTime utcNow, NuGet.Common.ILogger log, System.Threading.CancellationToken token) [0x002d5] in &lt;d0f788a4af354971807e5d8ca6fc682e&gt;:0 at NuGet.Protocol.ServiceIndexResourceV3Provider.TryCreate (NuGet.Protocol.Core.Types.SourceRepository source, System.Threading.CancellationToken token) [0x00233] in &lt;d0f788a4af354971807e5d8ca6fc682e&gt;:0 at NuGet.Protocol.Core.Types.SourceRepository.GetResourceAsync[T] (System.Threading.CancellationToken token) [0x000b8] in &lt;d0f788a4af354971807e5d8ca6fc682e&gt;:0 at NuGet.Protocol.PackageUpdateResourceV3Provider.TryCreate (NuGet.Protocol.Core.Types.SourceRepository source, System.Threading.CancellationToken token) [0x0007d] in &lt;d0f788a4af354971807e5d8ca6fc682e&gt;:0 at NuGet.Protocol.Core.Types.SourceRepository.GetResourceAsync[T] (System.Threading.CancellationToken token) [0x000b8] in &lt;d0f788a4af354971807e5d8ca6fc682e&gt;:0 at NuGet.Protocol.Core.Types.SourceRepository.GetResourceAsync[T] () [0x0006e] in &lt;d0f788a4af354971807e5d8ca6fc682e&gt;:0 at NuGet.Commands.CommandRunnerUtility.GetPackageUpdateResource (NuGet.Configuration.IPackageSourceProvider sourceProvider, System.String source) [0x000f1] in &lt;d0f788a4af354971807e5d8ca6fc682e&gt;:0 at NuGet.Commands.PushRunner.Run (NuGet.Configuration.ISettings settings, NuGet.Configuration.IPackageSourceProvider sourceProvider, System.String packagePath, System.String source, System.String apiKey, System.String symbolSource, System.String symbolApiKey, System.Int32 timeoutSeconds, System.Boolean disableBuffering, System.Boolean noSymbols, NuGet.Common.ILogger logger) [0x00133] in &lt;d0f788a4af354971807e5d8ca6fc682e&gt;:0 at NuGet.CommandLine.PushCommand.ExecuteCommandAsync () [0x001b0] in &lt;d0f788a4af354971807e5d8ca6fc682e&gt;:0 --- End of inner exception stack trace --- at System.Threading.Tasks.Task.ThrowIfExceptional (System.Boolean includeTaskCanceledExceptions) [0x00011] in &lt;285579f54af44a2ca048dad6be20e190&gt;:0 at System.Threading.Tasks.Task.Wait (System.Int32 millisecondsTimeout, System.Threading.CancellationToken cancellationToken) [0x00043] in &lt;285579f54af44a2ca048dad6be20e190&gt;:0 at System.Threading.Tasks.Task.Wait () [0x00000] in &lt;285579f54af44a2ca048dad6be20e190&gt;:0 at NuGet.CommandLine.Command.Execute () [0x000bd] in &lt;d0f788a4af354971807e5d8ca6fc682e&gt;:0 at NuGet.CommandLine.Program.MainCore (System.String workingDirectory, System.String[] args) [0x001f3] in &lt;d0f788a4af354971807e5d8ca6fc682e&gt;:0 ---&gt; (Inner Exception #0) NuGet.Protocol.Core.Types.FatalProtocolException: Unable to load the service index for source https://pkgs.dev.azure.com/sachabarber2019/_packaging/anotherfeed/nuget/v3/index.json. ---&gt; System.Net.Http.HttpRequestException: Response status code does not indicate success: 404 (Not Found - The feed with ID &apos;anotherfeed&apos; doesn&apos;t exist. (DevOps Activity ID: 9E8C7E28-9D51-44A1-9286-8F6F839BCBD6)). at System.Net.Http.HttpResponseMessage.EnsureSuccessStatusCode () [0x00040] in &lt;7ecf813f2d314058b05c6c092c47b77a&gt;:0 at NuGet.Protocol.HttpSource+&lt;&gt;c__DisplayClass12_0`1[T].&lt;GetAsync&gt;b__0 (System.Threading.CancellationToken lockedToken) [0x004a8] in &lt;d0f788a4af354971807e5d8ca6fc682e&gt;:0 at NuGet.Common.ConcurrencyUtilities.ExecuteWithFileLockedAsync[T] (System.String filePath, System.Func`2[T,TResult] action, System.Threading.CancellationToken token) [0x0024a] in &lt;d0f788a4af354971807e5d8ca6fc682e&gt;:0 at NuGet.Protocol.HttpSource.GetAsync[T] (NuGet.Protocol.HttpSourceCachedRequest request, System.Func`2[T,TResult] processAsync, NuGet.Common.ILogger log, System.Threading.CancellationToken token) [0x000ed] in &lt;d0f788a4af354971807e5d8ca6fc682e&gt;:0 at NuGet.Protocol.ServiceIndexResourceV3Provider.GetServiceIndexResourceV3 (NuGet.Protocol.Core.Types.SourceRepository source, System.DateTime utcNow, NuGet.Common.ILogger log, System.Threading.CancellationToken token) [0x00207] in &lt;d0f788a4af354971807e5d8ca6fc682e&gt;:0 --- End of inner exception stack trace --- at NuGet.Protocol.ServiceIndexResourceV3Provider.GetServiceIndexResourceV3 (NuGet.Protocol.Core.Types.SourceRepository source, System.DateTime utcNow, NuGet.Common.ILogger log, System.Threading.CancellationToken token) [0x002d5] in &lt;d0f788a4af354971807e5d8ca6fc682e&gt;:0 at NuGet.Protocol.ServiceIndexResourceV3Provider.TryCreate (NuGet.Protocol.Core.Types.SourceRepository source, System.Threading.CancellationToken token) [0x00233] in &lt;d0f788a4af354971807e5d8ca6fc682e&gt;:0 at NuGet.Protocol.Core.Types.SourceRepository.GetResourceAsync[T] (System.Threading.CancellationToken token) [0x000b8] in &lt;d0f788a4af354971807e5d8ca6fc682e&gt;:0 at NuGet.Protocol.PackageUpdateResourceV3Provider.TryCreate (NuGet.Protocol.Core.Types.SourceRepository source, System.Threading.CancellationToken token) [0x0007d] in &lt;d0f788a4af354971807e5d8ca6fc682e&gt;:0 at NuGet.Protocol.Core.Types.SourceRepository.GetResourceAsync[T] (System.Threading.CancellationToken token) [0x000b8] in &lt;d0f788a4af354971807e5d8ca6fc682e&gt;:0 at NuGet.Protocol.Core.Types.SourceRepository.GetResourceAsync[T] () [0x0006e] in &lt;d0f788a4af354971807e5d8ca6fc682e&gt;:0 at NuGet.Commands.CommandRunnerUtility.GetPackageUpdateResource (NuGet.Configuration.IPackageSourceProvider sourceProvider, System.String source) [0x000f1] in &lt;d0f788a4af354971807e5d8ca6fc682e&gt;:0 at NuGet.Commands.PushRunner.Run (NuGet.Configuration.ISettings settings, NuGet.Configuration.IPackageSourceProvider sourceProvider, System.String packagePath, System.String source, System.String apiKey, System.String symbolSource, System.String symbolApiKey, System.Int32 timeoutSeconds, System.Boolean disableBuffering, System.Boolean noSymbols, NuGet.Common.ILogger logger) [0x00133] in &lt;d0f788a4af354971807e5d8ca6fc682e&gt;:0 at NuGet.CommandLine.PushCommand.ExecuteCommandAsync () [0x001b0] in &lt;d0f788a4af354971807e5d8ca6fc682e&gt;:0 &lt;--- ##[error]The nuget command failed with exit code(1) and error(System.AggregateException: One or more errors occurred. (Unable to load the service index for source https://pkgs.dev.azure.com/sachabarber2019/_packaging/anotherfeed/nuget/v3/index.json.) ---&gt; NuGet.Protocol.Core.Types.FatalProtocolException: Unable to load the service index for source https://pkgs.dev.azure.com/sachabarber2019/_packaging/anotherfeed/nuget/v3/index.json. ---&gt; System.Net.Http.HttpRequestException: Response status code does not indicate success: 404 (Not Found - The feed with ID &apos;anotherfeed&apos; doesn&apos;t exist. (DevOps Activity ID: 9E8C7E28-9D51-44A1-9286-8F6F839BCBD6)). at System.Net.Http.HttpResponseMessage.EnsureSuccessStatusCode () [0x00040] in &lt;7ecf813f2d314058b05c6c092c47b77a&gt;:0 at NuGet.Protocol.HttpSource+&lt;&gt;c__DisplayClass12_0`1[T].&lt;GetAsync&gt;b__0 (System.Threading.CancellationToken lockedToken) [0x004a8] in &lt;d0f788a4af354971807e5d8ca6fc682e&gt;:0 at NuGet.Common.ConcurrencyUtilities.ExecuteWithFileLockedAsync[T] (System.String filePath, System.Func`2[T,TResult] action, System.Threading.CancellationToken token) [0x0024a] in &lt;d0f788a4af354971807e5d8ca6fc682e&gt;:0 at NuGet.Protocol.HttpSource.GetAsync[T] (NuGet.Protocol.HttpSourceCachedRequest request, System.Func`2[T,TResult] processAsync, NuGet.Common.ILogger log, System.Threading.CancellationToken token) [0x000ed] in &lt;d0f788a4af354971807e5d8ca6fc682e&gt;:0 at NuGet.Protocol.ServiceIndexResourceV3Provider.GetServiceIndexResourceV3 (NuGet.Protocol.Core.Types.SourceRepository source, System.DateTime utcNow, NuGet.Common.ILogger log, System.Threading.CancellationToken token) [0x00207] in &lt;d0f788a4af354971807e5d8ca6fc682e&gt;:0 --- End of inner exception stack trace --- at NuGet.Protocol.ServiceIndexResourceV3Provider.GetServiceIndexResourceV3 (NuGet.Protocol.Core.Types.SourceRepository source, System.DateTime utcNow, NuGet.Common.ILogger log, System.Threading.CancellationToken token) [0x002d5] in &lt;d0f788a4af354971807e5d8ca6fc682e&gt;:0 at NuGet.Protocol.ServiceIndexResourceV3Provider.TryCreate (NuGet.Protocol.Core.Types.SourceRepository source, System.Threading.CancellationToken token) [0x00233] in &lt;d0f788a4af354971807e5d8ca6fc682e&gt;:0 at NuGet.Protocol.Core.Types.SourceRepository.GetResourceAsync[T] (System.Threading.CancellationToken token) [0x000b8] in &lt;d0f788a4af354971807e5d8ca6fc682e&gt;:0 at NuGet.Protocol.PackageUpdateResourceV3Provider.TryCreate (NuGet.Protocol.Core.Types.SourceRepository source, System.Threading.CancellationToken token) [0x0007d] in &lt;d0f788a4af354971807e5d8ca6fc682e&gt;:0 at NuGet.Protocol.Core.Types.SourceRepository.GetResourceAsync[T] (System.Threading.CancellationToken token) [0x000b8] in &lt;d0f788a4af354971807e5d8ca6fc682e&gt;:0 at NuGet.Protocol.Core.Types.SourceRepository.GetResourceAsync[T] () [0x0006e] in &lt;d0f788a4af354971807e5d8ca6fc682e&gt;:0 at NuGet.Commands.CommandRunnerUtility.GetPackageUpdateResource (NuGet.Configuration.IPackageSourceProvider sourceProvider, System.String source) [0x000f1] in &lt;d0f788a4af354971807e5d8ca6fc682e&gt;:0 at NuGet.Commands.PushRunner.Run (NuGet.Configuration.ISettings settings, NuGet.Configuration.IPackageSourceProvider sourceProvider, System.String packagePath, System.String source, System.String apiKey, System.String symbolSource, System.String symbolApiKey, System.Int32 timeoutSeconds, System.Boolean disableBuffering, System.Boolean noSymbols, NuGet.Common.ILogger logger) [0x00133] in &lt;d0f788a4af354971807e5d8ca6fc682e&gt;:0 at NuGet.CommandLine.PushCommand.ExecuteCommandAsync () [0x001b0] in &lt;d0f788a4af354971807e5d8ca6fc682e&gt;:0 --- End of inner exception stack trace --- at System.Threading.Tasks.Task.ThrowIfExceptional (System.Boolean includeTaskCanceledExceptions) [0x00011] in &lt;285579f54af44a2ca048dad6be20e190&gt;:0 at System.Threading.Tasks.Task.Wait (System.Int32 millisecondsTimeout, System.Threading.CancellationToken cancellationToken) [0x00043] in &lt;285579f54af44a2ca048dad6be20e190&gt;:0 at System.Threading.Tasks.Task.Wait () [0x00000] in &lt;285579f54af44a2ca048dad6be20e190&gt;:0 at NuGet.CommandLine.Command.Execute () [0x000bd] in &lt;d0f788a4af354971807e5d8ca6fc682e&gt;:0 at NuGet.CommandLine.Program.MainCore (System.String workingDirectory, System.String[] args) [0x001f3] in &lt;d0f788a4af354971807e5d8ca6fc682e&gt;:0 ---&gt; (Inner Exception #0) NuGet.Protocol.Core.Types.FatalProtocolException: Unable to load the service index for source https://pkgs.dev.azure.com/sachabarber2019/_packaging/anotherfeed/nuget/v3/index.json. ---&gt; System.Net.Http.HttpRequestException: Response status code does not indicate success: 404 (Not Found - The feed with ID &apos;anotherfeed&apos; doesn&apos;t exist. (DevOps Activity ID: 9E8C7E28-9D51-44A1-9286-8F6F839BCBD6)). at System.Net.Http.HttpResponseMessage.EnsureSuccessStatusCode () [0x00040] in &lt;7ecf813f2d314058b05c6c092c47b77a&gt;:0 at NuGet.Protocol.HttpSource+&lt;&gt;c__DisplayClass12_0`1[T].&lt;GetAsync&gt;b__0 (System.Threading.CancellationToken lockedToken) [0x004a8] in &lt;d0f788a4af354971807e5d8ca6fc682e&gt;:0 at NuGet.Common.ConcurrencyUtilities.ExecuteWithFileLockedAsync[T] (System.String filePath, System.Func`2[T,TResult] action, System.Threading.CancellationToken token) [0x0024a] in &lt;d0f788a4af354971807e5d8ca6fc682e&gt;:0 at NuGet.Protocol.HttpSource.GetAsync[T] (NuGet.Protocol.HttpSourceCachedRequest request, System.Func`2[T,TResult] processAsync, NuGet.Common.ILogger log, System.Threading.CancellationToken token) [0x000ed] in &lt;d0f788a4af354971807e5d8ca6fc682e&gt;:0 at NuGet.Protocol.ServiceIndexResourceV3Provider.GetServiceIndexResourceV3 (NuGet.Protocol.Core.Types.SourceRepository source, System.DateTime utcNow, NuGet.Common.ILogger log, System.Threading.CancellationToken token) [0x00207] in &lt;d0f788a4af354971807e5d8ca6fc682e&gt;:0 --- End of inner exception stack trace --- at NuGet.Protocol.ServiceIndexResourceV3Provider.GetServiceIndexResourceV3 (NuGet.Protocol.Core.Types.SourceRepository source, System.DateTime utcNow, NuGet.Common.ILogger log, System.Threading.CancellationToken token) [0x002d5] in &lt;d0f788a4af354971807e5d8ca6fc682e&gt;:0 at NuGet.Protocol.ServiceIndexResourceV3Provider.TryCreate (NuGet.Protocol.Core.Types.SourceRepository source, System.Threading.CancellationToken token) [0x00233] in &lt;d0f788a4af354971807e5d8ca6fc682e&gt;:0 at NuGet.Protocol.Core.Types.SourceRepository.GetResourceAsync[T] (System.Threading.CancellationToken token) [0x000b8] in &lt;d0f788a4af354971807e5d8ca6fc682e&gt;:0 at NuGet.Protocol.PackageUpdateResourceV3Provider.TryCreate (NuGet.Protocol.Core.Types.SourceRepository source, System.Threading.CancellationToken token) [0x0007d] in &lt;d0f788a4af354971807e5d8ca6fc682e&gt;:0 at NuGet.Protocol.Core.Types.SourceRepository.GetResourceAsync[T] (System.Threading.CancellationToken token) [0x000b8] in &lt;d0f788a4af354971807e5d8ca6fc682e&gt;:0 at NuGet.Protocol.Core.Types.SourceRepository.GetResourceAsync[T] () [0x0006e] in &lt;d0f788a4af354971807e5d8ca6fc682e&gt;:0 at NuGet.Commands.CommandRunnerUtility.GetPackageUpdateResource (NuGet.Configuration.IPackageSourceProvider sourceProvider, System.String source) [0x000f1] in &lt;d0f788a4af354971807e5d8ca6fc682e&gt;:0 at NuGet.Commands.PushRunner.Run (NuGet.Configuration.ISettings settings, NuGet.Configuration.IPackageSourceProvider sourceProvider, System.String packagePath, System.String source, System.String apiKey, System.String symbolSource, System.String symbolApiKey, System.Int32 timeoutSeconds, System.Boolean disableBuffering, System.Boolean noSymbols, NuGet.Common.ILogger logger) [0x00133] in &lt;d0f788a4af354971807e5d8ca6fc682e&gt;:0 at NuGet.CommandLine.PushCommand.ExecuteCommandAsync () [0x001b0] in &lt;d0f788a4af354971807e5d8ca6fc682e&gt;:0 &lt;---) ##[error]Packages failed to publish ##[section]Finishing: NuGet push</span><br></pre></td></tr></table></figure>
+
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案:"></a>解决方案:</h2><p><strong>===============&gt;&gt;#1 票数：0</strong></p>
+
+您错过了在NuGetCommand @ 2任务中设置一些必需参数的过程。 尝试这个： 如果我们查看NuGet任务的文档 ，则对于“ push”命令，某些参数是必需的。
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">- task: NuGetCommand@2</span><br><span class="line"> displayName: &apos;NuGet push&apos;</span><br><span class="line"> inputs:</span><br><span class="line">   command: push</span><br><span class="line">   feedsToUse: select</span><br><span class="line">   vstsFeed: nugetprojectstestfeed</span><br><span class="line">   nuGetFeedType: internal</span><br><span class="line">   publishVstsFeed: nugetprojectstestfeed</span><br><span class="line">   allowPackageConflicts: true</span><br></pre></td></tr></table></figure>
+
+<p><strong>===============&gt;&gt;#2 票数：0</strong></p>
+
+Azure DevOps将Nuget发布到托管供稿 那是因为您使用的原始Feed连接不正确。 URL中不应包含NuGetProjects项目。 众所周知， Azure工件用于组织而不是一个项目 ，因此，当我们连接工件时，连接中不应包含项目信息。 当我们连接到工件时，可以从“ 连接到提要 ”选项卡中获得连接链接： 该URL是Package Source URL， 而不是 Browser中的URL，例如： 因此，您应该更改原始的Feed连接。 检查文档“ Azure DevOps Services和TFS中的NuGet程序包入门”，了解一些详细信息。 希望这可以帮助。
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://pkgs.dev.azure.com/&lt;OrganizationName&gt;/_packaging/&lt;FeedName&gt;/nuget/v3/index.json</span><br></pre></td></tr></table></figure>
+
+<p><strong>===============&gt;&gt;#3 票数：0</strong></p>
+
+几天前，我创建了一个新的Azure Artifacts feed，并在尝试创建类似于此示例的.NET Core / Standard NuGet构建管道时遇到了麻烦。 我的CI管道的其余部分运行良好，但是尽管我试图找到一种解决方法，但每次NuGet Push任务都失败，并且Azure管道日志中出现了完全相同的错误： ID为“ {my_feed_name}”的供稿不存在。 由于该提要确实存在，因此我进行了更多挖掘，并发现了其他类似报告，指出了Azure Pipelines中的错误。 显然，Microsoft最近将新供稿的默认范围级别更改为Project而不是Organization，这破坏了一些Azure Pipeline任务。 较旧的供稿似乎不受此问题的影响。 看到这个论坛帖子 ： 现在，默认情况下，新的提要在项目范围内，并且无法部署管道任务所需的修复程序。 我们正在推出一个修补程序，以更新到最新的管道任务版本，并且应该在一天结束之前发布。 希望微软会尽快解决此问题。
+**===============>>#4 票数：0**
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="tags/问题锦集/" rel="tag"># 问题锦集</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="cWindows编译v8时出现pkgconfig错误堆栈内存溢出.html" rel="next" title="cWindows编译v8时出现pkgconfig错误堆栈内存溢出">
+                <i class="fa fa-chevron-left"></i> cWindows编译v8时出现pkgconfig错误堆栈内存溢出
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="akkanet是否有任何选择可以知道分片实体是通过恢复重新启动的rememberentitytrue堆栈内存溢出.html" rel="prev" title="akkanet是否有任何选择可以知道分片实体是通过恢复重新启动的rememberentitytrue堆栈内存溢出">
+                akkanet是否有任何选择可以知道分片实体是通过恢复重新启动的rememberentitytrue堆栈内存溢出 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    <!-- 乱码三千文章内嵌广告 -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-2626449904708114" data-ad-slot="1549007621"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+  <!-- 乱码三千信息流广告 -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle" style="display:block" data-ad-format="fluid" data-ad-layout-key="-6t+ed+2i-1n-4w" data-ad-client="ca-pub-2626449904708114" data-ad-slot="9471729671"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">开发者</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="http://code.newban.cn/archives/">
+              
+                  <span class="site-state-item-count">1724</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#原文标题"><span class="nav-number">1.</span> <span class="nav-text">原文标题:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题"><span class="nav-number">2.</span> <span class="nav-text">问题:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解决方案"><span class="nav-number">3.</span> <span class="nav-text">解决方案:</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">开发者</span>
+  <div>
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+  </div>
+  
+</div>
+
+
+  <div class="powered-by">由 <a rel="external nofollow" class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a rel="external nofollow" class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+      <style>
+        a.gitment-editor-footer-tip { display: none; }
+        .gitment-container.gitment-footer-container { display: none; }
+      </style>
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: 'songjianzaina',
+            repo: 'codesan_comment',
+            
+            lang: "zh" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: '75fa01da04fd1029841debfa65ce027b566a47e3',
+            
+                client_id: '01a471de64bf7a7789f3'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="问题锦集,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="开发者博客" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="原文标题: How do I parse XML file in columnar storage format?    问题: 我想分块地解析XML文件，这样它就不会耗尽内存，并以列存储方式解析它， 即每一行的key1：value1，key2：value2，key3：value3等。   目前，我正在读取如下文件：   1string parseFieldFromLine(const strin">
+<meta name="keywords" content="问题锦集">
+<meta property="og:type" content="article">
+<meta property="og:title" content="c如何解析列式存储格式的XML文件堆栈内存溢出">
+<meta property="og:url" content="https://luna.newban.cn/c如何解析列式存储格式的XML文件堆栈内存溢出.html">
+<meta property="og:site_name" content="开发者博客">
+<meta property="og:description" content="原文标题: How do I parse XML file in columnar storage format?    问题: 我想分块地解析XML文件，这样它就不会耗尽内存，并以列存储方式解析它， 即每一行的key1：value1，key2：value2，key3：value3等。   目前，我正在读取如下文件：   1string parseFieldFromLine(const strin">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-09-08T08:47:27.236Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="c如何解析列式存储格式的XML文件堆栈内存溢出">
+<meta name="twitter:description" content="原文标题: How do I parse XML file in columnar storage format?    问题: 我想分块地解析XML文件，这样它就不会耗尽内存，并以列存储方式解析它， 即每一行的key1：value1，key2：value2，key3：value3等。   目前，我正在读取如下文件：   1string parseFieldFromLine(const strin">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+<!--谷歌广告验证代码-->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({
+          google_ad_client: "ca-pub-2626449904708114",
+          enable_page_level_ads: true
+     });
+</script>
+<!--谷歌广告验证代码-->
+
+
+
+  <link rel="canonical" href="https://luna.newban.cn/c如何解析列式存储格式的XML文件堆栈内存溢出.html">
+
+
+
+
+
+  <title>c如何解析列式存储格式的XML文件堆栈内存溢出 | 开发者博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+  
+<a href="https://www.github.com/songjianzaina" class="github-corner" aria-label="View source on Github"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">开发者博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">开发者的博客 – 全栈</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="http://www.newban.cn/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="http://code.newban.cn/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://luna.newban.cn">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="开发者">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="开发者博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">c如何解析列式存储格式的XML文件堆栈内存溢出</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-08-31T00:00:00+00:00">
+                2020-08-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="原文标题"><a href="#原文标题" class="headerlink" title="原文标题:"></a>原文标题:</h2>
+How do I parse XML file in columnar storage format?
+
+
+
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题:"></a>问题:</h2>
+我想分块地解析XML文件，这样它就不会耗尽内存，并以列存储方式解析它， 即每一行的key1：value1，key2：value2，key3：value3等。
+
+
+目前，我正在读取如下文件：
+
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">string parseFieldFromLine(const string &amp;line, const string &amp;key) &#123; // We&apos;re looking for a thing that looks like: // [key]=&quot;[value]&quot; // as part of a larger string. // We are given [key], and want to return [value]. // Find the start of the pattern string keyPattern = key + &quot;=\&quot;&quot;; ssize_t idx = line.find(keyPattern); // No match if (idx == -1) return &quot;&quot;; // Find the closing quote at the end of the pattern size_t start = idx + keyPattern.size(); size_t end = start; while (line[end] != &apos;&quot;&apos;) &#123; end++; &#125; // Extract [value] from the overall string and return it // We have (start, end); substr() requires, // so we must compute, (start, length). return line.substr(start, end - start); &#125; map&lt;string, User&gt; users; void readUsers(const string &amp;filename) &#123; ifstream fin; fin.open(filename.c_str()); string line; while (getline(fin, line)) &#123; User u; u.Id = parseFieldFromLine(line, &quot;Id&quot;); u.DisplayName = parseFieldFromLine(line, &quot;DisplayName&quot;); users[u.Id] = u; &#125; &#125;</span><br></pre></td></tr></table></figure>
+
+
+如您所见，我正在调用一个在一行中找到子字符串的函数。 从某种意义上来说，这是有问题的，如果我有一个格式错误的文件（行），我会得到意想不到的值，从而导致无提示故障。
+
+
+我读到有关使用XML解析器的信息，但对于C ++来说是新手，由于对测试工作/效率的了解也很少，因此我无法确定哪种解析器最适合键值格式。 我当前的I / P数据如下所示：
+
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt; &lt;posts&gt; &lt;row Id=&quot;1&quot; PostTypeId=&quot;1&quot; AcceptedAnswerId=&quot;509&quot; CreationDate=&quot;2009-04-30T06:49:01.807&quot; Score=&quot;13&quot; ViewCount=&quot;903&quot; Body=&quot;&amp;lt;p&amp;gt;Our nightly full (and periodic differential) backups are becoming quite large, due mostly to the amount of indexes on our tables; roughly half the backup size is comprised of indexes.&amp;lt;/p&amp;gt;&amp;#xA;&amp;#xA;&amp;lt;p&amp;gt;We&apos;re using the &amp;lt;strong&amp;gt;Simple&amp;lt;/strong&amp;gt; recovery model for our backups.&amp;lt;/p&amp;gt;&amp;#xA;&amp;#xA;&amp;lt;p&amp;gt;Is there any way, through using &amp;lt;code&amp;gt;FileGroups&amp;lt;/code&amp;gt; or some other file-partitioning method, to &amp;lt;strong&amp;gt;exclude&amp;lt;/strong&amp;gt; indexes from the backups?&amp;lt;/p&amp;gt;&amp;#xA;&amp;#xA;&amp;lt;p&amp;gt;It would be nice if this could be extended to full-text catalogs, as well.&amp;lt;/p&amp;gt;&amp;#xA;&quot; OwnerUserId=&quot;3&quot; LastEditorUserId=&quot;919&quot; LastEditorDisplayName=&quot;&quot; LastEditDate=&quot;2009-05-04T02:11:16.667&quot; LastActivityDate=&quot;2009-05-10T15:22:39.707&quot; Title=&quot;How to exclude indexes from backups in SQL Server 2008&quot; Tags=&quot;&amp;lt;sql-server&amp;gt;&amp;lt;backup&amp;gt;&amp;lt;sql-server-2008&amp;gt;&amp;lt;indexes&amp;gt;&quot; AnswerCount=&quot;3&quot; CommentCount=&quot;0&quot; FavoriteCount=&quot;3&quot; /&gt; &lt;row Id=&quot;2&quot; PostTypeId=&quot;1&quot; AcceptedAnswerId=&quot;1238&quot; CreationDate=&quot;2009-04-30T07:04:18.883&quot; Score=&quot;18&quot; ViewCount=&quot;1951&quot; Body=&quot;&amp;lt;p&amp;gt;We&apos;ve struggled with the RAID controller in our database server, a &amp;lt;a href=&amp;quot;http://www.pc.ibm.com/europe/server/index.html?nl&amp;amp;amp;cc=nl&amp;quot; rel=&amp;quot;nofollow&amp;quot;&amp;gt;Lenovo ThinkServer&amp;lt;/a&amp;gt; RD120. It is a rebranded Adaptec that Lenovo / IBM dubs the &amp;lt;a href=&amp;quot;http://www.redbooks.ibm.com/abstracts/tips0054.html#ServeRAID-8k&amp;quot; rel=&amp;quot;nofollow&amp;quot;&amp;gt;ServeRAID 8k&amp;lt;/a&amp;gt;.&amp;lt;/p&amp;gt;&amp;#xA;&amp;#xA;&amp;lt;p&amp;gt;We have patched this &amp;lt;a href=&amp;quot;http://www.redbooks.ibm.com/abstracts/tips0054.html#ServeRAID-8k&amp;quot; rel=&amp;quot;nofollow&amp;quot;&amp;gt;ServeRAID 8k&amp;lt;/a&amp;gt; up to the very latest and greatest:&amp;lt;/p&amp;gt;&amp;#xA;&amp;#xA;&amp;lt;ul&amp;gt;&amp;#xA;&amp;lt;li&amp;gt;RAID bios version&amp;lt;/li&amp;gt;&amp;#xA;&amp;lt;li&amp;gt;RAID backplane bios version&amp;lt;/li&amp;gt;&amp;#xA;&amp;lt;li&amp;gt;Windows Server 2008 driver&amp;lt;/li&amp;gt;&amp;#xA;&amp;lt;/ul&amp;gt;&amp;#xA;&amp;#xA;&amp;lt;p&amp;gt;This RAID controller has had multiple critical BIOS updates even in the short 4 month time we&apos;ve owned it, and the &amp;lt;a href=&amp;quot;ftp://ftp.software.ibm.com/systems/support/system%5Fx/ibm%5Ffw%5Faacraid%5F5.2.0-15427%5Fanyos%5F32-64.chg&amp;quot; rel=&amp;quot;nofollow&amp;quot;&amp;gt;change history&amp;lt;/a&amp;gt; is just.. well, scary. &amp;lt;/p&amp;gt;&amp;#xA;&amp;#xA;&amp;lt;p&amp;gt;We&apos;ve tried both write-back and write-through strategies on the logical RAID drives. &amp;lt;strong&amp;gt;We still get intermittent I/O errors under heavy disk activity.&amp;lt;/strong&amp;gt; They are not common, but serious when they happen, as they cause SQL Server 2008 I/O timeouts and sometimes failure of SQL connection pools.&amp;lt;/p&amp;gt;&amp;#xA;&amp;#xA;&amp;lt;p&amp;gt;We were at the end of our rope troubleshooting this problem. Short of hardcore stuff like replacing the entire server, or replacing the RAID hardware, we were getting desperate.&amp;lt;/p&amp;gt;&amp;#xA;&amp;#xA;&amp;lt;p&amp;gt;When I first got the server, I had a problem where drive bay #6 wasn&apos;t recognized. Switching out hard drives to a different brand, strangely, fixed this -- and updating the RAID BIOS (for the first of many times) fixed it permanently, so I was able to use the original &amp;quot;incompatible&amp;quot; drive in bay 6. On a hunch, I began to assume that &amp;lt;a href=&amp;quot;http://www.newegg.com/Product/Product.aspx?Item=N82E16822136143&amp;quot; rel=&amp;quot;nofollow&amp;quot;&amp;gt;the Western Digital SATA hard drives&amp;lt;/a&amp;gt; I chose were somehow incompatible with the ServeRAID 8k controller.&amp;lt;/p&amp;gt;&amp;#xA;&amp;#xA;&amp;lt;p&amp;gt;Buying 6 new hard drives was one of the cheaper options on the table, so I went for &amp;lt;a href=&amp;quot;http://www.newegg.com/Product/Product.aspx?Item=N82E16822145215&amp;quot; rel=&amp;quot;nofollow&amp;quot;&amp;gt;6 Hitachi (aka IBM, aka Lenovo) hard drives&amp;lt;/a&amp;gt; under the theory that an IBM/Lenovo RAID controller is more likely to work with the drives it&apos;s typically sold with.&amp;lt;/p&amp;gt;&amp;#xA;&amp;#xA;&amp;lt;p&amp;gt;Looks like that hunch paid off -- we&apos;ve been through three of our heaviest load days (mon,tue,wed) without a single I/O error of any kind. Prior to this we regularly had at least one I/O &amp;quot;event&amp;quot; in this time frame. &amp;lt;strong&amp;gt;It sure looks like switching brands of hard drive has fixed our intermittent RAID I/O problems!&amp;lt;/strong&amp;gt;&amp;lt;/p&amp;gt;&amp;#xA;&amp;#xA;&amp;lt;p&amp;gt;While I understand that IBM/Lenovo probably tests their RAID controller exclusively with their own brand of hard drives, I&apos;m disturbed that a RAID controller would have such subtle I/O problems with particular brands of hard drives.&amp;lt;/p&amp;gt;&amp;#xA;&amp;#xA;&amp;lt;p&amp;gt;So my question is, &amp;lt;strong&amp;gt;is this sort of SATA drive incompatibility common with RAID controllers?&amp;lt;/strong&amp;gt; Are there some brands of drives that work better than others, or are &amp;quot;validated&amp;quot; against particular RAID controller? I had sort of assumed that all commodity SATA hard drives were alike and would work reasonably well in any given RAID controller (of sufficient quality).&amp;lt;/p&amp;gt;&amp;#xA;&quot; OwnerUserId=&quot;1&quot; LastActivityDate=&quot;2011-03-08T08:18:15.380&quot; Title=&quot;Do RAID controllers commonly have SATA drive brand compatibility issues?&quot; Tags=&quot;&amp;lt;raid&amp;gt;&amp;lt;ibm&amp;gt;&amp;lt;lenovo&amp;gt;&amp;lt;serveraid8k&amp;gt;&quot; AnswerCount=&quot;8&quot; FavoriteCount=&quot;2&quot; /&gt; &lt;row Id=&quot;3&quot; PostTypeId=&quot;1&quot; AcceptedAnswerId=&quot;104&quot; CreationDate=&quot;2009-04-30T07:48:06.750&quot; Score=&quot;26&quot; ViewCount=&quot;692&quot; Body=&quot;&amp;lt;ul&amp;gt;&amp;#xA;&amp;lt;li&amp;gt;How do you keep your servers up to date?&amp;lt;/li&amp;gt;&amp;#xA;&amp;lt;li&amp;gt;When using a package manager like &amp;lt;a href=&amp;quot;http://wiki.debian.org/Aptitude&amp;quot; rel=&amp;quot;nofollow&amp;quot;&amp;gt;Aptitude&amp;lt;/a&amp;gt;, do you keep an upgrade / install history, and if so, how do you do it?&amp;lt;/li&amp;gt;&amp;#xA;&amp;lt;li&amp;gt;When installing or upgrading packages on multiple servers, are there any ways to speed the process up as much as possible?&amp;lt;/li&amp;gt;&amp;#xA;&amp;lt;/ul&amp;gt;&amp;#xA;&quot; OwnerUserId=&quot;22&quot; LastEditorUserId=&quot;22&quot; LastEditorDisplayName=&quot;&quot; LastEditDate=&quot;2009-04-30T08:05:02.217&quot; LastActivityDate=&quot;2009-06-05T04:01:09.423&quot; Title=&quot;Best practices for keeping UNIX packages up to date?&quot; Tags=&quot;&amp;lt;unix&amp;gt;&amp;lt;package-management&amp;gt;&amp;lt;server-management&amp;gt;&quot; AnswerCount=&quot;11&quot; FavoriteCount=&quot;14&quot; /&gt; &lt;row Id=&quot;4&quot; PostTypeId=&quot;2&quot; ParentId=&quot;3&quot; CreationDate=&quot;2009-04-30T07:49:58.027&quot; Score=&quot;10&quot; ViewCount=&quot;&quot; Body=&quot;&amp;lt;p&amp;gt;Regarding your third question: I always run a local repository. Even if it&apos;s only for one machine, it saves time in case I need to reinstall (I generally use something like aptitude autoclean), and for two machines, it almost always pays off.&amp;lt;/p&amp;gt;&amp;#xA;&amp;#xA;&amp;lt;p&amp;gt;For the clusters I admin, I don&apos;t generally keep explicit logs: I let the package manager do it for me. However, for those machines (as opposed to desktops), I don&apos;t use automatic installations, so I do have my notes about what I intended to install to all machines.&amp;lt;/p&amp;gt;&amp;#xA;&quot; OwnerUserId=&quot;28&quot; LastActivityDate=&quot;2009-04-30T07:49:58.027&quot; CommentCount=&quot;1&quot; /&gt; &lt;row Id=&quot;5&quot; PostTypeId=&quot;2&quot; ParentId=&quot;2&quot; CreationDate=&quot;2009-04-30T07:56:20.070&quot; Score=&quot;4&quot; ViewCount=&quot;&quot; Body=&quot;&amp;lt;p&amp;gt;I don&apos;t think it&apos;s common per se. However, as soon as you start using enterprise storage controllers, whether that be SAN&apos;s or standalone RAID controllers, you&apos;ll generally want to adhere to their compatibility list rather closely.&amp;lt;/p&amp;gt;&amp;#xA;&amp;#xA;&amp;lt;p&amp;gt;You may be able to save some bucks on the sticker price by buying a cheap range of disks, but that&apos;s probably one of the last areas I&apos;d want to save money on - given the importance of data in most scenarios.&amp;lt;/p&amp;gt;&amp;#xA;&amp;#xA;&amp;lt;p&amp;gt;In other words, explicit incompatibility is very uncommon, but explicit compatibility adherence is recommendable.&amp;lt;/p&amp;gt;&amp;#xA;&quot; OwnerUserId=&quot;24&quot; LastActivityDate=&quot;2009-04-30T07:56:20.070&quot; /&gt; &lt;row Id=&quot;6&quot; PostTypeId=&quot;1&quot; AcceptedAnswerId=&quot;537&quot; CreationDate=&quot;2009-04-30T07:57:06.247&quot; Score=&quot;8&quot; ViewCount=&quot;2648&quot; Body=&quot;&amp;lt;p&amp;gt;Our database currently only has one FileGroup, PRIMARY, which contains roughly 8GB of data (table rows, indexes, full-text catalog).&amp;lt;/p&amp;gt;&amp;#xA;&amp;#xA;&amp;lt;p&amp;gt;When is a good time to split this into secondary data files? What are some criteria that I should be aware of?&amp;lt;/p&amp;gt;&amp;#xA;&quot; OwnerUserId=&quot;3&quot; LastActivityDate=&quot;2009-07-08T07:23:49.527&quot; Title=&quot;In SQL Server, when should you split your PRIMARY Data FileGroup into secondary data files?&quot; Tags=&quot;&amp;lt;sql-server&amp;gt;&amp;lt;files&amp;gt;&amp;lt;filegroups&amp;gt;&quot; AnswerCount=&quot;3&quot; FavoriteCount=&quot;1&quot; /&gt; &lt;row Id=&quot;7&quot; PostTypeId=&quot;1&quot; AcceptedAnswerId=&quot;17&quot; CreationDate=&quot;2009-04-30T07:57:09.117&quot; Score=&quot;12&quot; ViewCount=&quot;529&quot; Body=&quot;&amp;lt;p&amp;gt;What enterprise virus-scanning systems do you recommend?&amp;lt;/p&amp;gt;&amp;#xA;&quot; OwnerUserId=&quot;32&quot; LastActivityDate=&quot;2009-04-30T11:51:09.290&quot; Title=&quot;What is the best enterprise virus-scanning system?&quot; Tags=&quot;&amp;lt;antivirus&amp;gt;&quot; AnswerCount=&quot;8&quot; CommentCount=&quot;3&quot; FavoriteCount=&quot;2&quot; /&gt; &lt;row Id=&quot;8&quot; PostTypeId=&quot;2&quot; ParentId=&quot;3&quot; CreationDate=&quot;2009-04-30T07:57:15.653&quot; Score=&quot;0&quot; ViewCount=&quot;&quot; Body=&quot;&amp;lt;p&amp;gt;You can have a local repository and configure all servers to point to it for updates. Not only you get speed of local downloads, you also get to control which official updates you want installed on your infrastructure in order to prevent any compatibility issues.&amp;lt;/p&amp;gt;&amp;#xA;&amp;#xA;&amp;lt;p&amp;gt;On the Windows side of things, I&apos;ve used &amp;lt;a href=&amp;quot;http://technet.microsoft.com/en-us/wsus/default.aspx&amp;quot; rel=&amp;quot;nofollow&amp;quot;&amp;gt;Windows Server Update Services&amp;lt;/a&amp;gt; with very satisfying results.&amp;lt;/p&amp;gt;&amp;#xA;&quot; OwnerUserId=&quot;36&quot; LastActivityDate=&quot;2009-04-30T07:57:15.653&quot; /&gt;</span><br></pre></td></tr></table></figure>
+
+
+其他档案：
+
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt; &lt;users&gt; &lt;row Id=&quot;1&quot; Reputation=&quot;4220&quot; CreationDate=&quot;2009-04-30T07:08:27.067&quot; DisplayName=&quot;Jeff Atwood&quot; EmailHash=&quot;51d623f33f8b83095db84ff35e15dbe8&quot; LastAccessDate=&quot;2011-09-03T13:30:29.990&quot; WebsiteUrl=&quot;http://www.codinghorror.com/blog/&quot; Location=&quot;El Cerrito, CA&quot; Age=&quot;40&quot; AboutMe=&quot;&amp;lt;p&amp;gt;&amp;lt;img src=&amp;quot;http://img377.imageshack.us/img377/4074/wargames1xr6.jpg&amp;quot; width=&amp;quot;250&amp;quot;&amp;gt;&amp;lt;/p&amp;gt;&amp;#xA;&amp;#xA;&amp;lt;p&amp;gt;&amp;lt;a href=&amp;quot;http://www.codinghorror.com/blog/archives/001169.html&amp;quot; rel=&amp;quot;nofollow&amp;quot;&amp;gt;Stack Overflow Valued Associate #00001&amp;lt;/a&amp;gt;&amp;lt;/p&amp;gt;&amp;#xA;&amp;#xA;&amp;lt;p&amp;gt;Wondering how our software development process works? &amp;lt;a href=&amp;quot;http://www.youtube.com/watch?v=08xQLGWTSag&amp;quot; rel=&amp;quot;nofollow&amp;quot;&amp;gt;Take a look!&amp;lt;/a&amp;gt;&amp;lt;/p&amp;gt;&amp;#xA;&quot; Views=&quot;3562&quot; UpVotes=&quot;1995&quot; DownVotes=&quot;31&quot; /&gt; &lt;row Id=&quot;2&quot; Reputation=&quot;697&quot; CreationDate=&quot;2009-04-30T07:08:27.067&quot; DisplayName=&quot;Geoff Dalgas&quot; EmailHash=&quot;b437f461b3fd27387c5d8ab47a293d35&quot; LastAccessDate=&quot;2011-09-05T22:14:06.527&quot; WebsiteUrl=&quot;http://stackoverflow.com&quot; Location=&quot;Corvallis, OR&quot; Age=&quot;34&quot; AboutMe=&quot;&amp;lt;p&amp;gt;Developer on the StackOverflow team. Find me on&amp;lt;/p&amp;gt;&amp;#xA;&amp;#xA;&amp;lt;p&amp;gt;&amp;lt;a href=&amp;quot;http://www.twitter.com/SuperDalgas&amp;quot; rel=&amp;quot;nofollow&amp;quot;&amp;gt;Twitter&amp;lt;/a&amp;gt;&amp;#xA;&amp;lt;br&amp;gt;&amp;lt;br&amp;gt;&amp;#xA;&amp;lt;a href=&amp;quot;http://blog.stackoverflow.com/2009/05/welcome-stack-overflow-valued-associate-00003/&amp;quot; rel=&amp;quot;nofollow&amp;quot;&amp;gt;Stack Overflow Valued Associate #00003&amp;lt;/a&amp;gt; &amp;lt;/p&amp;gt;&amp;#xA;&quot; Views=&quot;291&quot; UpVotes=&quot;46&quot; DownVotes=&quot;2&quot; /&gt; &lt;row Id=&quot;3&quot; Reputation=&quot;259&quot; CreationDate=&quot;2009-04-30T07:08:27.067&quot; DisplayName=&quot;Jarrod Dixon&quot; EmailHash=&quot;2dfa19bf5dc5826c1fe54c2c049a1ff1&quot; LastAccessDate=&quot;2011-09-01T20:43:27.743&quot; WebsiteUrl=&quot;http://stackoverflow.com&quot; Location=&quot;New York, NY&quot; Age=&quot;32&quot; AboutMe=&quot;&amp;lt;p&amp;gt;&amp;lt;a href=&amp;quot;http://blog.stackoverflow.com/2009/01/welcome-stack-overflow-valued-associate-00002/&amp;quot; rel=&amp;quot;nofollow&amp;quot;&amp;gt;Developer on the Stack Overflow team&amp;lt;/a&amp;gt;.&amp;lt;/p&amp;gt;&amp;#xA;&amp;#xA;&amp;lt;p&amp;gt;Was dubbed &amp;lt;strong&amp;gt;SALTY SAILOR&amp;lt;/strong&amp;gt; by Jeff Atwood, as filth and flarn would oft-times fly when dealing with a particularly nasty bug!&amp;lt;/p&amp;gt;&amp;#xA;&amp;#xA;&amp;lt;ul&amp;gt;&amp;#xA;&amp;lt;li&amp;gt;Twitter me: &amp;lt;a href=&amp;quot;http://twitter.com/jarrod_dixon&amp;quot; rel=&amp;quot;nofollow&amp;quot;&amp;gt;jarrod_dixon&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;&amp;#xA;&amp;lt;li&amp;gt;Email me: jarrod.m.dixon@gmail.com&amp;lt;/li&amp;gt;&amp;#xA;&amp;lt;/ul&amp;gt;&amp;#xA;&quot; Views=&quot;210&quot; UpVotes=&quot;259&quot; DownVotes=&quot;4&quot; /&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案:"></a>解决方案:</h2><p><strong>===============&gt;&gt;#1 票数：0</strong></p>
+
+我猜您正在寻找的是一个SAX解析器 ，它不会一次读取整个文档（就像DOM解析器一样），但是可以为特定事件定义回调（例如，新XML元素的开头） ）。 由于您要逐个元素地处理声音，因此听起来非常适合您。 我必须承认，我从未在C ++中进行过任何XML解析，但是他的两个库听起来很适合您的问题：
+
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="tags/问题锦集/" rel="tag"># 问题锦集</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="c如何检测当前会话是否通过RDP启动堆栈内存溢出.html" rel="next" title="c如何检测当前会话是否通过RDP启动堆栈内存溢出">
+                <i class="fa fa-chevron-left"></i> c如何检测当前会话是否通过RDP启动堆栈内存溢出
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="androidScrollView背景不均匀堆栈内存溢出.html" rel="prev" title="androidScrollView背景不均匀堆栈内存溢出">
+                androidScrollView背景不均匀堆栈内存溢出 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    <!-- 乱码三千文章内嵌广告 -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-2626449904708114" data-ad-slot="1549007621"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+  <!-- 乱码三千信息流广告 -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle" style="display:block" data-ad-format="fluid" data-ad-layout-key="-6t+ed+2i-1n-4w" data-ad-client="ca-pub-2626449904708114" data-ad-slot="9471729671"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">开发者</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="http://code.newban.cn/archives/">
+              
+                  <span class="site-state-item-count">1724</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#原文标题"><span class="nav-number">1.</span> <span class="nav-text">原文标题:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题"><span class="nav-number">2.</span> <span class="nav-text">问题:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解决方案"><span class="nav-number">3.</span> <span class="nav-text">解决方案:</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">开发者</span>
+  <div>
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+  </div>
+  
+</div>
+
+
+  <div class="powered-by">由 <a rel="external nofollow" class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a rel="external nofollow" class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+      <style>
+        a.gitment-editor-footer-tip { display: none; }
+        .gitment-container.gitment-footer-container { display: none; }
+      </style>
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: 'songjianzaina',
+            repo: 'codesan_comment',
+            
+            lang: "zh" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: '75fa01da04fd1029841debfa65ce027b566a47e3',
+            
+                client_id: '01a471de64bf7a7789f3'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

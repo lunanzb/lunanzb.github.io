@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="问题锦集,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="开发者博客" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="原文标题: Application utilizing two serial ports (native RS485 + USB RS232) receives delayed responses    问题: 我正在使用旧应用程序（MSVC19，Windows 10上具有.NET 4.5.2的C＃），该应用程序充当无趣设备的前端。 为了促进与设备的通信，建立了两个串行连接。 连接到MCU板的串行">
+<meta name="keywords" content="问题锦集">
+<meta property="og:type" content="article">
+<meta property="og:title" content="c使用两个串行端口本机RS485USBRS232的应用程序收到延迟的响应堆栈内存溢出">
+<meta property="og:url" content="https://luna.newban.cn/c使用两个串行端口本机RS485USBRS232的应用程序收到延迟的响应堆栈内存溢出.html">
+<meta property="og:site_name" content="开发者博客">
+<meta property="og:description" content="原文标题: Application utilizing two serial ports (native RS485 + USB RS232) receives delayed responses    问题: 我正在使用旧应用程序（MSVC19，Windows 10上具有.NET 4.5.2的C＃），该应用程序充当无趣设备的前端。 为了促进与设备的通信，建立了两个串行连接。 连接到MCU板的串行">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-09-08T08:47:27.216Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="c使用两个串行端口本机RS485USBRS232的应用程序收到延迟的响应堆栈内存溢出">
+<meta name="twitter:description" content="原文标题: Application utilizing two serial ports (native RS485 + USB RS232) receives delayed responses    问题: 我正在使用旧应用程序（MSVC19，Windows 10上具有.NET 4.5.2的C＃），该应用程序充当无趣设备的前端。 为了促进与设备的通信，建立了两个串行连接。 连接到MCU板的串行">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+<!--谷歌广告验证代码-->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({
+          google_ad_client: "ca-pub-2626449904708114",
+          enable_page_level_ads: true
+     });
+</script>
+<!--谷歌广告验证代码-->
+
+
+
+  <link rel="canonical" href="https://luna.newban.cn/c使用两个串行端口本机RS485USBRS232的应用程序收到延迟的响应堆栈内存溢出.html">
+
+
+
+
+
+  <title>c使用两个串行端口本机RS485USBRS232的应用程序收到延迟的响应堆栈内存溢出 | 开发者博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+  
+<a href="https://www.github.com/songjianzaina" class="github-corner" aria-label="View source on Github"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">开发者博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">开发者的博客 – 全栈</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="http://www.newban.cn/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="http://code.newban.cn/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://luna.newban.cn">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="开发者">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="开发者博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">c使用两个串行端口本机RS485USBRS232的应用程序收到延迟的响应堆栈内存溢出</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-08-31T00:00:00+00:00">
+                2020-08-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="原文标题"><a href="#原文标题" class="headerlink" title="原文标题:"></a>原文标题:</h2>
+Application utilizing two serial ports (native RS485 + USB RS232) receives delayed responses
+
+
+
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题:"></a>问题:</h2>
+我正在使用旧应用程序（MSVC19，Windows 10上具有.NET 4.5.2的C＃），该应用程序充当无趣设备的前端。 为了促进与设备的通信，建立了两个串行连接。 连接到MCU板的串行RS485（115200波特8N1）和一个USB FTDI RS232到TTL（9600波特8N1）适配器，用于连接第三方传感器平台。
+
+
+我要诊断的特定问题是，在另一个串行端口上发生任何通信之后不久，应用程序正在经历通过USB串行端口连接的传感器平台的延迟响应时间。 通常，传感器平台的响应时间在10到100毫秒之间是一致的。 在性能不佳的设置中 ，响应延迟可能长达20秒。
+
+
+为了找出问题，我将所有通信都提取到一个最小的应用程序中。 我还用基于arduino系统的诱饵替换了MCU和Sensor平台，以确保MCU和Sensor平台都不是原因。
+
+
+在采取了这些预防措施之后，我可以通过本地RS485端口连接设备的MCU诱饵来触发测试代码问题。 我可以通过USB RS485收发器连接MCU诱饵来防止此问题。 以下是显示该问题的日志摘录。
+
+
+设置良好（USB RS485，USB RS232）
+
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[27.11.2019 11:21:19] SENSOR: TX: Q [27.11.2019 11:21:19] SENSOR: RX: [Z 00086 z 00083] [27.11.2019 11:21:19] BaseMessage: Message completed: ( 15,6 ms) [Q] [27.11.2019 11:21:20] MCU: TX: $;version;* [27.11.2019 11:21:20] MCU: RX: [$;version;pass;MCU;Proto4;Hw2;*] [27.11.2019 11:21:20] BaseMessage: Message completed: ( 15,6 ms) [$;version;*] [27.11.2019 11:21:21] SENSOR: TX: Q [27.11.2019 11:21:21] SENSOR: RX: [Z 00086 z 00089] [27.11.2019 11:21:21] BaseMessage: Message completed: ( 15,6 ms) [Q] [27.11.2019 11:21:22] SENSOR: TX: Q [27.11.2019 11:21:22] SENSOR: RX: [Z 00085 z 00076] [27.11.2019 11:21:22] BaseMessage: Message completed: ( 31,2 ms) [Q] [27.11.2019 11:21:23] SENSOR: TX: Q [27.11.2019 11:21:23] SENSOR: RX: [Z 00085 z 00089] [27.11.2019 11:21:23] BaseMessage: Message completed: ( 31,2 ms) [Q] [27.11.2019 11:21:24] SENSOR: TX: Q [27.11.2019 11:21:24] SENSOR: RX: [Z 00085 z 00079] [27.11.2019 11:21:24] BaseMessage: Message completed: ( 15,6 ms) [Q] [27.11.2019 11:21:25] MCU: TX: $;temp;* [27.11.2019 11:21:25] MCU: RX: [$;temp;pass;55;0;0;0;0;0;*] [27.11.2019 11:21:25] BaseMessage: Message completed: ( 15,6 ms) [$;temp;*] [27.11.2019 11:21:26] SENSOR: TX: Q [27.11.2019 11:21:26] SENSOR: RX: [Z 00086 z 00094] [27.11.2019 11:21:26] BaseMessage: Message completed: ( 31,2 ms) [Q]</span><br></pre></td></tr></table></figure>
+
+
+性能不佳的设置（本机板载RS485，USB RS232）
+
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[27.11.2019 11:19:56] SENSOR: TX: Q [27.11.2019 11:19:56] SENSOR: RX: [Z 00088 z 00084] [27.11.2019 11:19:56] BaseMessage: Message completed: ( 15,6 ms) [Q] [27.11.2019 11:19:57] MCU: TX: $;version;* [27.11.2019 11:19:57] MCU: RX: [$;version;pass;MCU;Proto4;Hw2;*] [27.11.2019 11:19:57] BaseMessage: Message completed: ( 0,0 ms) [$;version;*] [27.11.2019 11:19:58] SENSOR: TX: Q [27.11.2019 11:20:06] SENSOR: RX: [Z 00088 z 00095] [27.11.2019 11:20:06] BaseMessage: Message completed: ( 7997,9 ms) [Q] [27.11.2019 11:20:07] SENSOR: TX: Q [27.11.2019 11:20:07] SENSOR: RX: [Z 00088 z 00090] [27.11.2019 11:20:07] BaseMessage: Message completed: ( 31,2 ms) [Q] [27.11.2019 11:20:08] SENSOR: TX: Q [27.11.2019 11:20:08] SENSOR: RX: [Z 00089 z 00097] [27.11.2019 11:20:08] BaseMessage: Message completed: ( 15,6 ms) [Q] [27.11.2019 11:20:09] SENSOR: TX: Q [27.11.2019 11:20:09] SENSOR: RX: [Z 00089 z 00089] [27.11.2019 11:20:09] BaseMessage: Message completed: ( 31,2 ms) [Q] [27.11.2019 11:20:10] MCU: TX: $;temp;* [27.11.2019 11:20:10] MCU: RX: [$;temp;pass;55;0;0;0;0;0;*] [27.11.2019 11:20:10] BaseMessage: Message completed: ( 0,0 ms) [$;temp;*] [27.11.2019 11:20:11] SENSOR: TX: Q [27.11.2019 11:20:16] SENSOR: RX: [Z 00089 z 00091] [27.11.2019 11:20:16] BaseMessage: Message completed: ( 4967,8 ms) [Q] [27.11.2019 11:20:17] SENSOR: TX: Q [27.11.2019 11:20:17] SENSOR: RX: [Z 00089 z 00092] [27.11.2019 11:20:17] BaseMessage: Message completed: ( 15,6 ms) [Q]</span><br></pre></td></tr></table></figure>
+
+
+很明显，在性能不佳的设置中 ，每当有消息发送到MCU平台时，传感器平台的下一个响应都会延迟几秒钟。 通过检查我的arduino诱饵的输出，我已经确认发送到传感器平台（“ Q”）的请求消息没有延迟，并且立即发送了响应。 因此，延迟必须发生在PC的接收路径或我的应用程序中。
+
+
+我还尝试过仅从应用程序连接传感器平台，然后使用终端执行与MCU平台的手动通信。 在这种情况下，不会发生延迟。
+
+
+由于这是我第一次连接基于RS485的串行端口，我需要注意什么吗？ 我检查了计算机BIOS中是否有其他设置，但协议（RS232 / RS485）和通常的地址和中断号除外，没有任何设置。
+
+
+Window对串行端口的处理是否存在任何已知的错误？ 由于USB转换器的普及，很难解决这个问题。 我不认为问题出在我的代码中，因为它可以在性能良好的开发人员设置中完美运行。
+
+
+测试应用程序的来源如下； 如果有人感兴趣，我也可以提供诱饵的来源。 不幸的是，为了不超过帖子的长度，我不得不删除了很多评论和日志输出。 如果需要，我可以找到其他位置来上传摘要。
+
+
+更新1
+
+
+我将最小样本修剪为更小的样本，同时仍然表现出这种行为。 我更改了PC BIOS设置，其方式为PC现在在所有COM端口上使用RS232，并使用外部RS232 <-> RS485桥接器将MCU连接到COM1。 然后，我将RS232 <-> TTL转换器连接到COM2，并将传感器连接到COM2。 最终结果是，不再涉及USB转换器，而只是普通的板载COM端口。
+
+
+我希望在BIOS中接近“默认”配置可以很好地工作。 但事实并非如此。 即使这样，延迟的响应仍然存在。
+
+
+我还将所有连接的比特率更改为一致的9600，以确保这不是比特率转换问题。
+
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">using System; using System.Collections.Generic; using System.IO; using System.IO.Ports; using System.Linq; using System.Text; using System.Threading; using System.Threading.Tasks; using System.Timers; namespace MultiSerial &#123; public class MultiSerialTest &#123; public string TAG &#123; get &#123; return &quot;Test&quot;; &#125; &#125; const int ciQueryInterval = 1000; LogCollector logger; SerialComm mcucomm; COMSettings mcuComSettings; SerialStreamDecoder mcuDecoder; SerialComm Sensorcomm; COMSettings SensorComSettings; SerialStreamDecoder SensorDecoder; ManualResetEvent evtSensorConnected; ManualResetEvent evtMCUConnected; public void run(string mcu_port, string sensor_port) &#123; evtSensorConnected = new ManualResetEvent(false); evtMCUConnected = new ManualResetEvent(false); logger = new LogCollector(); logger.InitLog(&quot;CommTest.log&quot;); mcuComSettings = new COMSettings(9600, Parity.None, 8, StopBits.One); mcuDecoder = new SerialStreamDecoder( MCUCommMessage.preamble, MCUCommMessage.delimiter, MCUCommMessage.terminator ); mcucomm = new SerialComm( mcuComSettings, mcuDecoder, VerifyMCU, false, logger, mcu_port, &quot;MCU&quot; ); SensorComSettings = new COMSettings(9600, Parity.None, 8, StopBits.One); SensorDecoder = new SerialStreamDecoder( SensorCommMessage.preamble, SensorCommMessage.delimiter, SensorCommMessage.terminator ); Sensorcomm = new SerialComm( SensorComSettings, SensorDecoder, VerifySensor, false, logger, sensor_port, &quot;SENSOR&quot; ); Sensorcomm.ConnectDevice(); mcucomm.ConnectDevice(); int counter = 0; while (true) &#123; if (counter == 5) &#123; VersionRequest verReq = new VersionRequest(mcucomm); verReq.Send(); verReq.AwaitCompletion(); counter = 0; &#125; else &#123; FetchRequest fetchReq = new FetchRequest(Sensorcomm); fetchReq.Send(); fetchReq.AwaitCompletion(); &#125; counter++; System.Threading.Thread.Sleep(ciQueryInterval); &#125; &#125; void VerifySensor(SerialComm comm, out bool bSuccess) &#123; comm.Log(TAG, &quot;Servicing verification request for SensorComm&quot;); FetchRequest fetchMessage = new FetchRequest(comm); fetchMessage.Send(); fetchMessage.AwaitCompletion(); if (fetchMessage.result == 0) &#123; comm.Log(TAG, &quot;Verification for SensorComm successful&quot;); bSuccess = true; &#125; else &#123; comm.Log(TAG, &quot;Verification for SensorComm failed&quot;); bSuccess = false; &#125; return; &#125; void VerifyMCU(SerialComm comm, out bool bSuccess) &#123; comm.Log(TAG, &quot;Servicing verification request for mcuComm&quot;); VersionRequest versionMessage = new VersionRequest(comm); versionMessage.Send(); versionMessage.AwaitCompletion(); if (versionMessage.result == 0) &#123; comm.Log(TAG, &quot;Verification for mcuComm successful&quot;); bSuccess = true; &#125; else &#123; comm.Log(TAG, &quot;Verification for mcuComm failed&quot;); bSuccess = false; &#125; return; &#125; &#125; class Program &#123; static void Main(string[] args) &#123; MultiSerialTest test = new MultiSerialTest(); test.run(args[0], args[1]); &#125; &#125; public class FetchRequest : SensorCommMessage &#123; new string TAG &#123; get &#123; return &quot;SensorComm:FetchRequest&quot;; &#125; &#125; // Request = &quot;Q\r\n&quot; // Response = [&lt;identifier&gt;&lt;whitespace&gt;&lt;value&gt;]^n public FetchRequest(SerialComm comm) : base(comm,fetch_instruction) &#123; &#125; protected override bool ParseReplyContents(List&lt;string&gt; tokens) &#123; // Dummy validation if (tokens.Count &lt; 2 || tokens.Count % 2 != 0) &#123; return false; &#125; return true; &#125; &#125; public abstract class SensorCommMessage : BaseMessage &#123; new string TAG &#123; get &#123; return &quot;SensorCommMessage &quot;; &#125; &#125; public const char preamble_ch = &apos;Z&apos;; public const char delimiter_ch = &apos; &apos;; public static readonly string preamble = preamble_ch.ToString(); public static readonly char delimiter = delimiter_ch; public static readonly string terminator = &quot;\r\n&quot;; public const string fetch_instruction = &quot;Q&quot;; private string instructionToken; private List&lt;string&gt; userTokens; public SensorCommMessage(SerialComm _comm, string _instructionToken) : base(_comm) &#123; instructionToken = _instructionToken; &#125; public override string ToWireString() &#123; string message = instructionToken; if (userTokens != null) &#123; foreach (string token in userTokens) &#123; message += token; message += delimiter; &#125; &#125; return message; &#125; public override bool ParseReplyFrame(List&lt;string&gt; replyTokens) &#123; bool bHandled = false; bHandled = ParseReplyContents(replyTokens); if (bHandled) &#123; MessageCompleted(); &#125; return bHandled; &#125; protected abstract bool ParseReplyContents(List&lt;string&gt; replyContentTokens); &#125; public class VersionRequest : MCUCommMessage &#123; public string DeviceId &#123; get &#123; return strDeviceId; &#125; &#125; string strDeviceId; public string ProtocolVersion &#123; get &#123; return strProtocollVersion; &#125; &#125; string strProtocollVersion; public string HardwareVersion &#123; get &#123; return strHardwareVersion; &#125; &#125; string strHardwareVersion; // Request = $;version;* // Response = $;version;pass;DeviceId;ProtocolVersion;HardwareVersion;* public VersionRequest(SerialComm comm) : base(comm,version_instruction) &#123; &#125; protected override bool ParseReplyContents(List&lt;string&gt; tokens) &#123; // Expect precisely 3 remaining tokens if (tokens.Count != 3) &#123; return false; &#125; strDeviceId = tokens[0]; strProtocollVersion = tokens[1]; strHardwareVersion = tokens[2]; return true; &#125; &#125; public class ParseHelper &#123; public static bool ParseFloatToken(string strToken, float fMin, float fMax, out float fValue) &#123; fValue = float.NaN; if (float.TryParse(strToken, out fValue) &amp;&amp; fValue &gt;= fMin &amp;&amp; fValue &lt;= fMax) &#123; return true; &#125; return false; &#125; public static bool ParseIntToken(string strToken, int iMin, int iMax, out int iValue) &#123; iValue = 0; if (int.TryParse(strToken, out iValue) &amp;&amp; iValue &gt;= iMin &amp;&amp; iValue &lt;= iMax) &#123; return true; &#125; return false; &#125; &#125; public class SerialStreamDecoder &#123; public string TAG &#123; get &#123; return &quot;SerialStreamDecoder&quot;; &#125; &#125; public string preamble; public char delimiter; public string terminator; public SerialStreamDecoder(string _preamble, char _delimiter, string _terminator) &#123; preamble = _preamble; delimiter = _delimiter; terminator = _terminator; &#125; public bool DecodeMessageFromStream(SerialComm comm, out string message, out List&lt;string&gt; tokens) &#123; string strRx = &quot;&quot;; message = &quot;&quot;; tokens = null; // Read until terminator strRx = comm.usart.ReadTo(terminator); // Re-append terminator because it does not get included in the read strRx += terminator; // If a preamble is set, scan input sequence for preamble int preampleIndex = 0; if ( preamble != &quot;&quot; &amp;&amp; ( preampleIndex = strRx.IndexOf(preamble)) &gt; 0) &#123; strRx = strRx.Substring(preampleIndex, strRx.Length - preampleIndex); &#125; message = strRx; tokens = strRx.Split(delimiter).ToList&lt;string&gt;(); return true; &#125; &#125; public abstract class MCUCommMessage : BaseMessage &#123; public string TAG &#123; get &#123; return &quot;MCUCommMessage &quot;; &#125; &#125; public const char preamble_ch = &apos;$&apos;; public const char delimiter_ch = &apos;;&apos;; public const char terminator_ch = &apos;*&apos;; public static readonly string preamble = preamble_ch.ToString(); public static readonly char delimiter = delimiter_ch; public static readonly string terminator = terminator_ch.ToString(); public const string version_instruction = &quot;version&quot;; public const string okay_result = &quot;pass&quot;; public const string fail_result = &quot;fail&quot;; private string instructionToken; private List&lt;string&gt; userTokens; public MCUCommMessage(SerialComm _comm, string _instructionToken ) : base(_comm) &#123; instructionToken = _instructionToken; &#125; public override string ToWireString() &#123; string message = preamble + delimiter + instructionToken + delimiter; if (userTokens != null) &#123; foreach (string token in userTokens) &#123; message += token; message += delimiter; &#125; &#125; message += terminator; return message; &#125; public override bool ParseReplyFrame(List&lt;string&gt; replyTokens) &#123; bool bHandled = false; string lastToken = replyTokens.ElementAt(replyTokens.Count - 1); if (replyTokens.Count &lt; 4 || replyTokens[0] != preamble || replyTokens[1] != instructionToken || lastToken != terminator) &#123; return false; &#125; if (!bHandled &amp;&amp; replyTokens[2] == fail_result &amp;&amp; replyTokens.Count == 6 ) &#123; ParseHelper.ParseIntToken(replyTokens[4], int.MinValue, int.MaxValue, out result); bHandled = true; &#125; if (!bHandled &amp;&amp; replyTokens[2] == okay_result) &#123; List&lt;string&gt; payloadTokens = replyTokens.GetRange(3, replyTokens.Count - 4); bHandled = ParseReplyContents(payloadTokens); &#125; if (bHandled) &#123; MessageCompleted(); &#125; return bHandled; &#125; protected abstract bool ParseReplyContents(List&lt;string&gt; replyContentTokens); public void AddTokens(IEnumerable&lt;string&gt; tokens) &#123; if (userTokens == null) userTokens = new List&lt;string&gt;(); foreach (string token in tokens) &#123; userTokens.Add(token); &#125; &#125; &#125; public abstract class BaseMessage &#123; public string TAG &#123; get &#123; return &quot;BaseMessage&quot;; &#125; &#125; public ManualResetEvent evtMessageRelease; public delegate void MessageCompletedEventHandler(); public event MessageCompletedEventHandler EvtMessageCompleted; protected SerialComm comm; DateTime timestampRequest; DateTime timestampReply; public int result; public BaseMessage( SerialComm _comm ) &#123; comm = _comm; evtMessageRelease = new ManualResetEvent(false); &#125; public int Send() &#123; timestampRequest = DateTime.Now; comm.TransmitSync(this); return result; &#125; public void AwaitCompletion() &#123; evtMessageRelease.WaitOne(); &#125; public abstract string ToWireString(); protected void MessageCompleted() &#123; timestampReply = DateTime.Now; TimeSpan duration = timestampReply - timestampRequest; comm.Log(TAG, &quot;Message completed: (&quot; + string.Format(&quot;&#123;0,8:F1&#125; ms&quot;, duration.TotalMilliseconds) + &quot;) [&quot; + this.ToWireString() + &quot;]&quot;); if (EvtMessageCompleted != null) EvtMessageCompleted(); CleanupMessage(); &#125; private void CleanupMessage() &#123; evtMessageRelease.Set(); &#125; public abstract bool ParseReplyFrame(List&lt;string&gt; tokens); &#125; public class LogCollector &#123; StreamWriter streamwriter; public void InitLog(string file) &#123; Directory.CreateDirectory(&quot;.\\logs&quot;); FileStream filestream = new FileStream(&quot;.\\logs\\&quot; + file, FileMode.Create); streamwriter = new StreamWriter(filestream); streamwriter.AutoFlush = false; &#125; public void Log(string tag, string message) &#123; string logMessage = &quot;[&quot; + DateTime.Now.ToString() + &quot;] &quot; + tag + &quot;: &quot; + message; streamwriter.WriteLine(logMessage); streamwriter.Flush(); Console.WriteLine(logMessage); &#125; &#125; public class COMSettings &#123; public int baudrate; public Parity parity; public int databits; public StopBits stopbits; public COMSettings(int _baudrate, Parity _parity, int _databits, StopBits _stopbits) &#123; baudrate = _baudrate; parity = _parity; databits = _databits; stopbits = _stopbits; &#125; &#125; public class SerialComm &#123; public string TAG &#123; get &#123; return strTag; &#125; &#125; string strTag; LogCollector logger; public void Log(string tag, string message) &#123; if (logger != null) logger.Log(tag, message); &#125; COMSettings comSettings; public SerialPort usart; private string preferredPort; private BaseMessage currentMessage = null; private SerialStreamDecoder decoder; public delegate void VerifyDeviceResponseDelegate(SerialComm comm, out bool bSuccess); private event VerifyDeviceResponseDelegate DeviceResponseVerification; public delegate void MessageReceivedDelegate(); public event MessageReceivedDelegate EvtMessageReceived; Thread connectThread; public SerialComm( COMSettings _comSettings, SerialStreamDecoder _decoder, VerifyDeviceResponseDelegate d, bool _bReconnectEnabled, LogCollector _logger, string _preferredPort, string tag = &quot;SerialComm&quot; ) &#123; comSettings = _comSettings; decoder = _decoder; DeviceResponseVerification = d; logger = _logger; preferredPort = _preferredPort; strTag = tag; &#125; public bool ConnectDevice() &#123; bool bDeviceVerified = false; try &#123; usart = new SerialPort( preferredPort, comSettings.baudrate, comSettings.parity, comSettings.databits, comSettings.stopbits ); usart.Open(); usart.DataReceived += new SerialDataReceivedEventHandler(OnDataReceived); DeviceResponseVerification(this, out bDeviceVerified); &#125; catch (Exception e) &#123; bDeviceVerified = false; &#125; if (!bDeviceVerified) &#123; if (usart != null) &#123; usart.Close(); usart.DataReceived -= OnDataReceived; usart = null; &#125; &#125; return usart != null; &#125; /* OnDataReceived * Handles received serial communication */ private void OnDataReceived(object sender, SerialDataReceivedEventArgs e) &#123; try &#123; // Read until terminator if (usart == null) return; List&lt;string&gt; tokens = null; string message = &quot;&quot;; if (!decoder.DecodeMessageFromStream(this, out message, out tokens)) &#123; return; &#125; Log(TAG, &quot;RX: [&quot; + message.Trim() + &quot;]&quot;); bool bHandled = false; // Check if we received a response to the current message if (!bHandled &amp;&amp; this.currentMessage != null) &#123; bHandled = currentMessage.ParseReplyFrame(tokens); &#125; if (bHandled) &#123; if (EvtMessageReceived != null) EvtMessageReceived(); &#125; &#125; catch (Exception ex) &#123; &#125; &#125; public void TransmitSync(BaseMessage message) &#123; currentMessage = message; WriteCurrentMessage(); &#125; public void WriteCurrentMessage() &#123; usart.Write(currentMessage.ToWireString() + &quot;\r\n&quot;); Log(TAG, &quot;TX: &quot; + currentMessage.ToWireString()); &#125; &#125; &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案:"></a>解决方案:</h2></-></->
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="tags/问题锦集/" rel="tag"># 问题锦集</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="cWindows网络驱动器上的文件操作错误堆栈内存溢出.html" rel="next" title="cWindows网络驱动器上的文件操作错误堆栈内存溢出">
+                <i class="fa fa-chevron-left"></i> cWindows网络驱动器上的文件操作错误堆栈内存溢出
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="c将XML序列化为C对象堆栈内存溢出.html" rel="prev" title="c将XML序列化为C对象堆栈内存溢出">
+                c将XML序列化为C对象堆栈内存溢出 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    <!-- 乱码三千文章内嵌广告 -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-2626449904708114" data-ad-slot="1549007621"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+  <!-- 乱码三千信息流广告 -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle" style="display:block" data-ad-format="fluid" data-ad-layout-key="-6t+ed+2i-1n-4w" data-ad-client="ca-pub-2626449904708114" data-ad-slot="9471729671"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">开发者</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="http://code.newban.cn/archives/">
+              
+                  <span class="site-state-item-count">1724</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#原文标题"><span class="nav-number">1.</span> <span class="nav-text">原文标题:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题"><span class="nav-number">2.</span> <span class="nav-text">问题:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解决方案"><span class="nav-number">3.</span> <span class="nav-text">解决方案:</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">开发者</span>
+  <div>
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+  </div>
+  
+</div>
+
+
+  <div class="powered-by">由 <a rel="external nofollow" class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a rel="external nofollow" class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+      <style>
+        a.gitment-editor-footer-tip { display: none; }
+        .gitment-container.gitment-footer-container { display: none; }
+      </style>
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: 'songjianzaina',
+            repo: 'codesan_comment',
+            
+            lang: "zh" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: '75fa01da04fd1029841debfa65ce027b566a47e3',
+            
+                client_id: '01a471de64bf7a7789f3'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
